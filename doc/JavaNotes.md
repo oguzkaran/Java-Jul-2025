@@ -212,6 +212,135 @@ System.out.println("Hello, world")
 **Anahtar Notlar:** Derleme işlemi genel olarak **atomlara ayırma (tokenizing)** ile başlar.
 
 **Anahtar Notlar:** Klavyeden basıldığında boşluk algısı yaratan karakterlere **whitespaces** denir. Klavyeden tuşlanabilen tipik `whitespaces` şunlardır: `SPACE, TAB(ULAR), ENTER`.
+###### 11 Ağustos 2025
+
+>Java'da kod yazım kuralları şu şekilde özetlenebilir:
+>
+>- Atomlar arasında istenildiği kadar boşluk (whitespace) bırakılabilir
+>- Anahtar sözcükler ve değişken atomlar kendi aralarında bitişik yazılamazlar yani aralarında en az bir tane boşluk (whitespace) olmalıdır. Diğer tüm atomlar bitişik yazılabilirler.
+
+>Atomlar arasında istenildiği kadar boşluk (whitespace) bırakılabilir
+
+```java
+package csd;
+
+  
+
+class App {
+
+public
+
+static
+
+void main(String [] args)
+
+{
+
+System .
+
+out.
+
+println("Hello, world");
+
+}
+
+}
+```
+
+
+>Anahtar sözcükler ve değişken atomlar kendi aralarında bitişik yazılamazlar yani aralarında en az bir tane boşluk (whitespace) olmalıdır.
+
+```java
+package csd;
+
+classApp { //error
+	publicstatic void main(String [] args) //error
+	{
+	
+		System.out.println("Hello, World");
+	
+	}
+}
+```
+
+>Diğer tüm atomlar bitişik olarak yazılabilir
+
+```java
+package csd;class App{public static void main(String[]args){System.out.println("Hello, World");}}
+```
+
+>Yukarıdaki temel yazım kuralları sayesinde programcı daha **okunabilir/algılanabilir (readable)** kodlar yazabilmektedir. 
+
+##### Yorum Satırları
+
+>Programlamada derleyicinin görmezden geldiği kod parçalarına **yorum satıları (comment lines)** denir. Java'da iki çeşit yorum satırı yazılabilir. Yorum satırları okunabilirliği/algılanabilirliği olumsuz etkilemeyecek şekilde koda eklenmelidir.
+
+```java
+package csd;
+
+class App {
+    public static void main(String [] args) 
+    {
+        //Burası görmezden gelinecek
+        System.out.println("Hello, World"); //Burası da görmezden gelinecek
+
+        /*
+        Burası da 
+        görmezden gelinecek
+        */ 
+    }
+}
+```
+
+##### Eclipse IDE Programı
+
+>Eclipse, Java'nın ilk yıllarından beri `free` olarak kullanılabilen bir IDE programdır. Eclipse tümm masaüstü işletim sistemlerinde çalışabilen bir uygulamadır. Eclipse kurulum programı aşağıdaki bağlantıdan indirilip kurulabilir:
+
+>[https://www.eclipse.org/downloads/](https://www.eclipse.org/downloads/)
+
+>Biz kursumuzda Eclipse ile açılmış tek bir proje üzerinde çalışacağız. Eclipse ile bir `Hello, World` programını çalıştırmak üzere bir proje açmak için işlemler şu şekilde yapılabilir:
+>1. Wokspace için bir dizin belirenir
+>2. Bir Java projesi açılır. Örneğin File -> New -> Java Project seçilebilir
+>3. Açılan pencerede proje ismi yazılmalıdır. Biz burada `Sample` ismini, vereceğiz. Yine bu pencerede JRE altındaki `Use an execution environment JRE` en az JavaSE 17 olarak seçilmelidir. Yine aynı pencerede `Module` altındaki `Create module-info.java file` seçeneği kaldırılmalıdır. 
+>4. Bir java dosyası eklemek için src dizininde New -> Class menüsü seçilebilir.
+>5. Açılan pencerede package text alanına csd, Name text alanına da App yazılmalıdır. 
+>6. Bu işlemden sonra program yazılarak çalıştırılabilir. Çalıştırmak pek çok yöntem vardır. Herhangi bir tanesi tercih edilebilir. Program çalıştırıldığıda Eclipse kendi Console penceresi açarak ilgili çıktıları orada gösterir.
+>
+**Anahtar Notlar:**  Aslında çalıştırma işlemi derleme işleminden sonra yapılmaktadır. Eclipse'de `build automatically` seçili ise her kod yazımında build işlemi, dolayısıyla derleme işlemi yapılır ve error oluşmazsa arakod üretilir. Eğer `build automatically` seçili değilken çalıştırılırsa önce build işlemi yapılır sonra üretilen arakod çalıştırılır.
+
+**Anahtar Notlar:** Bir IDE programda bir işlemi yapmanın birden fazla yöntemi olabilir ve genelde de birden fazla yönetimi vardır. Yukarıdaki proje açma aşamaları dışında da yöntemler bulunmaktadır.
+
+##### Genel Biçim Açıklama Notasyonu
+
+>Bir dilin kurallarının genel biçimlerini anlatmak için pek çok notasyon kullanılmaktadır. Biz kursumuzda genel olarak `açısal parantez-köşeli parantez tekniğini` kullanacağız. Bu teknikte zorunlu olarak bulunması gerekenler açıklamada açısal parantez içerisinde yazılır. Seçenekli (optional) olması durumunda köşeli parantez içerisinde yazılır. Ayrıca `//...` şeklinde kullanım durumunda `burada bir takım kodlar bulunabilir ancak şu an bizi ilgilendirmiyor` anlamında gelecektir. Genel biçimde doğrudan yazılan herşey orada olması gereken anlamındadır. Yaklaşık 20 yıldır programlamaya ilişkin kaynaklar bir konuyu anlatırken uydurma bazı isimlerkullanmaktadır. Bu isimler genel olarak `foo, bar, tar, zar, car vb.` Biz de bu isimleri zaman zaman kullanacağız. 
+
+##### Bildirim (Declaration)
+
+>Bir ismin derleyiciye tanıtılmasına denir.
+
+##### Hello World Progrmının Genel Açıklaması
+
+>Bir Java programı genel olarak paketlerden (package), paketler sınıflardan (class), sınıflar da metotlardan (method) oluşur. 
+>
+>Paket bildiriminin genel biçimi şu şekildedir:
+
+```java
+package <isim>;
+```
+>Burada paket ismi ileride ele alacağımız değişken isimlendirme kurallarına uygun olmalıdır. Paketler konusu ileride detaylı bir biçimde ele alınacaktır. Paketler konusunda kadar `csd` isimli paket altında çalışacağız. 
+
+>Sınıf bildiriminin genel biçimi şu şekildedir:
+
+```java
+[bildirime ilişkin bazı anahtar sözcükler] class <isim> {
+    //...
+}
+```
+
+>Burada sınıf isminin yine değişken isimlendirme kurallarına uygun olması gerekir. Sınıf bildiriminin detayları konular içerisinde ele alınacaktır. Sınıf kavramı `Nesne Yönelimli Programlama (Object Oriented Programming)` tekniğinin temel taşlarından biridir. 
+
+>Java'da alt programlara **metot (method)** denir. 
+
 
 
 
