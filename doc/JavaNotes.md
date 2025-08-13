@@ -339,12 +339,121 @@ package <isim>;
 
 >Burada sınıf isminin yine değişken isimlendirme kurallarına uygun olması gerekir. Sınıf bildiriminin detayları konular içerisinde ele alınacaktır. Sınıf kavramı `Nesne Yönelimli Programlama (Object Oriented Programming)` tekniğinin temel taşlarından biridir. 
 
->Java'da alt programlara **metot (method)** denir. 
+###### 13 Ağustos 2025
+
+>Java'da alt programlara **metot (method)** denir. **Metot bildirimi (method declaration)** alt programın kodlarının yazılmasıdır. Bir metot bildirildikten sonra, kodlarının çalıştırılabilmesi için **çağrılması (call/invoke)** gerekir. Metot bildiriminin genel biçimi şu şekildedir:
+
+```java
+[erişim belirleyici] [static] <geri dönüş bilgisi> <metot ismi>([parametreler])
+{
+    //...
+}
+```
+
+>Erişim belirleyici şunlardan biri olabilir: **public, protected, no-modifier, private.** İlgili konuya gelene kadar tüm metotlarımızı `public` olarak bildireceğiz. Bir metot **static** veya **non-static** olabilir. static anahtar sözcüğü ile bildirilen metotlar static, bildirilmeyenler non-static olurlar. İlgili konuya gelene kadar tüm metotları static olarak bildireceğiz. Bir metodun **geri dönüş değeri (return value)** olabilir ya da olmayabilir. Bir metodun geri dönüş değeri yoksa, geri dönüş bilgisi yerine **void** anahtar sözcüğü yazılır. Hiç bir şey yazılmaması geçersizdir. Bir metodun geri dönüş değerine ilişkin detaylar ileride ele alınacaktır. Metot ismi değişken isimlendirme kurallarına uygun herhangi bir isim olmalıdır. Bir metodun parametreleri olabilir ya da olmayabilir. Olmaması durumundan parantez içerisi boş bırakılır. Bir metodun parametre değişkenlerine ilişkin detaylar ileride ele alınacaktır. `{ ve }` arasında kalan kod bölümüne **metot gövdesi (method body)** denir. Metodun ne iş yaptığına ilişkin kodlar buraya yazılır.
+
+>`static` bir metodun çağrılmasının genel biçimi şu şekildedir:
+
+```java
+[paket ismi].[sınıf ismi].<metot ismi>([argümanlar]);
+```
+
+Argüman kavramı ileride ele alınacaktır. **Bir metot çağrıldığında akış metodun kodlarına dallanır. Çağrılan metodun kodları çalıştırılır Metot çağrısı bittiğinde yani çağrılan metot sonlandığında, akış çağrılan noktaya geri döner.** Akış main metodundan başlar. Akışın başladığı main metoduna **entry point** denir. mainmetodu `java` programı tarafından (yani JVM tarafından) çağrılır. Özel bazı durumlar dışında main metodu bittiğinde program sonlanır. 
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		System.out.println("Hello, world");
+		csd.Sample.foo();
+		csd.Sample.bar();		
+		System.out.println("Good bye, world");
+	}
+}
 
 
+class Sample {
+	public static void foo()
+	{
+		System.out.println("I am foo");
+	}
+	
+	public static void bar()
+	{
+	
+		System.out.println("I am bar");
+		csd.Mample.tar();
+	}
+}
 
 
+class Mample {
+	public static void tar()
+	{
+		System.out.println("I am tar");
+	}
+}
+
+```
+
+`print`ve `println` metotları aldıkları değerleri ekrana basmak için kullanılan standart metotlardır. Bu metotlar bir `imleç (cursor)` ile çalışırlar. İmlecin bulunduğu yere yazma yaparlar ve yazdıkları karakter sayısı kadar imleci ilerletirler. `print` metodu imleci son yazdığı karakterden sonrasında bırakır, `println` metodu ile imleci son yazdığı karakterden sonraki satırın (line) başında bırakır. 
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		System.out.print("Merhaba ");
+		System.out.println("Nasılsın?");
+		System.out.println("İyi misin?");
+	}
+}
+```
+
+**Anahtar Notlar:** `print` ve `println` metotları aslında non-static metotlardır. Aynı zamanda `System` sınıf, `out` `PrintStream` türünden bir `referanstır`. Buradaki detalar konular içerisinde ele alınacaktır.
+
+**Anahtar Notlar:** Aslında teknik olarak `print` ve `println` metotları ekrana yazdıklarını bilmezler. Bu metotlar **standard output (stdout)** denilen bir dosyaya yazma yaparlar. `stdout` dosyası nereye yönlendirilmişse (redirection) yazma oraya yapılır. Bu durumda `stdout` ekrana yönlendirilmişse bu metotlar ekrana yazarlar. Kursumuzda basitleştirmek için `ekrana basma` ya da `ekrana yazma` biçiminde kullanılacaktır. Benzer şekilde klavyeden okuma yapan metotlar **standard input (stdin)** dosyasından okuma yaparlar. `stdin` dosyası klavyeye yönlendirilmişse okuma klavyeden yapılır. Kursumuzda basitleştirmek için `klavyeden okuma` biçiminde kullanılacaktır. Masaüstü işletim sistemlerinin hemen hepsinde default olarak stdout ekrana, stdin klavyeye yönlendirilmiştir. Ayrıca IDE programlar `stdout` dosyasını kendi console pencelerelerine gönderebilirler.
 
 
+>Çağıran metodun (caller) ait olduğu sınıf ile çağrılan metodun ait olduğu sınıf aynı paket içerisindeyse, çağrı sırasında paket ismi kullanılmayabilir. Çağıran metot ile çağrılan metot aynı sınıf içerisindeyse çağrı sırasında paket ismi de kullanılmamışsa, sınıf ismi de kullanılmayabilir. 
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		System.out.println("Hello, world");
+		Sample.foo();
+		Sample.bar();		
+		System.out.println("Good bye, world");
+	}
+}
+
+
+class Sample {
+	public static void foo()
+	{
+		System.out.println("I am foo");
+		bar();
+	}
+	
+	public static void bar()
+	{	
+		System.out.println("I am bar");
+		Mample.tar();
+	}
+}
+
+
+class Mample {
+	public static void tar()
+	{
+		System.out.println("I am tar");
+	}
+}
+```
 
 
