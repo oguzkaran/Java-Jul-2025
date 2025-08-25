@@ -3,10 +3,25 @@ package csd;
 class App {
 	public static void main(String [] args)
 	{	
-		int ogrenciSayisi = 10;
+		int result;
 		
-		System.out.println(ogrenciSayisi);
+		result = NumberUtil.sum() * 3;
+		
+		//...
+		
+		System.out.println(result);
 	}
 }
 
-
+class NumberUtil {
+	public static int sum()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		
+		return a + b;
+	}
+}
