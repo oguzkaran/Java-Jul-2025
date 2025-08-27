@@ -1142,6 +1142,8 @@ class App {
 
 >Sabitlerden, operatörlerden ve değişkenlerden oluşan bir kombinasyona **ifade (expression)** denir. Bir ifade yalnızca sabitlerden ve operatörlerden oluşuyorsa **sabit ifadesi (constant expression)** denir. Bir sabit ya da bir değişken tek başına bir ifade belirtir ancak bir operatör tak başına bir ifade belirtmez. Her ifadenin bir türü vardır. Bunun bir tane istisnası vardır, ileride ele alınacaktır.
 
+##### 27 Ağustos 2025
+
 ##### Metotların Geri Dönüş Değerleri
 
 > Bir metodun geri dönüş değeri bilgisi yerine bir tür yazılırsa, bu metodun **geri dönüş değeri (return valueI)** vardır denir. Tersine bir metodun geri dönüş değeri varsa, geri dönüş değeri bilgisi yerine tür yazılır. Bir metodun geri dönüş değeri varsa, o metodun çağrısı bittiğinde çağrılan noktaya bir değer ile geri döner. Metodun geri dönüş değeri yoksa, metot sonlandığında çağrılan noktaya yalnızca geri döner, yani bir değer ile geri dönmez. Bir metodun geri dönüş değeri varsa, geri dönüş değeri metot içerisinde **return deyimi (return statment)** ile oluşturulur. return deyiminin genel biçimi şu şekildedir:
@@ -1153,7 +1155,6 @@ return [ifade];
 >Genel biçimden de anlaşıldığı gibi, return deyimi ya tek başına ya da bir ifade ile kullanılabilmektedir. return deyimi kurallar dahilinde nasıl kullanılırsa kullanılsın, akış return deyimine geldiğinde metot sonlanır. Yani return deyiminin birinci görevi metodu sonlandırmaktır. return deyimi kurallar dahilinde bir ifade ile kullanılmışsa ifadenin değeri çağrılan noktaya aktarılır. Buna geri dönüş değeri denmesinin nedeni budur.
 
 >Aşağıdaki demo örnekte `sum` metodunda kullanıcıdan int türden iki tane değer istmemiş ve toplam değerine geri dönülmüştür. `main` metodu içerisinde `sum` metodu çağrısı bir ifade içerisinde kullanılmış dolayısıyla geri dönüş değeri o ifadede işleme sokulmuştur
-
 
 ```java
 package csd;
@@ -1188,7 +1189,9 @@ class NumberUtil {
 }
 ```
 
->Akış return deyimine geldiğinde, return deyimine ilişkin ifade hesaplanır ve elde edilen değere geri dönülür
+>Akış return deyimine geldiğinde, return deyimine ilişkin ifade hesaplanır ve elde edilen değere geri dönülür.
+
+>Aşağıdaki demo örneği inceleyiniz
 
 ```java
 package csd;
@@ -1214,13 +1217,537 @@ class NumberUtil {
 		System.out.print("Input two numbers:");
 		int a = kb.nextInt();
 		int b = kb.nextInt();		
+
+		return a + b;		
+	}
+}
+```
+>Bir metodun geri dönüş değeri varsa return tek başına (yani bir ifade olmadan) kullanılamaz.
+
+```java
+class NumberUtil {
+	public static int sum()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
 		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+
+		return; //error
+	}
+}
+```
+>Bir metodun geri dönüş değeri varsa, akışın her noktasında değere geri dönebilmesi gerekir. Aksi durumda error oluşur. Yani derleyici açısından geri dönüş değeri olan bir metodun sonlandığı her noktada bir değere geri dönüyor olması gerekir
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+class NumberUtil {
+	public static int sum() //error
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+class NumberUtil {
+	public static int sum() //error
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+
+	
+		if (a > b)
+			return a;
+	}
+}
+```
+
+>Bir metodun geri dönüş değeri başka bir metodun geri dönüş değeri olarak doğrudan yazılabilir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		int result;
+		
+		result = Util.total();
+		
+		//...
+		
+		System.out.println(result);
+	}
+}
+
+
+class Util {
+	public static int total()
+	{
+		//...
+		System.out.println("total");
+		
+		
+		return NumberUtil.sum();
+	}
+}
+
+class NumberUtil {
+	public static int sum()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+
 		return a + b;
 	}
 }
 ```
 
+>Aşağıdaki demo örneği inceleyiniz
 
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		int result;
+		
+		result = Util.total();
+		
+		//...
+		
+		System.out.println(result);
+	}
+}
+
+
+class Util {
+	public static int total()
+	{
+		//...
+		System.out.println("total");
+		
+		
+		return NumberUtil.sum() * 2;
+	}
+}
+
+class NumberUtil {
+	public static int sum()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+
+		return a + b;
+	}
+}
+```
+>Bir metodun geri dönüş değeri varsa, çağrıda geri dönüş değerinin sentaks ve semantik açıdan işleme sokulması zorunlu değildir. Şüphesiz metodun yaptığı işin de buna yönelik olması gerekir.
+
+
+>Aşağıdaki demo örnekte metodu çağıran programcı senaryo gereği yalnızca değerin ekrana basılması ile ilgilenmektedir. Bu durumda geri dönüş değerini işleme sokmamıştr. Örnekteki `sum` metodu toplam değerini ekrana basmamış olsaydı, geri dönüş değerini kullanmamak yani işleme sokmamak bu metot için anlamlı olur muydu?
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		NumberUtil.sum();
+	}
+}
+
+class NumberUtil {
+	public static int sum()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		int total = a + b;
+		
+		System.out.println(total);
+
+		return total;
+	}
+}
+```
+>Geri dönüş değeri olan metot çağrısında derleyici **geçici değişken (temporary variable)** yaratan ve duruma göre işleme sokan kodu üretir. Aşağıdaki demo örnekte 
+
+```java
+result = NumberUtil.sum() * 3;
+```
+
+>deyimi için derleyici yaklaşık olarak aşağıdaki gibi bir kodu üretir (yani byte code'a yazar). 
+
+```java
+int temp = NumberUtil.sum();
+
+result = temp * 3;
+```
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		int result;
+		
+		result = NumberUtil.sum() * 3;
+		
+		//...
+		
+		System.out.println(result);
+	}
+}
+
+class NumberUtil {
+	public static int sum()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		
+		return a + b;		
+	}
+}
+```
+
+>Dikkat edilirse geri dönüş değeri olan bir metot çağrısı geçici değişkene yapılan bir aktarım ya da başka bir deyişle atama (assignment) işlemidir.
+
+>Bir metodun geri dönüş değeri olmaması durumunda geri dönüş değeri bilgisi yerine **void** anahtar sözcüğü yazılır. Geri dönüş değeri olmayan metotlara **void metotlar (void methods)** denir. void bir metod sonlandığında çağrılan noktaya bir değer ile geri dönmez. Bu durumda void bir metot içerisinde return deyiminin ifade ile kullanılması error oluşturur.
+
+```java
+class NumberUtil {
+	public static void printSum()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int total = a + b;
+		
+		System.out.println(total);
+		return total; //error		
+	}
+}
+```
+
+>void bir metot içerisinde return deyimi ifade olmadan yani tek başına istenirse sonlandırmak için kullanılabilir. Bu durumda void bir metot içerisinde return deyimi kullanımı zorunlu değildir. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		NumberUtil.printSum();
+	}
+}
+
+class NumberUtil {
+	public static void printSum()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int total = a + b;
+		
+		if (total < 0)
+			return;
+		
+		System.out.println(total);				
+	}
+}
+```
+
+>void bir metot çağrısı sanki geri dönüş değeri varmış gibi işleme sokulamaz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		int result = NumberUtil.printSum() * 2; //error
+	} 
+}
+
+class NumberUtil {
+	public static void printSum()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int total = a + b;
+		
+		if (total < 0)
+			return;
+		
+		System.out.println(total);				
+	}
+}
+```
+
+**Anahtar Notlar:** Bir metodun geri dönüş değeri o metodun çıktısıdır (output).
+
+**Anahtar Notlar:** Java'da bir metot tek bir değere geri dönebilir. Birden fazla değer geri dönemez.
+
+**Anahtar Notlar:** void bir metot çağrısı da bir ifadedir ancak bu ifadenin türü yoktur. void bir metot çağrısına **void expression** denir.
+
+##### Metotların Parametre Değişkenleri
+
+>Metodun isminden sonra parantez içerisinde bildirilen değişkenlere **metot parametre değişkenleri (method parameter variables)** denir. Metot parametre değişkenleri aralarında virgül atomu ile ayrılacak şekilde yazılırlar
+
+```java
+class NumberUtil {
+	public static int sum(int a, int b)
+	{
+		return a + b;
+	}
+	
+	public static int square(int a)
+	{
+		return a * a;
+	}
+	
+	public static void printSum(int a, int b)
+	{
+		int result = a + b;
+		
+		System.out.println(result);
+	}
+}
+```
+
+>Metodun son parametresinden sonra virgül konması error oluşuturur
+
+```java
+class NumberUtil {
+	public static int sum(int a, int b,) //error
+	{
+		return a + b;
+	}
+	
+	public static int square(int a,) //error
+	{
+		return a * a;
+	}
+}
+```
+
+>Bir metodun parametre değişkenleri aynı türden olsa bile her biri için tür bilgisi yazılmalıdır. Aksı durumda error oluşur
+
+```java
+class NumberUtil {
+	public static int sum(int a, b) //error
+	{
+		return a + b;
+	}
+}
+```
+>Metot parametre değişkenleri faaliyet alanı (scope) bakımından metot başında bildirilen yerel değişkenler gibidir. Yani tüm metot boyunca görülebilirdir. Metot gövdesi dışından görülebilir değildir. 
+
+>Metot çağrılırken parametrelere geçilen ifadelere **argüman (arguments)** denir. Bu anlamda metodun parametreleri, metodun girdileri (input). Bir metodun kaç tane parametresi varsa o kadar sayıda argüman ile çağrılmalıdır. Parametre değişkenleri değerlerini metot çağrısında, ilgili parametreye geçilen argümana ilişkin ifadenin değeri olarak alırlar. Yani metot çağrısında önce argümanlara geçilen ifadeler hesaplar elde edilen değerler ilgili parametreler aktarılır. Bu durumda argümandan parametreye aktarım da bir değer verme yani atama işlemidir. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		int total = NumberUtil.sum(a, b);
+		
+		System.out.println(total);
+		
+		NumberUtil.printSum(a, b);
+		
+		int result = NumberUtil.square(a);
+		
+		System.out.println(result);
+	} 
+}
+
+class NumberUtil {
+	public static int sum(int a, int b) 
+	{
+		return a + b;
+	}
+	
+	public static int square(int a) 
+	{
+		return a * a;
+	}
+	
+	public static void printSum(int a, int b)
+	{
+		int result = a + b;
+		
+		System.out.println(result);	
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		int total = NumberUtil.sum(a, b, 10); //error
+		
+		
+	} 
+}
+
+class NumberUtil {
+	public static int sum(int a, int b) 
+	{
+		return a + b;
+	}
+	
+	public static int square(int a) 
+	{
+		return a * a;
+	}
+	
+	public static void printSum(int a, int b)
+	{
+		int result = a + b;
+		
+		System.out.println(result);	
+	}
+}
+```
+
+>Aşağıdaki demo örnekte önce argümanlara ilişkin ifadelerin değerleri hesaplanır, sonra elde edilen değerler parametrelere aktarılır
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		int total = NumberUtil.sum(a + 2, b * 3);
+		
+		System.out.println(total);
+	} 
+}
+
+class NumberUtil {
+	public static int sum(int a, int b) 
+	{
+		return a + b;
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz. Bu örnekte 
+
+```java
+System.out.println(NumberUtil.sum(a + 2, b * 3));
+```
+
+>deyimi kompact olarak yazılmıştır. Bu tarz kompakt ifadelerin yazımında okunabilirliğin/algılanabilirliğin olumsuz etkilenmemesine özen gösterilmelidir.
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+			
+		System.out.println(NumberUtil.sum(a + 2, b * 3));
+	} 
+}
+
+class NumberUtil {
+	public static int sum(int a, int b) 
+	{
+		return a + b;
+	}
+}
+```
+
+**Anahtar Notlar:** Java'da 3 yerde değer verme ya da başka bir deyişle atama işlemi söz konnusudur:
+1. Atama operatörleri ile yapılan değer verme
+2. Bir metodun geri dönüş değerinin geçici değişkene aktarımı
+3. Argümanlardan parametrelere aktarım
+
+
+###### Metotlar ne işe yarar? Problem çözümünde neden metotlar yazalım? 
+
+>Bu sorunun cevabı aşağıdaki maddelerle özetlenebillir:
+>
+>- Bir işin çok fazla yerde yapılması durumu kod tekrarına yol açar. Yazılım geliştirmede temel prensiplerden biri **zorunlu olmadıkça kod tekrarı yapmamaktır.** Bu kavrama İngilizce olarak **Do not repeat yourself (DRY)** denilmektedir.Bu durumda programcı bir metot yazarak ilgili algoritmaya ilişkin kod tekrarını o metodu çağrırarak engellemiş olur
+>
+>- Bir problemin çözümü gerektiği her noktada metot çağırma yerine kod tekrarlayarak yapılmışsa, bu durumda programcı problemin çözümüne ilişkin kodda bir değişiklik yapmak istediğinde veya bir hata olduğunu farkediği düzeltmek istedğinde tekrarladığı her yerde bu değişikliği yapmak zorunda kalır. Halbuki bu metot yazılmış ve gereken yerlerde çağrılmış olursa sadece metot içerisinde değişiklik yazpılması yeterli olacaktır.
+>
+>- Bir problemin çözümünün bir metot olarak yazılması onun bağımsız olarak test edilip doğrulanması, varsa hataların farkedilip düzeltilmesini kolaylaştırabilmektedir.
+>
+>- Bir problemin çözümü gerektiği her noktada metot çağırma yerine kod tekrarlayarak yapılmışsa, kodun okunabilirliği/algılanabilirliği de azalabilir. Metot çağrısı okunabilirliği/algılanabilirliği artırır
+>
+>- Metotlar yazıldığında başka projelere de çeşitli yöntemlerle taşınarak kullanılabilir. Bu anlamda **code reusablity** açısından da önemlidir.
+>
+>- Metodu yazan programcı metodun nasıl yazıldığına ilişkin detayları bilmek zorunda değildir. Çünkü metodun çağrıldığı noktada nasıl yazıldığının önemi yoktur, ne iş yaptığının önemi vardır.
 
 
 
