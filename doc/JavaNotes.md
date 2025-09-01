@@ -1749,5 +1749,364 @@ class NumberUtil {
 >
 >- Metodu yazan programcı metodun nasıl yazıldığına ilişkin detayları bilmek zorunda değildir. Çünkü metodun çağrıldığı noktada nasıl yazıldığının önemi yoktur, ne iş yaptığının önemi vardır.
 
+**Anahtar Notlar:** Yukarıda anlatılan gerekçelerin en temel çözümü metotlar yazmak ve çağırmak biçimindedir. İleride ele alacağımız başka tekniklerle birlikte daha yüksek seviyeli çözümler de göreceğiz.
+
+###### 1 Eylül 2025
+
+##### Formatlı Yazdırma İşlemleri
+
+>Java'da formatlı yazdırma yazdırma yapmak için temel olarak **System.out.printf** metodu kullanılır. Bununla birlikte tamamen aynı işi yapan **System.out.format** isimli metot da kullanılabilmektedir. `printf` metodunun birinci parametresine argüman olarak bir yazı (string, string literal vb.) geçilmelidir. Metodun diğer paramtreleri istenilen sayıda ve türde olabilmektedir. Bu anlamda `printf` metodu `değişken sayıda argüman alan metottur(variable arguments/varargs method).` Bu tarz metotların nasıl yazılacağı bu bölümde ele alınmayacaktır. Metodun birinci parametresine geçilen yazı içerisinde özel bazı karakterler `%` karakteri ile birlikte kullanılabilmektedir. Bu özel karakterlere **format karakterleri (format specifiers)** denir. Bu format karakterleri `%` karakteri ile birlikte kullanıldıklarında **yer tutucu (place holder)** görevi görürler. Bir format karakteri özel bazıları dışında bir türe karşılık gelir ve o yer tutucu yerine metoda geçilen argümanın değeri yerleştirilerek formatlama işlemi yapılır. Format karakterlerinin bazıları şunlardır:
+
+>**d:** Tamsayı türleri için kullanılır. Sayının decimal olarak formatlanmasını sağlar
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();	
+		
+		System.out.printf("%d + %d = %d%n", a, b, a + b);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+```
+
+>**x veya X:** Tamsayı türleri için kullanılır. Sayının değerinin hxadecimal olarak formatlanmasını sağlar. Format karakterinin küçük veya büyük olmasına göre semboller sırasıyla küçük harf veya büyük harf olarak yazılırlar.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();	
+		
+		System.out.printf("%x + %x = %x%n", a, b, a + b);
+		System.out.printf("%X + %X = %X%n", a, b, a + b);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+```
+
+>**o:** Tamsayı türleri için kullanılır. Sayının değerinin octal olarak formatlanmasını sağlar.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();	
+		
+		System.out.printf("%o + %o = %o%n", a, b, a + b);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+
+```
+
+>Tamsayılar formatlanırken **hizalama (alignment)** yapılabilmektedir. `%` ile format karakteri arasında pozitif bir tamsayı yazıldığında, yer tutucuya ilişkin değerin karakter sayısı o tanmsayı değerinden küçükse tamamlamak için `SPACE` karakteri yerleştirilir. Eğer hizalama için yazılan pozitif tamsayıdan önce sıfır yazılırsa tamamlamak için sıfır kullanılır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Tarih bilgisini giriniz (gün ay yıl):");
+		int day = kb.nextInt();
+		int month = kb.nextInt();
+		int year = kb.nextInt();
+		
+		System.out.printf("%2d/%2d/%4d%n", day, month, year);
+		System.out.printf("%02d/%02d/%04d%n", day, month, year);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+
+```
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		int a = kb.nextInt();
+		
+		System.out.printf("a = %08X%n", a);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+```
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		long a = kb.nextLong();
+		
+		System.out.printf("a = %016X%n", a);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+```
+
+>**f:** Gerçek sayı türleri için kullanılır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();	
+		
+		System.out.printf("%f + %f = %f%n", a, b, a + b);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+```
+
+>Gerçek sayıların formatlanmasında `%` ile `f` arasında `.` ile birlikte bir negatif olmayan tamsayı yazıldığında, noktadan sonra kaç basamağın formatlanacağı bilgisidir. Geri kalan basamaklar bilimsel olarak yuvarlanır (round).
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();	
+		
+		System.out.printf("%.2f + %.2f = %.20f%n", a, b, a + b);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+```
+**c:** char türü için kullanılır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		char c = 45000;
+		
+		System.out.printf("c = %c%n", c);
+		System.out.println("Tekrar yapıyor musunuz?");	
+	} 
+}
+```
+
+**b:** boolean türü için kullanılır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		boolean flag = true;
+		
+		System.out.printf("flag = %b%n", flag);
+		System.out.println("Tekrar yapıyor musunuz?");	
+	} 
+}
+```
+
+**n:** İmleci bir sonraki satırın başına çokmek için kullanılır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();	
+		
+		System.out.printf("a = %.4f%nb = %.4f%n", a, b);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+```
+**`%`** `%` karakterinin formatlanması için kullanılır.
+
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Oranı giriniz:");
+		double ratio = kb.nextDouble();
+		
+		System.out.printf("Oran = %% %f%n", ratio);
+		System.out.printf("Oran = %%%f%n", ratio);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+```
+
+>Format karakterlerine ilişkin argümanların türlerinin uyuşmaması durumunda exception oluşur.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Oranı giriniz:");
+		double ratio = kb.nextDouble();
+		
+		
+		System.out.printf("Oran = %% %d%n", ratio);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+```
+
+**Anahtar Notlar:** Burada anlatılan format karakterlerinin diğer ayrıntıları konular içerisinde ele alınacaktır.
+
+**Anahtar Notlar:** Burada anlatılan format karakterleri dışında da pek format karakteri vardır. Konular içerisinde ele alınacaktır.
+
+**Anahtar Notlar:** `printf` metodu gibi kullanılan yani formatlamayı aynı şekilde yapabilen ancak ekrana basmayan çok önemli bazı metotlar vardır. Bu sebeple `printf` kullanımının bilinmesi Java programcısı açısından önemlidir. Bu çok önemli metotlar ileride ele alınacaktır.
+
+>**Sınıf Çalışması:** Klavyeden girilen iki double türden sayının toplamını, farkını, çarpımını ve bölümünü aşağıdaki açıklamalara göre ekrana bastıran programı yazınız.
+>
+>**Açıklamalar:**
+>- Sayılar noktadan sonra 2 basamağa kadar, sonuçlar ise noktadan sonra 7 basamağa kadar gösterilecektir
+>
+>- Ekran çıktıları girilen sayılar örneğin `0.1` ve `0.2` ise aşağıdaki biçimde olacaktır
+
+```
+0.1000 + 0.2000 = 0.3000000
+0.1000 - 0.2000 = -0.1000000
+...
+```
+>Diğer işlemler içinde benzer çıktılar olacaktır.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();
+		
+		System.out.printf("%.4f + %.4f = %.7f%n", a, b, a + b);
+		System.out.printf("%.4f - %.4f = %.7f%n", a, b, a - b);
+		System.out.printf("%.4f * %.4f = %.7f%n", a, b, a * b);
+		System.out.printf("%.4f / %.4f = %.7f%n", a, b, a / b);		
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+```
+
+##### Bölme İşlemi
+
+>Tamsayılarla bölme işleminde sonuç tamsayı olarak elde edilir. Yapılan işlemin sonucunda değerin noktadan sonraki kısmı atılır. Tamsayılarla bölme işleminde payda sıfır ise exception oluşur.
+
+>Aşağıdaki demo örneği çeşitli değerler ile çalıştırıp sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		System.out.printf("%d / %d = %d%n", a, b, a / b);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+```
+
+>`IEEE 754` formatında gerçek sayılar dışında özel bazı değerler de bulunur. Örneğin, `NaN, Infinity, -Infinity` değerleri sırasıyla `Not a Number, Positive Infinity, Negative Infinity` değerlerini temsil eder. Bu durumda gerçek sayılarla bölme işleminde payda sıfır, pay sıfır dışı bir değerse elde edilen sonuç, pay pozitif ise `Infinity`, nagatif ise `-Infinity` biçimindedir. Pay ve paydanın her ikisi birden sıfır ise sonuç `NaN` biçimindedir.
+
+>Aşağıdaki demo örneği çeşitli değerler ile çalıştırıp sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();
+		
+		System.out.printf("%f / %f = %f%n", a, b, a / b);
+		System.out.println("Tekrar yapıyor musunuz?");
+	} 
+}
+```
+
+>`IEEE 754` formatında başka özel değerler de bulunur. Bunlar konular içerisinde ele alınacaktır. Genel olarak `NaN` Matematikteki belirsiziliği (indeterminate), `Infinity ve -Infinity` ise Matematikteki tanımsızlığı temsil eder. 
+
+##### Standart Metotlar
+
+>JavaSE'de standart olarak bildirilen pek çok metot bulunmaktadır. Programcı bir problemin çözümüne ilişkin işlem yapan standart metotlar varsa önce onları kullanmayı tercih etmelidir. Eğer yoksa bazı çok kullanılan kütüphanelerde varsa onları tercih etmelidir. Hala yoksa bu durumda programcı ilgili işlemleri yapan metotları yazmalıdır. Ancak bu durum, programcının kullandığı bir metodun, standart olsun ya da olmasın nasıl yazıldığını gözardı etmesi anlamına gelmemelidir. Programcı, programlama yaşamı boyunca hepsini olmasa da hazır olarak kullandığı metotların nasıl yazıldığını öğrenmesi gerekir. Bunun hemen yapılması gerekmez.  
+>
+>Standart metotların, metot kullanmaya da ek olarak avantajları şu şekilde özetlenebilir:
+>- Testleri yapılmıştır ve yeterince etkin olarak yazılmıştır. Hatta duruma göre zamanla metodun etkinliği de artırılmış olabilir.
+>
+>- Taşınabilirdir. Yani, standart metotların çağrıldığı kodlar herhangi bir üçüncü parti koda ya da kütüphaneye ihtiyaç duymadan derlenebilir. 
+>
+>Bu durumda bir metodun **ne iş yaptığını** anlamak için tipik olarak bir dökumantasyon oluşturulur. JavaSE içerisinde bulunan standart metotların (ait olduğu sınıfların da) dökumantasyonu [https://docs.oracle.com/](https://docs.oracle.com/) bağlantısındaki çeşitli sayfalarda bulunmaktadır. Ancak yine de ilgili dökumantasyon tüm detayıyla açıklama yapmayabilir. Genel olarak Java dökumantasyonu konu hakkında fikir vermek için yazılır. Duruma göre programcı başka kaynaklardan öğrenmek zorunda kalabilir.
 
 
