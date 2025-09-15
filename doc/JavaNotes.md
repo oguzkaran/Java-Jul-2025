@@ -2422,7 +2422,7 @@ class App {
 
 **Anahtar Notlar:** Derleyicinin bir ifadenin türünü tespit etmesine İngilizce terim olarak **type inference/deduction** denir.
 
->Sabitlerin türleri aşağıdaki kurallara belirlenir:
+>Sabitlerin türleri aşağıdaki kurallara göre belirlenir:
 >
 >- Sayı nokta içermiyorsa, sonuna her hangi bir ek almamışsa ve int türü sınırları içerisinde kalıyorsa int türden bir sabittir. Sayı int türü sınırları dışındaysa error oluşur. Örneğin, 100, 234.
 >
@@ -2438,7 +2438,7 @@ class App {
 >
 >-  boolean türden iki tane sabit vardır: true, false.
 >
->- Tek tırnak içerisinde yazılan karakterlere ilişkin sembollere tırnakları ile beraber **karakter sabitleri (character literals)** denir. Karakter sabitleri char türdendir. Tek tırnak içerisinde özel bazı durumlar dışında tek bir karakter yazılabilir. Aksi durumda error oluşur. Bir karakter sabiti, ilgili karakterin code point'ine karşılık gelir. Bu durumda char türden içerisinde bir karakterin code point'i tutulabilir. Böylelikle **mantıksal olarak** char türü ile br karakter tutulmuş olur. Bazı karakterler klavyedeki tuş kombinasyonları ile doğrudan yazılamazlar, bazı karakterler ise doğrudan ekrana basılamazlar (non-printable). Bu tarz karakterlere ilişkin sabitler, `\` karakteri ile birlikte özel bir karakter ile tek tırnak içerisinde yani bir karakter sabiti olarak yazılırlar. Sabitleri, ters bölü ile yazılabilen karakterlere **escape sequence characters** denir. Java'da desteklenen escape sequence karakter şunlardır:
+>- Tek tırnak içerisinde yazılan karakterlere ilişkin sembollere tırnakları ile beraber **karakter sabitleri (character literals)** denir. Karakter sabitleri char türdendir. Tek tırnak içerisinde özel bazı durumlar dışında tek bir karakter yazılabilir. Aksi durumda error oluşur. Bir karakter sabiti, ilgili karakterin code point'ine karşılık gelir. Bu durumda char türden değişken içerisinde bir karakterin code point'i tutulabilir. Böylelikle **mantıksal olarak** char türü ile bir karakter tutulmuş olur. Bazı karakterler klavyedeki tuş kombinasyonları ile doğrudan yazılamazlar, bazı karakterler ise doğrudan ekrana basılamazlar (non-printable). Bu tarz karakterlere ilişkin sabitler, `\` karakteri ile birlikte özel bir karakter ile tek tırnak içerisinde yani bir karakter sabiti olarak yazılırlar. Sabitleri, ters bölü ile yazılabilen karakterlere **escape sequence characters** denir. Java'da desteklenen escape sequence karakter şunlardır:
 
 | Karakter Sabiti | Karakter Sabiti Adı                          |
 | --------------- | -------------------------------------------- |
@@ -2490,7 +2490,7 @@ class App {
 }
 ```
 
->Tek tırnak karakter sabiti `\` ile yazılmalıdır. Aksi durumda error oluşur. İki tırnak karakter sabit doğrudan ya da `\` ile yazışabilmektedir.
+>Tek tırnak karakter sabiti `\` ile yazılmalıdır. Aksi durumda error oluşur. İki tırnak karakter sabiti doğrudan ya da `\` ile yazılabilmektedir.
 
 ```java
 package csd;
@@ -2505,7 +2505,7 @@ class App {
 }
 ```
 
->Ters bölü karakterinin karakter sabiti de yine `\` ile yazılmalıdır. Aksş durumda error oluşur
+>Ters bölü karakterinin karakter sabiti de yine `\` ile yazılmalıdır. Aksi durumda error oluşur
 
 ```java
 package csd;
@@ -2703,7 +2703,7 @@ class App {
 }
 ```
 
->Bir sabit üstel olarak gösterilebilir. Bu gösterime **bilimsel gösterim (scientific notation)** ya da **üstek gsterim (exponential notation)** denir. Üstel olarak gösterilen sabitler değerleri ne olursa olsun double türden dir.
+>Bir sabit üstel olarak gösterilebilir. Bu gösterime **bilimsel gösterim (scientific notation)** ya da **üstel gösterim (exponential notation)** denir. Üstel olarak gösterilen sabitler değerleri ne olursa olsun double türden dir.
 
 >Aşağıdaki demo örneği inceleyiniz
 
@@ -2799,6 +2799,8 @@ class App {
 }
 ```
 
+###### 15 Eylül 2025
+
 ##### Temel Operatörler
 
 >Belirli bir işleme yol açan ve bu işlem sonucunda bir değer üreten atomlara **operatör (operator)** denir. Bu bölümde temel operatörler ele alınacaktır. Bazı operatörler konular içerisinde, bazı operatörler `Java ile Uygulama Geliştirme 1` kursunda ele alınacaktır. 
@@ -2811,7 +2813,7 @@ class App {
 >
 >1. İşlevlerine göre sınıflandırma: İşlevlerine göre operatörler şu şekilde sınıflandırılabilir:
 >
->>- Artimetik Operatörler (Aritthmetic Operators)
+>>- Artimetik Operatörler (Arithmetic Operators)
 >>- Karşılaştırma Operatörleri (Comparison Operators)
 >>- Mantıksal Operatörler (Logical Operators)
 >>- Bitsel Operatörler (Bitwise Operators)
@@ -2829,14 +2831,14 @@ class App {
 >>- Araek (infix)
 >>- Sonek (postfix)
 >
->**Operatörün Ürettiği Değer (Product Value):** Operatörün işlemi sonucunda elde edilen değerdir.
+>**Operatörün Ürettiği Değer (Product Value):** Operatörün yaptığı işlem sonucunda elde edilen değerdir.
 >
->**Operatörün yan Etkisi (Side Effect):** Operatörün, operandının değerinin değiştirip değiştirmemesi durumudur. Değiştiriyorsa yan etkisi vardır, değiştirmiyorsa yoktur.
+>**Operatörün Yan Etkisi (Side Effect):** Operatörün, operandının değerini değiştirip değiştirmemesi durumudur. Değiştiriyorsa yan etkisi vardır, değiştirmiyorsa yoktur.
 >
 >**Operatörün Kısıtı (Contraint):** Operatörün kullanımına ilişkin zorunluluklardır.
 >
 >**Operatörün Önceliği (Operator Precedence):** Bir ifadede önceliği olan operatörün genel olarak (ama her operatör için değil) önce işleme girmesidir. Bu durumun önemli bazı istisnaları vardır. 
-Aslında terminolojik olarak operatörün önceliği (operator precedence) ve işleme giriş sırası (order of evaluation) her operatör için aynı şeyler anlamına gelmez. Bazı operatörler öncelikli olmasına işlem sıraları farklı olabilmektedir. Önceliğe ilişkin basit bir örnek şu şekilde verilebilir: 
+Aslında terminolojik olarak **operatörün önceliği (operator precedence)** ve **işleme giriş sırası (order of evaluation)** her operatör için aynı şeyler değildir. Bazı operatörler öncelikli olmasına karşın işlem sıraları farklı olabilmektedir. Önceliğe ilişkin basit bir örnek şu şekilde verilebilir: 
 
 ```
 a = b + c * d ifadesinin yapılış sırası şöyledir:
@@ -2853,8 +2855,394 @@ i2: i1 * d
 i3: a = i2
 ```
 
->Bazı operatörler aynı öncelik seviyesinde olabilirler. Bu durumda, aynı öncelik seviyesindeki operatörlerin nasıl ele alınacağı **associativity** denilen bir kavram ile belirlidir. Bu anlamda **left associative** ve **right associative** terimleri kullanılır.
+>Bazı operatörler aynı öncelik seviyesinde olabilirler. Bu durumda, aynı öncelik seviyesindeki operatörlerin nasıl ele alınacağı **associativity** denilen bir kavram ile belirlidir. Bu anlamda **left associative** ve **right associative** terimleri kullanılır. Örneğin
 
+```
+a = b + c - d ifadesinin yapılış sırası şöyledir:
+i1: b + c
+i2: i1 - d
+i3: a = i2
+```
+
+###### Aritmetik Operatörler
+
+>Aritmetik operatörler şunlardır: `+, -, *, /, %, -, +, --, ++`. Bu operatörlerin operandları boolean türden olamazlar. 
+
+>`+, -, *, /, %` operatörleri iki operandlı (binary) ve araek (infix) durumundadır. Bu operatörler işlemin sonucuna ilişkin değeri üretirler. Bu operatörlerin yan etkileri yoktur. `/ ve *` operatörleri aynı öncelik grubundadır ve, aynı öncelik grubunda buluna `+ ve -` operatörlerinden önceliklidir. Bu iki grup da soldan sağa önceliklidir (left associative). 
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		System.out.printf("%d + %d = %d%n", a, b, a + b);
+		System.out.printf("%d - %d = %d%n", a, b, a - b);
+		System.out.printf("%d * %d = %d%n", a, b, a * b);
+		System.out.printf("%d / %d = %d%n", a, b, a / b);
+	}
+}
+```
+
+>Mod alma işlemi `%` atomu ile belirtilen operatör ile yapılır. Mod alma işlemi de aslında bölme yapılarak hesaplandığından bu operatör `* ve /` operatörleri ile aynı öncelik seviyesindedir. Bu operatör pratikte daha çok tamsayılarla kullanılsa da Java'da gerçek sayılarla da kullanılabilmektedir. Bu operatörün ikinci operandının negatif olmasının bir önemli yoktur. `n` pozitif bir tamsayı olmak üzere, bir sayının `n` sayısına göre modunu almakla `-n` sayısına göre modunu almak aynı sonucu verir. Operatörün birinci operandının pozitif olması durumunda ürettiği değer Matematikteki mod işlemi ile aynıdır ancak birinci operandının negatif olması durumunda, operandın pozitif değerine göre mod işlemi hesaplanır ve negatifi değer olarak üretilir. Yani bu operatörün birinci operandının negatif olması durumunda ürettiği değer Matematikteki ile aynı şekilde hesaplanmaz.
+
+>Aşağıdaki demo örneği çeşitli değerler ile çalıştırıp sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		System.out.printf("%d %% %d = %d%n", a, b, a % b);
+	}
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı 3 basamaklı bir sayının basamakları toplamına geri dönen `sumOf3Digits`metodunu `NumberUtil` sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz.
+>**Açıklamalar:**
+>- Metot sayının 3 basamaklı olup olmadığını kontrol etmeyecektir
+>- Metot negatif bir sayı için basamakları toplamını pozitif olarak döndürecektir.
+>- Metot içerisinde döngü kullanılmayacaktır. Zaten gerek de yoktur.
+
+>**Çözüm-1:** 
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		NumberUtilSumOf3Digits.run();
+	}
+}
+
+class NumberUtilSumOf3Digits {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		System.out.printf("Sum of digits of '%d' is %d%n", a, NumberUtil.sumOf3Digits(a));		
+	}
+}
+
+class NumberUtil {
+	public static int sumOf3Digits(int val)
+	{
+		int a = val / 100;
+		int b = val / 10 % 10;
+		int c = val % 10;
+		
+		return Math.abs(a + b + c);
+		
+	}
+}
+```
+
+>**Çözüm-2:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		NumberUtilSumOf3Digits.run();
+	}
+}
+
+class NumberUtilSumOf3Digits {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		System.out.printf("Sum of digits of '%d' is %d%n", a, NumberUtil.sumOf3Digits(a));		
+	}
+}
+
+class NumberUtil {
+	public static int sumOf3Digits(int val)
+	{
+		int a = val / 100;
+		int b = val % 100 / 10;
+		int c = val % 10;
+		
+		return Math.abs(a + b + c);
+		
+	}
+}
+```
+>**Çözüm-3:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		NumberUtilSumOf3Digits.run();
+	}
+}
+
+class NumberUtilSumOf3Digits {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		System.out.printf("Sum of digits of '%d' is %d%n", a, NumberUtil.sumOf3Digits(a));		
+	}
+}
+
+class NumberUtil {
+	public static int sumOf3Digits(int val)
+	{
+		return Math.abs(val / 100 + val % 100 / 10 + val % 10);	
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();
+		
+		System.out.printf("%f %% %f = %f%n", a, b, a % b);
+	}
+}
+```
+
+>İşaret `-` operatörü tek operandlı (unary) ve önek (prefix) durumundadır. Bu operatör operandına ilişkin ifadenin değerinin ters işaretlisini üretir. Operatörün yan etkisi yoktur. Operatör ikinci öcelik seviyesindedir. Bu öncelik seviyesindeki operatörler `sağdan sola (right associative)` olarak ele alınırlar. İşaret `+` operatörü, operandı olan ifadenin değerinin aynısını üretir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		int b;
+		int c;
+		
+		b = -a;
+		c = +a;
+		
+		System.out.printf("a = %d%nb = %d%nc = %d%n", a, b, c);		
+	}
+}
+```
+
+>Aslında teknik olarak doğrudan negatif sabit yoktur. Negatif bir sabit aslında bir sabite işaret `-` operatörünün uygulanmış biçimidir. 
+
+
+**Anahtar Notlar:** Okunabilirlik/algılanabilirlik açısından genel olarak binary bir operatör ile operandları arasında bir yalnız bir tane `SPACE` karakteri yazılır. Unary bir operatör ile operandı genel olarak bitişik yazılır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a;
+		
+		a = - - - - - - - - - - - 3;
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a = 2, b = 3, c;
+		
+		c = a - - - - - - - - - - b; 
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c);
+	}
+}
+```
+
+>`++ (increment)` ve `-- (decrement)` operatörleri tek operandlı operatörleri. Bu operatörler hem önek hem de sonek durumunda kullanılabilirler. Bu operatörlerin operandları değişken olmalıdır. Bu operatörlerin yan etkisi vardır. Bu operatörlerin operandlarına ilişkin değişkenler, boolean türü dışında kalan temel türlerden biri olabilir. `++` operatörü operandına ilişkin ifadenin değerini bir artırır, `--` operatörü operandına ilişkin ifadenin değerini bir azaltır. Bu operatörler ister önek olarak ister sonek olarak kullanılsın yan etkilerini operandına yansıtırlar. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a = 10;
+		
+		++a; //a = a + 1
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a = 10;
+		
+		a++; //a = a + 1
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+```
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a = 10;
+		
+		--a; //a = a - 1
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a = 10;
+		
+		a--; //a = a - 1
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+```
+>`++` operatörünün prefix kullanımında ürettiği değer (işleme giren değer) artırılmış değerdir, postfix kullanımında ürettiği değer artırılMAmış değerdir. Benzer şekilde, `--` operatörünün prefix kullanımında ürettiği değer (işleme giren değer) azaltılmış değerdir, postfix kullanımında ürettiği değer azaltılmaMAmış değerdir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a = 10;
+		int b;
+		
+		b = ++a;
+		
+		System.out.printf("a = %d, b = %d%n", a, b); //a = 11, b = 11
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a = 10;
+		int b;
+		
+		b = a++;
+		
+		System.out.printf("a = %d, b = %d%n", a, b); //a = 11, b = 10
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a = 10;
+		int b;
+		
+		b = --a;
+		
+		System.out.printf("a = %d, b = %d%n", a, b); //a = 9, b = 9
+	}
+}
+```
+>Aşağıdaki demo örneği inceleyiniz
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a = 10;
+		int b;
+		
+		b = a--;
+		
+		System.out.printf("a = %d, b = %d%n", a, b); //a = 9, b = 10
+	}
+}
+```
 
 
 
