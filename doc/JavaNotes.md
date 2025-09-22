@@ -3244,5 +3244,443 @@ class App {
 }
 ```
 
+###### 22 Eylül 2025
+
+>Java derleyicisi, soldan sağa ve yukarıdan aşağıya doğru, anlamlı en uzun ifadeyi atomlarına ayıracak (tokenizing) şekilde işlem yapar. Bu kurala **maximal/maximum munch** denir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int x = 2, y = 3;
+		int z;
+		
+		z = x+++y; //x++ + y
+		
+		System.out.printf("x = %d, y = %d, z = %d%n", x, y, z);
+	}
+}
+```
+
+>Aşağıdaki demo örnekte error oluşur
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int x = 2, y = 3;
+		int z;
+		
+		z = x++y; //error
+	}
+}
+```
+
+>Aşağıdaki demo örnekte error oluşur
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int x = 2, y = 3;
+		int z;
+		
+		z = x++++y; //error
+		
+		System.out.printf("x = %d, y = %d, z = %d%n", x, y, z);
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int x = 2; 
+		int y;
+		
+		y = x++ - --x;
+		
+		System.out.printf("x = %d, y = %d%n", x, y);
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int x = 10, y = 3; 
+		int z;
+		
+		z = x++ + --x / y++; 
+		
+		System.out.printf("x = %d, y = %d, z = %d%n", x, y, z); //x = 10, y = 4, z = 13
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 2;
+		
+		a = a++;
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 2;
+		
+		a = ++a;
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+```
+
+###### Karşılaştırma Operatörleri
+
+>Temel karşılaştırma operatörleri 6 tanedir: `< > <= >= == !=`. Bu operatörler iki operandlı ve araek durumundadır. Bu operatörlerin ürettiği değer boolean türdendir. Karşılaştırma işlemi doğru ise `true`, yanlış ise `false` değerini üretir. Bu operatörlerin yan etkisi yoktur. `< > <= >=` operatörleri klasik büyüklük-küçüklük karşılaştırması yapan operatörler. `==` operatörü operandlarına ilişkin ifadelerin değerleri eşit ise `true`, değilse `false` değerini üretir. `!=` operatörü operandlarına ilişkin ifadelerin değerleri eşit değilse `true`, eşitse `false` değerini üretir. Bu operatörler, ilgili işleme göre karşılaştırılabilen türler ile kullanılabilmektedir. Örneğin, int türden iki değer `<` operatörü ile işleme sokulabilir ancak boolean türden iki değer `<` operatörü ile işleme sokulamaz. Yine örneğin, boolean türden iki değer `==` ve `!=` operatörleri ile işleme sokulabilir. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		System.out.printf("%d < %d -> %b%n", a, b, a < b);
+		System.out.printf("%d > %d -> %b%n", a, b, a > b);
+		System.out.printf("%d <= %d -> %b%n", a, b, a <= b);
+		System.out.printf("%d >= %d -> %b%n", a, b, a >= b);
+		System.out.printf("%d == %d -> %b%n", a, b, a == b);
+		System.out.printf("%d != %d -> %b%n", a, b, a != b);
+	}
+}
+```
+
+###### Metot Çağırma Operatörü 
+
+>Java'da metot çağrısı, **metot çağırma operatörü (method call/invoke operator)** ile yapılır. Bu operatör, operatör öncelik tablosunun birinci seviyesindedir. Bu operatör, özel amaçlı, iki operandlı ve araek durumundadır. Bu operatör ile ilgili metot çağrılır ve metodun geri dönüş değeri varsa o değer üretilir. void bir metot çağrısı için bu operatöre ilişkin ifade `void ifadedir (void expression)`. void ifadelerin değeri olmaz. 
+
+###### Mantıksal Operatörler
+
+>Mantıksal operatörler şunlardır: `&& || !`. `&&` operatörü `mantıksal VE (logical AND)`, `||` operatörü `mantıksal VEYA (logical OR)`, `!` operatörü `mantıksal DEĞİL (logical NOT)` işlemlerini yaparlar. Bu operatörlerin operandları boolean türden olmalıdır. Aksi durumda error oluşur. Operatörlerin ürettiği değer boolean türdendir. Bu operatörlerin yan etkileri yoktur.
+
+
+>`&& ve ||` operatörleri iki operandlı ve araek durumundadır. Bu operatörler `Mantık'taki` ilgili işlemleri yaparlar. Bu operatörlerin doğruluk tablosu (truth table) şu şekildedir:
+
+
+|  a  |  b  | a `&&` b | a `\|\|`b |
+| :-: | :-: | :------: | :-------: |
+|  T  |  T  |    T     |     T     |
+|  T  |  F  |    F     |     T     |
+|  F  |  T  |    F     |     T     |
+|  F  |  F  |    F     |     F     |
+
+
+>Bu doğruluk tablosundan özetle şu sonuçlar çıkartılabilir:
+>
+>- `&&` işleminde operandlardan en az biri yanlışsa sonuç yanlıştır.
+>
+>- `||` işleminde operandlardan en az biri doğruysa sonuç doğrudur.
+
+>`&&` işlemi `||` işlemine göre önceliktir. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result;
+		
+		result = Sample.foo() && Sample.bar();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result;
+		
+		result = Sample.bar() || Sample.foo();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+}
+```
+
+>**Bu operatörler doğru sonuca (yani Matematiksel olarak elde edilmesi gereken sonuca) en kısa yoldan ulaşmaya çalışırlar. Yani derleyici bu operatörlere ilişkin ifadeler için doğru sonuca en kısa yoldan ulaşacak kodları üretir. Bu sebeple bu operatörlerin bulunduğu ifadeler hesaplanmaya her zaman soldan başlanır.** Bu operatörlerin birinci operandları hesaplandığında elde edilen sonuç, ikinci operand hesaplansa bile değişmeyecekse, ikinci operand hesaplanmaz. Örneğin `&&` operatörünün birinci operandından elde edilen değer false ise ikinci operand hesaplanmaz. Benzer şekilde `||` operatörünün birinci operandından elde edilen değer true ise ikinci operand hesaplanmaz. Çünkü hesaplansa bile sonuç değişmez. Buna **kısa devre davranışı (short circuit behavior)** denir. 
+
+>Aşağıdeki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result;
+		
+		result = Sample.bar() && Sample.foo();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result;
+		
+		result = Sample.foo() || Sample.bar();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+}
+```
+
+>Bu operatörler için doğru sonuca en kısa yoldan ulaşmak söz konusu olduğundan operatör önceliği (operator precedence) ile işleme giriş sırası (order of evaluation) ifadeye göre farklı olabilmektedir. Yani bu operatörlerin bulunduğu bir ifadede operatör önceliği ne olursa olsun, işleme giriş sırası hep soldan başlayacak şekilde yapılır ancak elde edilen sonuç operatör önceliğine uyularak elde edilen sonuç ile aynıdır. Yani bu operatörler kısa devre davranışını da kullanarak doğru sonuca en kısa yoldan ulaşırlar.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result;
+		
+		result = Sample.foo() || Sample.bar() && Sample.tar();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+	
+	public static boolean tar()
+	{
+		System.out.println("tar");
+		
+		return false;
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result;
+		
+		result = Sample.bar() && Sample.foo() || Sample.tar();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+	
+	public static boolean tar()
+	{
+		System.out.println("tar");
+		
+		return false;
+	}
+}
+```
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result;
+		
+		result = (Sample.foo() || Sample.bar()) && Sample.tar();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+	
+	public static boolean tar()
+	{
+		System.out.println("tar");
+		
+		return false;
+	}
+}
+```
+
+
 
 
