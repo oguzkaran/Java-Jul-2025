@@ -3681,6 +3681,444 @@ class Sample {
 }
 ```
 
+###### 24 Eylül 2025
+
+>`&` (bitwise AND) ve `|` (bitwise OR) operatörleri tamsayılarla ve boolean türü ile kullanılabilen operatörlerdir. Bu operatörler tamsayılar ile kullanıldığında operandlara ilişkin değerlerin karşılıklı bitlerini ilgili işlemlere sokarlar ve ilgili sonucu üretirler. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 10; //0x0000000A <-> 00000000000000000000000000001010
+		int b = 11; //0x0000000B <-> 00000000000000000000000000001011
+		int c;
+		
+		c = a & b; //0x0000000A <-> 00000000000000000000000000001010
+		
+		System.out.printf("c = %d, c = %08X%n", c, c); 
+		
+		c = a | b; //0x0000000B <-> 00000000000000000000000000001011
+		
+		System.out.printf("c = %d, c = %08X%n", c, c);
+	}
+}
+
+```
+
+>`&` ve `|` operatörleri boolean türden ifadeler ile kullanıldıklarında mantıksal operatör karşılıkları olan operatörler (yani `&&` ve `||`) ile tek farkları kısa devre davranışının olmamasıdır. Diğer tüm özellkler aynıdır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result;
+		
+		result = Sample.foo() | Sample.bar() & Sample.tar();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+	
+	public static boolean tar()
+	{
+		System.out.println("tar");
+		
+		return false;
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result;
+		
+		result = Sample.bar() & Sample.foo() | Sample.tar();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+	
+	public static boolean tar()
+	{
+		System.out.println("tar");
+		
+		return false;
+	}
+}
+```
+
+**Anahtar Notlar:** Bu operatörler ve diğer bitsel operatörlere ilişkin detaylar `Java ile Uygulama Geliştirme 1` kursunda ele alınacaktır.
+
+>`!` (logical NOT) operatörü tek operandlı ve önek durumundadır. Operatörün yan etkisi yoktur. Bu operatör operandına ilişkin ifadenin değilini (yani true ise false, false ise true değerini) üretir. Bu operatörün doğruluk tablosu şu şekildedir:
+
+
+|  a  |  !a |
+| :-: | :-: |
+|  T  |  F  |
+|  F  |  T  |
+
+>Aşağıdaki demo örnekte flag değerine göre işlemler yapılmış ve içerisindeki değer değiştirilmiştir
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean flag = true;
+		
+		if (flag) {
+			//...
+		}
+		else {
+			//...
+		}
+		
+		flag = !flag;
+	}
+}
+```
+>Atama operatörü (assignment operator) özel amaçlı, iki operandlı ve araek durumundadır. Operatörün birinci operandı bir değişken olmalıdır. Operatörün yan etkisi vardır, birinci operandına ilişkin değişkenin içerisine ikinci operandına ilişkin ifadenin değeri kopyalanır. Operatör sağdan sola önceliklidir. Operatörün ürettiği değer atanan değerdir. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a, b, c;
+		
+		a = b = c = 6;
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c);
+	}
+}
+```
+>Aşağıdaki demo örnekte soldan sağa ikinci atama operatörünün operandı değişken olmadığından dolayı error oluşur
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 10, b = 20, c = 45;
+		
+		(a = b) = c = 6; //error
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c);
+	}
+}
+```
+
+>Aşağıdaki demo örnek geçerlidir değil mi?
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 10, b = 20, c = 45;
+		
+		a = b = (c = 6);
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c);
+	}
+}
+```
+
+>Aşağıdaki demo örnek geçerlidir değil mi?
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 10, b = 20, c = 45;
+		
+		a = (b = c = 6);
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c);
+	}
+}
+```
+>Java'da bir grup `işlemli atama operatörü (compound/augmented assignment operator)` vardır. Bu operatörlerin genel biçimi şu şekildedir:
+
+```java
+<ifade1> <op>= <ifade2>
+```
+
+>Bu genel biçimin yaklaşık karşılığı şu şekildedir:
+
+```java
+<ifade1> = <ifade1> <op> <ifade2>
+```
+>Bu operatörler atama operatörleri olduğundan `ifade1`'in değişken olması zorunludur. Örneğin programcı
+
+```java
+a = a + b
+```
+
+ifadesinin
+
+```java
+a += b
+```
+
+>biçiminde yazabilir (hatta yazmalıdır). Aslında bu operatör okunabilirliği/algılanabilirliği artırması yanında bazı ifadelerin daha basit (yalın) olarak yazılmasını sağlar. 
+
+**Anahtar Notlar:** Aslında işlemli atama operatörünün karşılığı olan yukarıdaki ifade biraz daha detaylıdır. Bu detaylar ileride ele alınacaktır.
+
+>Aşağodaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 10, b = 20;
+		
+		a += b; //a = a + b;
+		
+		System.out.printf("a = %d, b = %d%n", a, b);
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 3, b = 4, c = 6;
+		
+		a *= b + c; //a = a * (b + c);	
+		
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c);
+	}
+}
+```
+
+###### Operatör Öncelik Tablosu
+
+| Operatör                                | İlişkisi    |
+| --------------------------------------- | ----------- |
+| ( ) . [ ] new                           | Soldan sağa |
+| + - ++ -- ! ~ ( )                       | Sağdan sola |
+| * / %                                   | Soldan sağa |
+| + -                                     | Soldan sağa |
+| << >> >>>                               | Soldan sağa |
+| > < >= <= instanceof                    | Soldan sağa |
+| == !=                                   | Soldan sağa |
+| &                                       | Soldan sağa |
+| ^                                       | Soldan sağa |
+| \|                                      | Soldan sağa |
+| &&                                      | Soldan sağa |
+| \|\|                                    | Soldan sağa |
+| ?:                                      | Sağdan sola |
+| = *= /= %= += -= <<= >>= &= ^= \|= >>>= | Sağdan sola |
+
+
+##### Noktalı Virgül'ün İşlevi
+
+>Noktalı virgül Java'da **sonlandırıcı karakter (terminator)** olarak klullanılır. Java'da başka sonlandırıcı karakter yoktur. Noktalı virgül genel olarak ifadeleri ve bazı deyimleri sonlandırmak için kullanılır.
+
+##### Etkisiz İfadeler ve Erişilemeyen Kodlar
+
+>Java'da **etkisiz ifadeler (code has no effect)** geçersizdir
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 3, b = 4;
+		
+		a + b; //error	
+		
+	}
+}
+```
+
+>Derleyici akışın hiç bir zaman bir noktaya gelemeyeceğini anladığı kodlar için `genel olarak` error oluşturur. Bu tarz kodlara **unreachable codes** denir.
+
+```java
+class Util {
+	public static int add(int a, int b)
+	{
+		return a + b;
+		System.out.println("Unreachable code"); //error
+	}
+}
+```
+
+##### Deyimler
+
+>Programın çalıştırılan parçalarına **deyim (statement)** denir. Bir program deyimlerin çalıştırılmasıyla çalışır. Java'da deyimler şunlardır:
+>**Basit Deyimler (Simple Statements):** Bir ifadenin sonuna noktalı virgül konduğunda oluşan deyimdir. Örneğin
+```java
+a = b + c;
+```
+ya da 
+```java
+System.out.println("Hello world");
+```
+>Basit deyim çalıştırıldığında, o deyime ilişkin ifade hesaplanır
+>
+>>**Bileşik Deyimler (Compound Statements):** `{` ile `}` arasında kalan yani bir blok bileşik deyimdir. Bileşik deyim çalıştırıldığında blok içerisindeki deyimler sırasıyla çalıştırılır. Bir metodun gövdesi de aslında bileşik deyimdir. 
+>
+>**Bildirim Deyimleri (Declaration Statements):** Bir değişkenin bildirildiği deyimdir. Bileşik deyim çalıştırıldığında bellekte yer ayrılır.
+>
+>**Kontrol Deyimleri (Control Statements):** Akışa yön veren deyimlerdir. Her kontrol deyiminin kendine özgü çalıştırılma biçimi vardır. Dolayısıyla o deyim için ayrıca öğrenilmelidir. Java'da bazı kontrol deyimleri şunlardır: **return deyimi (return statement), if deyimi (if statement), döngü deyimleri (loop statments), break deyimi (break statement), continue deyimi (continue statment), switch deyimi (switch statement).**
+>
+>**Boş Deyim (Empty/null Statement):** Noktalı virgülün tek başına kullanılması ile oluşan deyimdir. Boş deyim çalıştırıldığında her hangi bir şey yapılmaz. 
+
+##### Temel Kontrol Deyimleri
+
+>Bu bölümde şu temel kontrol deyimleri ele alınacaktır: `if deyimi, döngü deyimleri (while, do-while, for), break deyimi, continue deyimi, switch deyimi (ve switch expression).`
+
+###### if Deyimi
+
+>Neredeyse tüm programlama dillerinde bulunan deyimdir. Bu deyim koşula bağlı olarak akışı yönlendirmeyi sağlar. if deyiminin genel biçimi şu şekildedir:
+
+```java
+if (<koşul ifadesi>)
+	<deyim>
+[
+else
+	<deyim>
+]
+```
+
+>if deyiminde koşul ifadesi (condition expression/predicate) boolean türden olmalıdır. Aksi durumda error oluşur. if deyiminde koşul ifadesinin değeri true ise, doğru kısmına ilişkin deyim çalıştırılır, false ise varsa else kısmına ilişkin deyim (yani yanlış kısmına ilişkin deyim) çalıştırılır. if deyiminin else kısmı olmak zorunda değildir. if deyiminin else kısmı yoksa VE koşul ifadesinin değeri false ise akış if deyiminden sonraki deyimden devam eder. if deyimi else kısmı ile beraber tek bir deyimdir. if deyimin doğru ve yanlış kısmına ilişkin deyimler, bildirim deyimi dışında her hangi bir deyim olabilir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a % 2 == 0)
+			a /= 2;
+		else
+			a *= 2;
+		
+		System.out.printf("a = %d%n", a);
+		
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz. Örnekte if deyiminin doğru ve yanlış kısımlarında bileşik deyim kullanılmıştır
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a % 2 == 0) {
+			System.out.printf("%d is even%n", a);
+			a /= 2;		
+		}
+		else {
+			System.out.printf("%d is odd%n", a);
+			a *= 2;
+		}
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+```
+
+**Anahtar Notlar:** if deyiminde (ve döngü deyimlerinde) basit deyimin kullanılabildiği durumlarda bazı programcılar yine bileşik deyim kullanmayı tercih ederler. Diğer bir deyişle bu tip durumlarda hiç bir zaman basit deyim kullanmazlar. Bazı programcılar ise basit deyimin kullanılabildiği yerlerde bileşik deyim kullanmamayı tercih ederler. Bu yaklaşımların her ikisi de normal ve doğru yaklaşımlardır. Bir programcı ya da bir bir geliştirme takımı bu yaklaşımların her hangi birisini tercih edebilir. Burada kötü yaklaşım karışık olarak kullanmaktır.
+
+>Aşağıdaki demo örnekte else kısmı olmayan if deyimi kullanılmıştır
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a % 2 == 0)			
+			a /= 2;
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+```
 
 
 
