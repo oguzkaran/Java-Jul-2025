@@ -4044,7 +4044,7 @@ else
 ]
 ```
 
->if deyiminde koşul ifadesi (condition expression/predicate) boolean türden olmalıdır. Aksi durumda error oluşur. if deyiminde koşul ifadesinin değeri true ise, doğru kısmına ilişkin deyim çalıştırılır, false ise varsa else kısmına ilişkin deyim (yani yanlış kısmına ilişkin deyim) çalıştırılır. if deyiminin else kısmı olmak zorunda değildir. if deyiminin else kısmı yoksa VE koşul ifadesinin değeri false ise akış if deyiminden sonraki deyimden devam eder. if deyimi else kısmı ile beraber tek bir deyimdir. if deyimin doğru ve yanlış kısmına ilişkin deyimler, bildirim deyimi dışında her hangi bir deyim olabilir.
+>if deyiminde koşul ifadesi (condition expression/predicate) boolean türden olmalıdır. Aksi durumda error oluşur. if deyiminde koşul ifadesinin değeri true ise, doğru kısmına ilişkin deyim çalıştırılır, false ise varsa else kısmına ilişkin deyim (yani yanlış kısmına ilişkin deyim) çalıştırılır. if deyiminin else kısmı olmak zorunda değildir. if deyiminin else kısmı yoksa VE koşul ifadesinin değeri false ise akış if deyiminden sonraki deyimden devam eder. if deyimi (varsa) else kısmı ile beraber tek bir deyimdir. if deyimin doğru ve yanlış kısmına ilişkin deyimler, bildirim deyimi dışında her hangi bir deyim olabilir.
 
 >Aşağıdaki demo örneği inceleyiniz
 
@@ -4120,5 +4120,532 @@ class App {
 }
 ```
 
+###### 29 Eylül 2025
+
+>Aşağıdaki demo örnekte, if deyiminin doğru kımında yanlışlıkla noktalı virgül konmasından dolayı boş deyim kullanılmış olur. Bu durumda error oluşmaz.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a % 2 == 0);			
+			a /= 2;
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+```
+
+>Aşağıdaki demo örnekte else'in ait olduğu bir if deyimi olmadığından error oluşur
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a % 2 == 0);			
+			a /= 2;
+		else //error
+			a *= 2;
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+```
+>Aşağıdaki demo örnekte else, içteki if deyime aittir. Bu duruma **dangling else** denir. Bu durumda programın doğru yazılmadığına dikkat ediniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a > 0)
+			if (a % 2 == 0)
+				System.out.printf("%d is positive even number%n", a);
+		else
+			System.out.printf("%d should be positive%n", a);
+	
+	}
+}
+```
+
+>Yukarıdaki demo örnek için dangling else durumundan dolayı oluşan hata bileşik deyim kullanılarak aşağıdaki gibi çözülebilir
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a > 0) {
+			if (a % 2 == 0)
+				System.out.printf("%d is positive even number%n", a);
+		}
+		else
+			System.out.printf("%d should be positive%n", a);
+	
+	}
+}
+
+```
+
+>Aşağıdaki demo örnekte dangling else durumu yoktur
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a > 0) 
+			if (a % 2 == 0)
+				System.out.printf("%d is positive even number%n", a);
+			else 
+				System.out.printf("%d is positive odd number%n", a);
+		else
+			System.out.printf("%d should be positive%n", a);
+	
+	}
+}
+```
+
+>Aşağıdaki if deyiminin else kısmında başka bir if deyimi vardır
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a > 0)
+			System.out.printf("%d is a positive number%n", a);
+		else
+			if (a == 0)
+				System.out.println("Zero");
+			else
+				System.out.printf("%d is a negative number%n", a);
+	}
+}
+```
+
+>Yukarıdaki demo örnek aşağıdaki gibi daha okunabilir/algılanabilir yazılabilir
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a > 0)
+			System.out.printf("%d is a positive number%n", a);		
+		else if (a == 0)
+			System.out.println("Zero");
+		else
+			System.out.printf("%d is a negative number%n", a);
+	}
+}
+```
+>Yukarıdaki örnek aşağıdaki gibi yazılsaydı, problemin senaryosu açısından bir problem olmayacaktı yani doğru çalışacaktı. Ancak koşullar ayrık (discrete/independent) olduğundan `else if` biçiminde yazılması, hem gereksiz kontrolleri engelleyecekti hem de daha okunabilir/algılanabilir olacaktı. Bu durumda ayrık koşulların `else if` biçiminde yazılması, ayrı olmayan koşullara ilişkin if deyimlerinin okunabilirliğini/algılanabilirliğini artırır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a > 0)
+			System.out.printf("%d is a positive number%n", a);		
+		if (a == 0)
+			System.out.println("Zero");
+		if (a < 0)
+			System.out.printf("%d is a negative number%n", a);
+	}
+}
+```
+
+>Aşağıdaki demo örnekte koşulların ayrık olmadığını gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a > 10)
+			System.out.printf("%d > 10%n", a);
+		if (a > 13)
+			System.out.printf("%d > 13%n", a);
+		if (a > 21)
+			System.out.printf("%d > 21%n", a);
+	}
+}
+```
+>boolean ifadelerin koşul ifadesinde `==` ve `!=` operatörleri ile kullanılması tavsiye edilmez. Bu durumda, `==` operatörü kullanmak yerine ifadenin doğrudan yazılması, `!=` operatörü kullanmak yerine ise ifadenin mantıksal değilinin (örneğin mantıksal değil operatörü ile) yazılması tavsiye edilir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		Util.writeEvenStatusByFlag(a % 2 == 0);
+	}
+}
+
+class Util {
+	public static void writeEvenStatusByFlag(boolean even)
+	{
+		if (even) //if (even == true)
+			System.out.println("Even");
+		else
+			System.out.println("Odd");			
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		Util.writeEvenStatusByFlag(a % 2 == 0);
+	}
+}
+
+class Util {
+	public static void writeEvenStatusByFlag(boolean even)
+	{
+		if (!even) //if (even == false)
+			System.out.println("Odd");
+		else
+			System.out.println("Even");			
+	}
+}
+```
+
+**Anahtar Notlar:** Geri dönüş değeri boolean türden olan metotların isimlendirilmesinde `is, are, can` vb gibi önekler kullanılır. Örneğin, bir sayının asal olup olmadığını test eden bir metodun ismi `isPrime` olabilir. Eğer metot ismi bir fiil belirtiyorsa isimlendirme o fiilin çekimine göre yapılır. Örneğin bir cihazın bağlı olmadığını test eden bir metot `exists` ya da `deviceExists` biçiminde isimlendirilebilir.
+
+>Aşağıdaki demo örnekte bulunan `isEven` metodunda if deyiminin doğru kısmında return deyimi olduğundan, koşulun doğru olması durumunda metot sonlanır. Bu durumda else gereksizdir.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (NumberUtil.isEven(a))
+			System.out.printf("%d is even%n", a);
+		else
+			System.out.printf("%d is odd%n", a);
+	}
+}
 
 
+class NumberUtil {
+	public static boolean isEven(int a)
+	{
+		if (a % 2 == 0)
+			return true;
+		else
+			return false;
+	}
+}
+```
+>Yukarıdaki demo örnek aşağıdaki gibi yapılabilir
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (NumberUtil.isEven(a))
+			System.out.printf("%d is even%n", a);
+		else
+			System.out.printf("%d is odd%n", a);
+	}
+}
+
+
+class NumberUtil {
+	public static boolean isEven(int a)
+	{
+		if (a % 2 == 0)
+			return true;
+		
+		return false;
+	}
+}
+```
+
+>Yukarıdaki demo örnekte bulunan `isEven`metodu aşağıdaki gibi daha okunabilir/algılanabilir biçimde yazılabilir
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (NumberUtil.isEven(a))
+			System.out.printf("%d is even%n", a);
+		else
+			System.out.printf("%d is odd%n", a);
+	}
+}
+
+
+class NumberUtil {
+	public static boolean isEven(int a)
+	{
+		return a % 2 == 0;
+	}
+}
+```
+>Demo örnekte `isEven` metodunun yazılmış olması durumunda `isOdd` metodu aşağıdaki gibi daha okunabilir/algılanabilir yazılabilir
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		
+		if (NumberUtil.isOdd(a))
+			System.out.printf("%d is odd%n", a);
+		else
+			System.out.printf("%d is even%n", a);
+	}
+}
+
+class NumberUtil {
+	public static boolean isEven(int a)
+	{
+		return a % 2 == 0;
+	}
+	
+	public static boolean isOdd(int a)
+	{
+		return !isEven(a);
+	}
+}
+```
+
+>**Sınıf Çalışması:** Katsayıları klavyeden alınan ikinci dereceden bir denklemin köklerini bulup ekrana basan programı aşağıdaki açıklamalara göre yazınız
+**Açıklamalar:**
+- Program şu ana gördüklerimiz kullanılarak yazılacaktır.
+
+- İkinci dereceden (quadratic) bir denklem
+
+$$ax^2 + bx + c = 0$$
+
+olsun. Buna göre delta $\Delta$ (discriminant)
+$$\Delta = b^2 - 4ac$$
+olarak belirlenir. Buna göre kökler şu şekilde hesaplanır:
+
+1. Eğer $\Delta$ > 0 ise kökler
+	$$x_1 = \frac{-b + \sqrt{\Delta}}{2a}$$
+	$$x_2 = \frac{-b - \sqrt{\Delta}}{2a}$$
+
+2. Eğer $\Delta$ = 0 ise kökler
+	$$x_1 = x_2 = \frac{-b}{2a}$$
+
+3. if $\Delta$ < 0 ise gerçek kök yok
+
+- Yuvarlama hatalarını göz ardı ediniz.
+  
+- Program çıktısı, eğer iki kök varsa ayrı ayrı, çakışık kök varsa örneğin `x1 = x2 = 4` biçiminde yazılacaktır. Gerçek kök yok ise ekran çıktısı olarak `No real root` biçiminde olacaktır. 
+
+>**Çözüm:**
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		QuadraticEquationSolverApp.run();
+	}
+}
+
+class QuadraticEquationSolverApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input coefficients:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();
+		double c = kb.nextDouble();
+		
+		EquationUtil.findQuadraticEquationRoots(a, b, c);
+	}
+}
+
+class EquationUtil {
+	public static void printQuadraticEquationRoots(double a, double b, double delta)
+	{
+		double sqrtDelta = Math.sqrt(delta);
+		double x1 = (-b + sqrtDelta) / (2 * a);
+		double x2 = (-b - sqrtDelta) / (2 * a);
+		
+		System.out.printf("x1 = %f%nx2 = %f%n", x1, x2);
+	}
+	
+	public static void printQuadraticEquationRoot(double a, double b)
+	{
+		System.out.printf("x1 = x2 = %f%n", -b / (2 * a));
+	}
+	
+	public static double calculateDelta(double a, double b, double c)
+	{
+		return b * b - 4 * a * c;
+	}
+	
+	public static void findQuadraticEquationRoots(double a, double b, double c)
+	{
+		double delta = calculateDelta(a, b, c);
+		
+		if (delta > 0)
+			printQuadraticEquationRoots(a, b, delta);
+		else if (delta == 0)
+			printQuadraticEquationRoot(a, b);
+		else 
+			System.out.println("No real root");
+	}
+}
+```
+>Yukarıdaki açıklamalarda program çıktısı ile ilgili bir zorunluluk belirtmeseydi aşağıdaki gibi de yapılabilirdi
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		QuadraticEquationSolverApp.run();
+	}
+}
+
+class QuadraticEquationSolverApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input coefficients:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();
+		double c = kb.nextDouble();
+		
+		EquationUtil.findQuadraticEquationRoots(a, b, c);
+	}
+}
+
+class EquationUtil {
+	public static void printQuadraticEquationRoots(double a, double b, double delta)
+	{
+		double sqrtDelta = Math.sqrt(delta);
+		double x1 = (-b + sqrtDelta) / (2 * a);
+		double x2 = (-b - sqrtDelta) / (2 * a);
+		
+		System.out.printf("x1 = %f%nx2 = %f%n", x1, x2);
+	}
+	
+	public static double calculateDelta(double a, double b, double c)
+	{
+		return b * b - 4 * a * c;
+	}
+	
+	public static void findQuadraticEquationRoots(double a, double b, double c)
+	{
+		double delta = calculateDelta(a, b, c);
+		
+		if (delta >= 0)
+			printQuadraticEquationRoots(a, b, delta);
+		
+		else 
+			System.out.println("No real root");
+	}
+}
+```
