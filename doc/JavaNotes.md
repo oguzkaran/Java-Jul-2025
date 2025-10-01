@@ -4649,3 +4649,454 @@ class EquationUtil {
 	}
 }
 ```
+
+###### 1 Ekim 2025
+
+##### Döngü Deyimleri
+
+>Bir işin yinelemeli olarak yapılmasını sağlayan kontrol deyimlerine **döngü deyimleri (loop statements)** ya da kısaca **döngüler (loops)** denir. Java'da döngü deyimleri şunlardır:
+>1. while döngü deyimi:
+	- Kontrolün başta yapıldığı while döngü deyimi (while döngüsü)
+	- Kontrolün sonda yapıldığı while döngü deyimi (do-while döngüsü)
+>  
+>2. for döngü deyimi
+>
+>3. for-each (enhanced for loop) döngü deyimi 
+
+>while döngüsü dendiğinde ilk akla gelen `kontrolün başta yapıldığı while döngü deyimidir.` Kontrolün sonda yapıldığı whle döngü deyimi `do-while döngüsü` olarak da adlandırılır. Buna göre, kursumuzda `while döngüsü` dendiğinde `kontrolün başta yapıldığı while döngü deyimi`, `do-while döngüsü` dendiğinde ise `kontrolün sonda yapıldığı while döngü deyimi` anlaşılacaktır. `for-each` döngü deyimi bu bölümde ele alınmayacaktır.
+
+###### Kontrolün Başta Yapıldığı while Döngü Deyimi
+
+>Bu deyimin genel biçimi şu şekildedir:
+
+```java
+while (<koşul fadesi>)
+	<deyim>
+```
+
+>Burada koşul ifadesi boolean türden olmalıdır. Aksi durumda error oluşur. Burada koşul ifadesi true olduğu sürece döngü içerisindeki deyim yinelenir. Akış deöngüye geldiğinde koşulun gerçeklenip gerçeklenmediğine bakılır, duruma göre akış döngüye hiç girmeyebilir.
+
+>Aşağıdaki demo örneği çeşitli değerler girerek çalıştırıp sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+        
+        System.out.print("Input a value:");
+        int n = kb.nextInt();
+        
+        int i = 0;
+        
+        while (i < n) {
+        	System.out.printf("%d ", i);
+        	++i;
+        }
+        
+        System.out.println("\nC and System Programmers Association");
+    }
+}
+```
+
+>Koşul ifadesi her zaman true olan bir döngüye **sonsuz dmngü (infinite loop)** denir. Sonsuz döngü program boyunca yinelenen bir döngü olmayabilir. Örneğin sonsuz döngü içerisinde return deyimi kullanıldığında döngünün içinde bulunduğu metot sonlanacağından sonsuz döngüden de çıkılmış olur. while döngüsü ile sonsuz döngü tipik olarak şu şekilde oluşturulabilir:
+
+```java
+while (true)
+	<deyim>
+```
+
+>while döngüsünde yanlışlıkla noktalı virgül konması durumu
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {   
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+        
+        System.out.print("Input a value:");
+        int n = kb.nextInt();
+        
+        int i = 0;
+        
+        while (i < n); {
+        	System.out.printf("%d ", i);
+        	++i;
+        }
+        
+        System.out.println("\nC and System Programmers Association");
+    }
+}
+```
+
+>while döngüsü ile `n-kez` yinelenen döngü aşağıdaki biçimde yazılabilir
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {   
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+        
+        System.out.print("Input a value:");
+        int n = kb.nextInt();
+        
+        int i = 0;
+        
+        while (i < n) {
+        	System.out.printf("%d ", i);
+        	++i;
+        }
+        
+        System.out.println("\nC and System Programmers Association");
+    }
+}
+```
+
+>while döngüsü ile `n-kez` yinelenen döngü aşağıdaki biçimde yazılabilir
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {   
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+        
+        System.out.print("Input a value:");
+        int n = kb.nextInt();
+        
+        int i = n - 1;
+        
+        while (i >= 0) {
+        	System.out.printf("%d ", i);
+        	--i;
+        }
+        
+        System.out.println("\nC and System Programmers Association");
+    }
+}
+```
+
+>Aşağıdaki `n-kez yinelenen` döngü kalıbı bazı programcılar tarafından sevilir ve kullanılır. Bu döngü kalıbı Java programcısı tarafından hiç kullanılmasa dahi görünce tanınmalıdır. Bu kalıpta, `n` değişkeninin değeri her adımda değiştiğinden, döngüden sonra, döngüden önceki değerinin kullanılması durumunda dikkatli olunmalıdır. 
+
+>Aşağıdaki demo örneği çeşitli değerler ile çalıştrıp sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {   
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+        
+        System.out.print("Input a value:");
+        int n = kb.nextInt();      
+      
+        while (n-- > 0)
+        	System.out.printf("%d ", n);
+       
+        System.out.printf("%nAfter loop -> n = %d%n", n);
+        System.out.println("\nC and System Programmers Association");
+    }
+}
+```
+
+>while döngüsünün koşul ifadesinde, bir metodun geri dönüş değerinin bir değişkene atanması ve atanan değerin kontrol edilmesi (yani atanan değere göre koşul belirlenmesi) idiomu bazı uygulamalarda kullanılabilmektedir. Bu idiom kullanılırken okunabilirliğin/algılanabilirliğin olumsuz etkilenmemesine dikkat edilmelidir
+
+>Aşağıdaki demo örnekte klavyeden sıfır girilene kadar alınan sayıların toplamı bulunmaktadır. `(a = Integer.parseInt(kb.nextLine())) != 0` ifadesindeatama işleminin önceliklendirildiğine, aksi durumda error oluşacağına dikkat ediniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {   
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+        
+        System.out.println("Begin to input values until zero:");
+        int total = 0;
+        
+        int a;
+        
+        while ((a = Integer.parseInt(kb.nextLine())) != 0) 
+        	total += a;
+        
+        System.out.printf("Total:%d%n", total);
+    }
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {   
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+        
+        System.out.print("Begin to input values until zero:");
+        int total = 0;
+        
+        int a;
+        
+        while ((a = kb.nextInt()) != 0) 
+        	total += a;
+        
+        System.out.printf("Total:%d%n", total);
+    }
+}
+```
+
+>**Sınıf Çalışması:** Klavyeden sıfır girilene kadar alınan sayılardan pozitif ve negatif olanlarının toplamlarını ve kaçar tane olduklarını bulan programı aşağıdaki açıklamalara göre yazınız:
+>**Açıklamalar:**
+>- Sayılar girilmeden önce ekrana `Begin to input values until zero:` mesajı basılacak ve sayılar aralarında boşluk (whitespace) karakter ile girilebilecektir.
+>
+>- Örneğin 11 tane pozitif ve 6 tane negatif girilmiş olması durumunda çıktı şu şekilde olacaktır
+```
+Sum of positive 11 number is 124
+Sum of negative 6 number is -34
+```
+>
+>- Hiç pozitif ya da negatif sayı girilmediğinde çıktılar aşağıdaki örnek biçimlerde olacaktır
+
+```
+You did not input any positive number!...
+Sum of negative 6 number is -34
+```
+
+ya da 
+
+```
+Sum of positive 6 number is 34
+You did not input any negative number!...
+```
+
+ya da 
+
+```
+You did not input any positive number!...
+You did not input any negative number!...
+```
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	PositiveNegativeSumCountApp.run();
+    }
+}
+
+class PositiveNegativeSumCountApp {
+	public static void writePositiveReport(int posSum, int posCount)
+	{
+		if (posCount > 0) 
+			System.out.printf("Sum of positive %d number is %d%n", posCount, posSum);
+		else
+			System.out.println("You did not input any positive number!...");
+	}
+	
+	public static void writeNegativeReport(int negSum, int negCount)
+	{
+		if (negCount > 0) 
+			System.out.printf("Sum of negative %d number is %d%n", negCount, negSum);
+		else
+			System.out.println("You did not input any negative number!...");
+	}
+	
+	public static void writeReport(int posSum, int posCount, int negSum, int negCount)
+	{
+		writePositiveReport(posSum, posCount);
+		writeNegativeReport(negSum, negCount);
+	}
+	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		int posSum, negSum, posCount, negCount;
+		
+		posSum = negSum = posCount = negCount = 0;
+		
+		int val;
+		
+		System.out.print("Begin to input values until zero:");
+		
+		while ((val = kb.nextInt()) != 0)
+			if (val > 0) {
+				posSum += val;
+				++posCount;
+			}
+			else {
+				negSum += val;
+				++negCount;
+			}
+		
+		writeReport(posSum, posCount, negSum, negCount);
+	}
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir sayının basamak sayısını döndüren `countDigits` isimli metodu `NumberUtil` sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilCountDigitsTest.run();
+	}
+}
+
+
+class NumberUtilCountDigitsTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input a number:");
+			int a = Integer.parseInt(kb.nextLine());
+			
+			System.out.printf("Value:%d -> Number of Digits:%d%n", a, NumberUtil.countDigits(a));
+			
+			if (a == 0)
+				return;
+		}
+	}
+}
+
+
+class NumberUtil {
+	public static int countDigits(int a)
+	{
+		if (a == 0)
+			return 1;
+		
+		int count = 0;
+		
+		while (a != 0) {
+			++count;
+			a /= 10;
+		}
+		
+		return count;
+	}
+}
+```
+
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir sayının tersine geri dmnen `reverse` isimli metodu `NumberUtil` sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz. 
+>**İpucu:** 
+
+```
+123 -> 3 -> 3 * 10 + 2 = 32 -> 32 * 10 + 1 = 321 
+```
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilReverseTest.run();
+	}
+}
+
+
+class NumberUtilReverseTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input a number:");
+			int a = Integer.parseInt(kb.nextLine());
+			
+			System.out.printf("Value:%d -> Reverse:%d%n", a, NumberUtil.reverse(a));
+			
+			if (a == 0)
+				return;
+		}
+	}
+}
+
+class NumberUtil {
+	public static int reverse(int a)
+	{
+		int result = 0;
+		
+		while (a != 0) {
+			result = result * 10 + a % 10;
+			a /= 10;
+		}
+		
+		return result;
+	}
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir sayının palindrom olup olmağını test eden `isPalindrome` isimli metodu `NumberUtil` sınıfı içerisinde yazınız ve test ediniz
+>
+>**Açıklama:** Bir sayının tersi kendisine eşitse o sayı bir palindromik sayıdır.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilIsPalindromeTest.run();
+	}
+}
+
+class NumberUtilIsPalindromeTest {
+	public static void run()
+	{
+		int n = 0;
+		
+		while (n <= 1_000_000) {
+			if (NumberUtil.isPalindrome(n))
+				System.out.println(n);
+			++n;
+		}
+	}
+}
+
+class NumberUtil {
+	public static boolean isPalindrome(int a)
+	{
+		return a == reverse(a);
+	}
+	
+	public static int reverse(int a)
+	{
+		int result = 0;
+		
+		while (a != 0) {
+			result = result * 10 + a % 10;
+			a /= 10;
+		}
+		
+		return result;
+	}
+}
+```
+
