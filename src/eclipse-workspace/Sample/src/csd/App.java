@@ -3,38 +3,14 @@ package csd;
 class App {
 	public static void main(String[] args) 
 	{
-		NumberUtilIsPalindromeTest.run();
-	}
-}
-
-class NumberUtilIsPalindromeTest {
-	public static void run()
-	{
-		int n = 0;
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
 		
-		while (n <= 1_000_000) {
-			if (NumberUtil.isPalindrome(n))
-				System.out.println(n);
-			++n;
-		}
-	}
-}
-
-class NumberUtil {
-	public static boolean isPalindrome(int a)
-	{
-		return a == reverse(a);
-	}
+		System.out.print("Input a value:");
+		int n = kb.nextInt();	
 	
-	public static int reverse(int a)
-	{
-		int result = 0;
+		for (int i = 0; i < n; ++i);
+			System.out.printf("%d ", i);
 		
-		while (a != 0) {
-			result = result * 10 + a % 10;
-			a /= 10;
-		}
-		
-		return result;
+		System.out.println();
 	}
 }

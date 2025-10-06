@@ -5100,3 +5100,524 @@ class NumberUtil {
 }
 ```
 
+###### 6 Ekim 2025
+
+>**Sınıf Çalışması:** Parametresi ile alıdığı int türden bir sayının basamakları toplamını döndüren `sumDigits` isimli metodu `NumberUtil` sınıfı içerisinde yazınız ve test ediniz.
+>
+>**Açıklamalar:**
+>Metot negatif sayılar çin basamakların toplamını pozitif olarak döndürecektir
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilSumDigitsTest.run();
+	}
+}
+
+class NumberUtilSumDigitsTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input a value:");
+			int val = Integer.parseInt(kb.nextLine());
+			
+			System.out.printf("Digits sum of %d is %d%n", val, NumberUtil.sumDigits(val));
+			
+			if (val == 0)
+				return;
+		}
+	}
+}
+
+class NumberUtil {
+	public static int sumDigits(int a)
+	{
+		int total = 0;
+		
+		while (a != 0) {
+			total += a % 10;
+			a /= 10;
+		}
+		
+		return Math.abs(total);
+	}
+}
+
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı bir sayının Armstrong sayısı olup olmadığını test eden `isArmstrong` isimli metodu aşağıdaki açıklamalara göre `NumberUtil` sınıfı içerisinde yazınız.
+>
+>**Açıklamalar:**
+>- Basamaklarının basamak sayıncı kuvvetleri toplamı kendisine eşit olan sayılara Armstrong sayıları denir. Örneğin 153 bir Armstrong sayısıdır.
+>- Metot negatif sayılar için false değerine geri dönecektir.
+>- Metodunuzu 1 basamaklı, 2 basamaklı, 3 basamaklı, 4 basamaklı ve 5 basamaklı Armstrong sayılarını ekrana yazdıran bir kod ile test edebilirsiniz.
+>- Math sınıfının pow metodu yerine parametreleri int türden olan bir pow metodu yazıp kullanınız.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilIsArmstronTest.run();
+	}
+}
+
+class NumberUtilIsArmstronTest {
+	public static void run()
+	{
+		int a = -10;
+		
+		while (a <= 999_999) {
+			if (NumberUtil.isArmstrong(a))
+				System.out.println(a);
+			
+			++a;
+		}
+	}
+}
+
+class NumberUtil {
+	public static boolean isArmstrong(int a)
+	{
+		return a >= 0 && getDigitsPowSum(a) == a;
+	}
+	
+	public static int getDigitsPowSum(int a)
+	{
+		int n = countDigits(a);
+		
+		int total = 0;
+		
+		while (a != 0) {
+			total += pow(a % 10, n);
+			a /= 10;
+		}
+		
+		return total;
+	}
+	
+	public static int countDigits(int a)
+	{
+		if (a == 0)
+			return 1;
+		
+		int count = 0;
+		
+		while (a != 0) {
+			++count;
+			a /= 10;
+		}
+		
+		return count;
+	}
+	
+	public static int pow(int a, int b)
+	{
+		int result = 1;
+		
+		while (b-- > 0)
+			result *= a;
+		
+		return result;
+	}
+}
+```
+
+###### Kontrolün Sonda Yapıldığı while Döngü Deyimi
+
+>`do-while` döngüsünün genel biçimi şu şekildedir:
+
+```java
+do
+	<deyim>
+while (<koşul ifadesi>);
+```
+>Akış `do-while` döngüsüne koşul ifadesine bakılma yani ilk adım her zaman yapılır. İlk adımdan sonra koşul ifadesine göre bir sonraki adıma geçilir ya da döngü sonlanır. Bu döngü, while döngüsü kadar kullanılmasa da okunabilirliği/algılanabilirliği artırması durumunda tercih edilebilir. Bununla birlikte, `do-while` döngüsü kodu okuyana ilk adımın kesinlikle yapılması gereken bir algoritma olduğu algısını oluşturur. Böyle bir durum olmamasına rağmen `do-while` döngüsünün kullanımı okunabilirliği/algılanabilirliği olumsuz etkiler. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{	
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();
+		
+		int i = 0;
+		
+		do {
+			System.out.printf("i = %d%n", i);
+			++i;
+		} while (i < n);
+		
+		System.out.printf("After loop:i = %d%n", i);
+	}
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı bir sayının Armstrong sayısı olup olmadığını test eden `isArmstrong` isimli metodu aşağıdaki açıklamalara göre `NumberUtil` sınıfı içerisinde yazınız.
+>
+>**Açıklamalar:**
+>- Basamaklarının basamak sayıncı kuvvetleri toplamı kendisine eşit olan sayılara Armstrong sayıları denir. Örneğin 153 bir Armstrong sayısıdır.
+>- Metot negatif sayılar için false değerine geri dönecektir.
+>- Metodunuzu 1 basamaklı, 2 basamaklı, 3 basamaklı, 4 basamaklı ve 5 basamaklı Armstrong sayılarını ekrana yazdıran bir kod ile test edebilirsiniz.
+>- Math sınıfının pow metodu yerine parametreleri int türden olan bir pow metodu yazıp kullanınız.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilIsArmstronTest.run();
+	}
+}
+
+class NumberUtilIsArmstronTest {
+	public static void run()
+	{
+		int a = -10;
+		
+		while (a <= 999_999) {
+			if (NumberUtil.isArmstrong(a))
+				System.out.println(a);
+			
+			++a;
+		}
+	}
+}
+
+class NumberUtil {
+	public static boolean isArmstrong(int a)
+	{
+		return a >= 0 && getDigitsPowSum(a) == a;
+	}
+	
+	public static int getDigitsPowSum(int a)
+	{
+		int n = countDigits(a);
+		
+		int total = 0;
+		
+		while (a != 0) {
+			total += pow(a % 10, n);
+			a /= 10;
+		}
+		
+		return total;
+	}
+	
+	public static int countDigits(int a)
+	{
+		int count = 0;
+		
+		do {
+			++count;
+			a /= 10;
+		} while (a != 0);
+		
+		return count;
+	}
+	
+	public static int pow(int a, int b)
+	{
+		int result = 1;
+		
+		while (b-- > 0)
+			result *= a;
+		
+		return result;
+	}
+}
+```
+
+>Yerel değişkenlerin faaliyet alanı (scope) kuralları gereği `do-while` döngüsünün içerisindeki deyimde bildirilen bir değişke koşul ifadesinde kullanılamaz
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		do {
+			System.out.print("Input a value:");
+			int a = Integer.parseInt(kb.nextLine());
+			
+			System.out.printf("%d * %d = %d%n", a, a, a * a);
+		} while (a != 0); //error
+	}
+}
+```
+
+>Yukarıdaki demo örnek aşağıdaki gibi yapılabilir
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		int a;
+		
+		do {
+			System.out.print("Input a value:");
+			a = Integer.parseInt(kb.nextLine());
+			
+			System.out.printf("%d * %d = %d%n", a, a, a * a);
+		} while (a != 0);
+	}
+}
+```
+
+###### for Döngü Deyimi
+
+>for döngü deyimi, Java'nın en kapsamlı ve dolayısıyla en yetenekli döngü deyimidir. for döngüsünün genel biçimi şu şekildedir:
+
+```java
+for ([birinci kısım]; [ikinci kısım]; [üçüncü kısım])
+	<deyim>
+```
+
+>Bu döngünün kısımlarına ilişkin ifadelerin hesaplanması şu şekildedir:
+>
+>- Birinci kısım: Akış for düngüsüne geldiği yapan yapılır. Bu durumda bir kez yapılmış olur.
+>
+>- İkinci kısım: Koşul ifadesine ilişkin kısımdır, boolean türden olmalıdır. Akış döngü deyimine geldiğinde koşul kontrolü yapılır, duruma göre döngüye hiç girmeyebilir.
+>
+>- Üçüncü kısım: Döngünün bir adımı tamamlandığında bir sonraki adım için koşul kontrol edilmeden yapılır.
+
+>Bu döngünün kısımlarının boş bırakılması durumu ayrıca ele alınacaktır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();
+		int i;
+		
+		for (i = 0; i < n; ++i)
+			System.out.printf("%d ", i);
+		
+		System.out.println();
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();
+		int i;
+	
+		for (i = n - 1; i >= 0; --i)
+			System.out.printf("%d ", i);
+		
+		System.out.println();
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();
+		int i;
+	
+		for (i = n - 1; i >= 0; i -= 2)
+			System.out.printf("%d ", i);
+		
+		System.out.println();
+	}
+}
+```
+
+>for döngüsünde iteratif olarak kullanılan bir değişkene genel olarak **döngü değişkeni (loop variable)** denir.
+>
+>for döngüsünün birinci kısmında değişken bildirimi yapılabilir. Bu durumda değişkene ilk değer verilmesi (initialization) gerekir. Birinci kısımda bildirilen değişkenin faaliyet alanı döngü boyuncadır, döngüden sonra kullanılamaz. Bu durumda döngü değişkenin döngüden çıktıktan sonraki değeri algoritmik açıdan kullanılmayacaksa for döngüsünün birinci kısmında bildirilmnesi tavsiye edilir. Aslında bu kullanım faaliyet alanı daraltma açısından iyi bir tekniktir. Ayrıca, döngü değişkeninin döngüden önce bildirildiği for döngülerinin okunabilirliğini/algılanabilirliğini artırır. Çünkü, döngü değişkenin döngüden önce bildirildiği for döngüsünde kodu okuyan kişide, döngü değişkenin döngüden sonraki değerinin de kullanıldığı algısı oluşur. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();	
+	
+		for (int i = 0; i < n; ++i)
+			System.out.printf("%d ", i);
+		
+		System.out.println();
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();	
+	
+		for (int i = 0; i < n; ++i)
+			System.out.printf("%d ", i);
+		
+		++i; //error
+		
+		System.out.println();
+	}
+}
+
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();	
+	
+		for (int i = 0; i < n; ++i)
+			System.out.printf("First loop -> %d%n", i);
+		
+		System.out.println("----------------------------------");
+		
+		for (int i = 0; i < n; ++i)
+			System.out.printf("Second loop -> %d%n", i);
+	}
+}
+```
+
+>Aşağıdaki demo örnekte, i değişkeninin döngüden sonraki değeri kullanılmadığından, her ne kadar istenen işi yapsa da okunabilirlik/algılanabilirlik açısından iyi yazılmamıştır. Örnek yukarıdaki gibi yapılmalıdır
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();	
+		int i;
+		
+		for (i = 0; i < n; ++i)
+			System.out.printf("First loop -> %d%n", i);
+		
+		System.out.println("----------------------------------");
+		
+		for (i = 0; i < n; ++i)
+			System.out.printf("Second loop -> %d%n", i);
+	}
+}
+
+
+```
+
+>Aşağıdaki demo örnekte for döngüsünde yanlışlıkla noktalı vigül konması durumu gösterilmiştir
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();
+		int i;
+	
+		for (i = 0; i < n; ++i);
+			System.out.printf("%d ", i);
+		
+		System.out.println();
+	}
+}
+```
+
+>Aşağıdaki örnekte scope kuralları gereği error oluşur
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();	
+	
+		for (int i = 0; i < n; ++i);
+			System.out.printf("%d ", i); //error
+		
+		System.out.println();
+	}
+}
+```
+
+
+
+
+
