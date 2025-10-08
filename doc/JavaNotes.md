@@ -5617,7 +5617,523 @@ class App {
 }
 ```
 
+###### 8 Ekim 2025
+
+>for döngü deyiminin birinci ve üçüncü kısmında virgül atomu belirli koşullar altında ifadeleri ayırmak için kullanılabilir. Anımsanacağı gibi Java'da virgül operatörü yoktur. Virgülün bu şekildeki kullanımı tamamen for döngüsüne özgüdür.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();	
+	
+		for (int i = 0, k = 5; i < n && k >= 0; ++i, --k)
+			System.out.printf("(%d, %d)%n", i, k);
+	}
+}
+```
+>for döngüsünün birinci kısmında değişken bildirimi yapıldığında virgül ile ayrılacak diğer ifadenin aynı türden değişken bildirimi olması ve türünün yazılmaması gerekir. Aksi durumda error oluşur
 
 
+>Aşağıdaki demo örneği inceleyiniz
 
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();	
+	
+		for (int i = 0, long k = 5; i < n && k >= 0; ++i, --k) //error
+			System.out.printf("(%d, %d)%n", i, k);
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();	
+	
+		for (int i = 0, k = 5, --i; i < n && k >= 0; ++i, --k) //error
+			System.out.printf("(%d, %d)%n", i, k);
+	}
+}
+```
+
+>Aşağıdaki demo örnek klavyeden sıfır girilene kadar alınan sayıların adedi ve toplamı bulunmuştur. Şüphesiz örnek özelinde bu yazım biçimi çok okunabilir/algılanabilir değildir. for döngü deyiminin yeteneklerini göstermek için puzzle niteliğinde yazılmıştır
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		int sum = 0;		
+		int count = 0;
+		int a;
+		
+		
+		for (System.out.println("Begin to input values:"); (a = kb.nextInt()) != 0; sum += a, ++count)
+			;
+		
+		System.out.printf("Sum of %d number is %d%n", count, sum);
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		int sum = 0;		
+		int count = 0;
+		int a;
+		
+		
+		for (System.out.println("Begin to input values:"), System.out.print("Input a value:"); 
+				(a = Integer.parseInt(kb.nextLine())) != 0; sum += a, ++count, System.out.print("Input a value:"))
+			;
+		
+		System.out.printf("Sum of %d number is %d%n", count, sum);
+	}
+}
+```
+
+>for döngüsünde birinci kısmın boş bırakılması durumunda akış for döngüsüne geldiğinde koşul kontrolünden önce her hangi bir şey yapılmaz yani doğrudan koşul kontrolü yapılır
+
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();
+		
+		int i = 0;
+		
+		for (; i < n; ++i)
+			System.out.printf("i = %d%n", i);
+	}
+}
+```
+
+>for döngüsünde üçüncü kısmın boş bırakılması durumunda bir adım tamamlandığında bir sonraki adım için kontrol işleminden önce bir şey yapılmaz. Yani, bir adım tamamlandığında doğrudan kontrol yapılır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();
+	
+		
+		for (int i = 0; i < n;) {
+			System.out.printf("i = %d%n", i);
+			++i;
+		}
+	}
+}
+```
+
+>for döngüsünün birinci ve üçüncü kısmının boş bırakılması durumunda oluşan döngü, while döngüsüne benzer.
+
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+		
+		System.out.print("Input a value:");
+		int n = kb.nextInt();
+	
+		
+		int i = 0;
+		
+		for (; i < n;) { //while (i < n)
+			System.out.printf("i = %d%n", i);
+			++i;
+		}
+	}
+}
+```
+
+>for döngüsünün ikinci kısmının boş bırakılması durumu sonsuz döngü anlamına gelir. Yani ikinci kısmın boş bırakılması ile ikinci kısma `true` ifadesinin yazılması aynı anlamdadır. Pek çok programcı for döngüsü ile sonsuz döngü oluştururken 3 kısmı da boş bırakmayı bir kalıp olarak tercih ederler:
+
+
+```java
+for (;;)
+	<deyim>
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir sayının tersine geri dmnen `reverse` isimli metodu `NumberUtil` sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz. 
+>**İpucu:** 
+
+```
+123 -> 3 -> 3 * 10 + 2 = 32 -> 32 * 10 + 1 = 321 
+```
+
+>**Çözüm:**
+
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilReverseTest.run();
+	}
+}
+
+
+class NumberUtilReverseTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		for (;;) {
+			System.out.print("Input a number:");
+			int a = Integer.parseInt(kb.nextLine());
+			
+			System.out.printf("Value:%d -> Reverse:%d%n", a, NumberUtil.reverse(a));
+			
+			if (a == 0)
+				return;
+		}
+	}
+}
+
+class NumberUtil {
+	public static int reverse(int a)
+	{
+		int result = 0;
+		
+		while (a != 0) {
+			result = result * 10 + a % 10;
+			a /= 10;
+		}
+		
+		return result;
+	}
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir sayının faktoriyel değerine geri dönen `factorial` isimli metodu `NumberUtil` sınıfı içerisinde aşağıdaki açıklamalar göre yazınız ve test ediniz
+>
+>**Açıklamalar:**
+>
+>- Faktoriyel işlemi şu şekildedir:
+```
+0! = 1
+1! = 1
+2! = 1 * 2
+...
+n! = 1 * 2 * ... * (n - 1) * n
+```
+>
+>Metot int türünde geri dönecektir.
+>
+>Metot negatif sayılar için 1 değerine geri dönecektir
+>
+>Faktoriyel çok hızlı büyüyen bir işlem olduğundan test kodunuzu `12!` değerine kadar ekrana basacak şekilde yazınız. 
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilFactorialTest.run();
+	}
+}
+
+class NumberUtilFactorialTest {
+	public static void run()
+	{
+		for (int n = -1; n < 12; ++n)
+			System.out.printf("%d! = %d%n", n, NumberUtil.factorial(n));
+	}
+}
+
+class NumberUtil {
+	public static int factorial(int n)
+	{
+		int result = 1;
+		
+		for (int i = 2; i <= n; ++i)
+			result *= i;		
+		
+		return result;
+	}
+}
+```
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilFactorialTest.run();
+	}
+}
+
+class NumberUtilFactorialTest {
+	public static void run()
+	{
+		for (int n = -1; n < 12; ++n)
+			System.out.printf("%d! = %d%n", n, NumberUtil.factorial(n));
+	}
+}
+
+class NumberUtil {
+	public static int factorial(int n)
+	{
+		int result = 1;
+		
+		for (; n >= 1; --n)
+			result *= n;
+		
+		return result;
+	}
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı long türden bir sayının asal olup olmadığını test eden `isPrime` isimli metodu yazınız ve test ediniz.
+>**Tanım:** Yalnızca 1'e ve kendisine bölüneebilen 1'den büyük sayılara **asal sayılar** denir.
+
+>**Çözüm:** Yavaş versiyon
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilIsPrimeTest.run();
+	}
+}
+
+class NumberUtilIsPrimeTest {
+	public static void run()
+	{
+		for (long a = -10; a <= 100; ++a)
+			if (NumberUtil.isPrime(a))
+				System.out.printf("%d ", a);
+		
+		System.out.println();
+		
+		System.out.println(NumberUtil.isPrime(1_000_003));		
+	}
+}
+
+class NumberUtil {
+	public static boolean isPrime(long a) 
+	{
+		if (a <= 1)
+			return false;
+		
+		for (long i = 2; i <= a / 2; ++i)
+			if (a % i == 0)
+				return false;
+		
+		return true;			 
+	}
+}
+```
+
+>**Çözüm:** Daha hızlı bir versiyon
+>**Kural:** Bir sayının asal olabilmesi için karekökünden küçük veya eşit olan asal sayıların hiç birisine tam olarak bölünememesi gerekir. (Sieve of Eratosthenes)
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilIsPrimeTest.run();
+	}
+}
+
+class NumberUtilIsPrimeTest {
+	public static void run()
+	{
+		for (long a = -10; a <= 100; ++a)
+			if (NumberUtil.isPrime(a))
+				System.out.printf("%d ", a);
+		
+		System.out.println();
+		
+		System.out.println(NumberUtil.isPrime(1_000_003));	
+	}
+}
+
+class NumberUtil {
+	public static boolean isPrime(long a) 
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0) 
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		return true;
+	}
+}
+```
+>Aşağıdaki basit ve manuel olarak yapılmış test ile metotlar karşılaştırılmıştır. Kodlar durumu göstermek için yazılmıştır
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilIsPrimeTest.run();
+	}
+}
+
+class NumberUtilIsPrimeTest {
+	public static void run()
+	{			
+		System.out.println(NumberUtil.isPrimeSlow(1_000_003));
+		System.out.println(NumberUtil.isPrime(1_000_003));
+	}
+}
+
+class NumberUtil {
+	public static boolean isPrimeSlow(long a) 
+	{
+		if (a <= 1)
+			return false;
+		
+		int count = 0;
+		
+		for (long i = 2; i <= a / 2; ++i) {		
+			++count;
+			if (a % i == 0)
+				return false;
+		}
+		
+		System.out.printf("isPrimeSlow -> count:%d%n", count);
+		
+		return true;			 
+	}
+	
+	
+	public static boolean isPrime(long a) 
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0) 
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		int count = 0;
+		
+		for (long i = 11; i * i <= a; i += 2) {
+			++count;
+			if (a % i == 0)
+				return false;
+		}
+		
+		System.out.printf("isPrime -> count:%d%n", count);
+		
+		return true;
+	}
+}
+```
+
+>Aşağıdaki büyük asal sayıları test için kullanabilirsiniz:
+
+```
+6750161072220585911
+1603318868174368979
+6584583408148485263
+6245098347044246839
+6285871677077738093
+5697859706174583067
+710584055392819667
+4935060337471977161
+3728803592870153407
+4331452335614730577
+1386437196678024971
+1677990107453991593
+4765603950744460867
+4498306523077899307
+4434895834573449257
+```
+
+**Anahtar Notlar:** Bir sayının asal olup olmadığını test etmek için yukarıdaki algoritmadan hızlı yöntemler de vardır. Bunlar-, daha Matematiksel işlemler gerektirdiğinden burada ele alınmayacaktır. Yukarıda algoritma ve implementasyonun programcı tarafından bilinmesi tavsiye edilir.
 
