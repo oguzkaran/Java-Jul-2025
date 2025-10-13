@@ -6135,5 +6135,354 @@ class NumberUtil {
 4434895834573449257
 ```
 
-**Anahtar Notlar:** Bir sayının asal olup olmadığını test etmek için yukarıdaki algoritmadan hızlı yöntemler de vardır. Bunlar-, daha Matematiksel işlemler gerektirdiğinden burada ele alınmayacaktır. Yukarıda algoritma ve implementasyonun programcı tarafından bilinmesi tavsiye edilir.
+**Anahtar Notlar:** Bir sayının asal olup olmadığını test etmek için yukarıdaki algoritmadan hızlı yöntemler de vardır. Bunlar, daha Matematiksel işlemler gerektirdiğinden burada ele alınmayacaktır. Yukarıda algoritma ve implementasyonun programcı tarafından bilinmesi tavsiye edilir.
 
+###### 13 Ekim 2025
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden pozitif `n`sayısı için n-inci asal sayıyı döndüren `nthPrime` isimli metodu NumberUtil sınıfı içerisinde yazınız ve test ediniz.
+
+>**Açıklamalar:** 
+>- isPrime metodunun hızlı versiyonu kullanılacaktır.
+>- n değerinin negatif olması durumu metot içerisinde kontrol edilmeyecektir.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilNthPrimeTest.run();
+	}
+}
+
+class NumberUtilNthPrimeTest {
+	public static void run()
+	{			
+		for (int n = 1; n <= 50; ++n)
+			System.out.printf("%d -> %d%n", n, NumberUtil.nthPrime(n));
+	}
+}
+
+class NumberUtil {
+	public static long nthPrime(int n)
+	{
+		long result = 2;
+		int count = 0;
+		
+		for (long i = 2; count < n; ++i)
+			if (isPrime(i)) {
+				++count;
+				result = i;
+			}
+		
+		
+		return result;
+	}
+	
+	public static boolean isPrime(long a) 
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0) 
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		
+		return true;
+	}
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı long türden bir sayıdan büyük olan ilk asal sayıya geri dönen `nextPrime` metodunu yazınız ve test ediniz.
+
+>**Açıklamalar:** 
+>- isPrime metodunun hızlı versiyonu kullanılacaktır.
+>- Metot taşma durumlarını kontrol etmeyecektir.
+
+>**Çözüm-1:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilNextPrimeTest.run();
+	}
+}
+
+class NumberUtilNextPrimeTest {
+	public static void run()
+	{			
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input a number:");
+			int a = Integer.parseInt(kb.nextLine());
+			
+			System.out.printf("Next Prime number:%d%n", NumberUtil.nextPrime(a));
+			
+			if (a == 0)
+				return;
+		}
+	}
+}
+
+class NumberUtil {
+	public static long nextPrime(int a)
+	{
+		long val = a;
+		
+		while (!isPrime(++val))
+			;
+		
+		return val;
+	}
+	
+	public static boolean isPrime(long a) 
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0) 
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		
+		return true;
+	}
+}
+```
+
+>**Çözüm-2:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilNextPrimeTest.run();
+	}
+}
+
+class NumberUtilNextPrimeTest {
+	public static void run()
+	{			
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input a number:");
+			int a = Integer.parseInt(kb.nextLine());
+			
+			System.out.printf("Next Prime number:%d%n", NumberUtil.nextPrime(a));
+			
+			if (a == 0)
+				return;
+		}
+	}
+}
+
+class NumberUtil {
+	public static long nextPrime(int a)
+	{
+		long i;
+		
+		for (i = a + 1; !isPrime(i); ++i)
+			;
+		
+		return i;
+	}
+	
+	public static boolean isPrime(long a) 
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0) 
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		
+		return true;
+	}
+}
+```
+
+###### İç İçe Döngüler
+
+>Bir döngünün deyimi yine bir döngü deyimi ise bu durumda **iç içe döngü (nested loop)** yazılmış olur. İç içe döngüler genelde iç içe iki tane veya iç içe üç tane olarak karşımıza çıkar. İç içe üçten fazla döngü çok özel durumlarda yani özel algoritmalarda karşımıza çıkabilir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int m = kb.nextInt();
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < m; ++i)
+			for (int k = n - 1; k >= 0; --k)
+				System.out.printf("(%d, %d)%n", i, k);
+			
+	}
+}
+```
+
+>Bazı durumlarda döngü içerisinde çağrılan bir metot dolayısıyla iç içe döngü oluşabilir
+
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two numbers:");
+		int m = kb.nextInt();
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < m; ++i)
+			Util.doSomething(i, n);
+			
+	}
+}
+
+class Util {
+	public static void doSomething(int i, int n)
+	{
+		for (int k = n - 1; k >= 0; --k)
+			System.out.printf("(%d, %d)%n", i, k);
+	}
+}
+```
+
+>Aşağıdaki demo örnekte üç basamaklı Armstrong sayıları iç içe üç döngü kullanılarak bulunmuştur
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		for (int a = 1; a <= 9; ++a)
+			for (int b = 0; b <= 9; ++b)
+				for (int c = 0; c <= 9; ++c)
+					if (100 * a + 10 * b + c == a * a * a + b * b * b + c * c *c)
+						System.out.printf("%d%d%d ", a, b, c);
+		
+		System.out.println();
+	}
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı n pozitif sayısı için n-inci Fibonacci sayısına geri dönen `fibonacciNumber` isimli metodu yazınız ve test ediniz.
+
+>**Açıklamalar:**
+>
+>- İlk iki terimi `0` ve `1` olmak üzere bir sonraki terimin önceki iki terimin toplamıyla elde edildiği seriye `Fibınacci serisi`, serinin terimleri olan sayılara ise `Fibonacci sayıları` denir:
+
+```
+0, 1, 1, 2, 3, 5, 8, 13, ...
+```
+>
+>- Metot n sayısının pozitif olup olmadığını kontrol etmeyecektir.
+>
+>- Metot taşma durumlarını kontrol etmeyecektir.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumbeUtilFibonacciNumberTest.run();
+	}
+}
+
+
+class NumbeUtilFibonacciNumberTest {
+	public static void run()
+	{	
+		for (int n = 1; n <= 30; ++n)
+			System.out.printf("%d ", NumberUtil.fibonacciNumber(n));
+		
+		System.out.println();
+	}
+}
+
+class NumberUtil {
+	public static int fibonacciNumber(int n)
+	{
+		if (n <= 2)
+			return n - 1;
+		
+		int prev1 = 1, prev2 = 0, result = 1;
+		
+		for (int i = 3; i < n; ++i) {
+			prev2 = prev1;
+			prev1 = result;
+			result = prev1 + prev2;
+		}
+		
+		return result;
+	}
+	
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir sayıdan büyük ilk Fibonacci sayısına geri dönen `nextFibonacciNumber` isimli metodu yazınız ve test ediniz.
+
+>**Açıklamalar:**
+>- Metot taşma durumlarını kontrol etmeyecektir.

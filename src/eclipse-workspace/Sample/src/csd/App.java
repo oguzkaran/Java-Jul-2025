@@ -3,54 +3,38 @@ package csd;
 class App {
 	public static void main(String[] args) 
 	{
-		NumberUtilIsPrimeTest.run();
+		NumbeUtilFibonacciNumberTest.run();
 	}
 }
 
-class NumberUtilIsPrimeTest {
+
+class NumbeUtilFibonacciNumberTest {
 	public static void run()
-	{			
-		System.out.println("isPrime:");
-		System.out.println(NumberUtil.isPrime(710584055392819667L));		
+	{	
+		for (int n = 1; n <= 30; ++n)
+			System.out.printf("%d ", NumberUtil.fibonacciNumber(n));
+		
+		System.out.println();
 	}
 }
 
 class NumberUtil {
-	public static boolean isPrimeSlow(long a) 
+	public static int fibonacciNumber(int x)
 	{
-		if (a <= 1)
-			return false;
+		if(x <= 2) {
+			return x-1;
+		}
 		
-		for (long i = 2; i <= a / 2; ++i)	
-			if (a % i == 0)
-				return false;
+		int sum = 0;
+		for(int counter = 3, a1 = 0, a2 = 1 ; counter <= x ; counter++) {
+			sum = a1 + a2;
+			a1 = a2;
+			a2 = sum;
+		}
 		
-		return true;			 
+		return sum;
+
 	}
 	
-	
-	public static boolean isPrime(long a) 
-	{
-		if (a <= 1)
-			return false;
-		
-		if (a % 2 == 0) 
-			return a == 2;
-		
-		if (a % 3 == 0)
-			return a == 3;
-		
-		if (a % 5 == 0)
-			return a == 5;
-		
-		if (a % 7 == 0)
-			return a == 7;
-		
-		for (long i = 11; i * i <= a; i += 2)
-			if (a % i == 0)
-				return false;
-		
-		
-		return true;
-	}
 }
+
