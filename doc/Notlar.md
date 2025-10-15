@@ -6482,7 +6482,368 @@ class NumberUtil {
 }
 ```
 
+###### 15 Ekim 2025
+
 >**Sınıf Çalışması:** Parametresi ile aldığı int türden bir sayıdan büyük ilk Fibonacci sayısına geri dönen `nextFibonacciNumber` isimli metodu yazınız ve test ediniz.
 
->**Açıklamalar:**
->- Metot taşma durumlarını kontrol etmeyecektir.
+>**Açıklama:** Metot taşma durumlarını kontrol etmeyecektir.
+
+>**Çözüm-1:** 
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumbeUtilNextFibonacciNumberTest.run();
+	}
+}
+
+
+class NumbeUtilNextFibonacciNumberTest {
+	public static void run()
+	{	
+		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input a value:");
+			int a = Integer.parseInt(kb.nextLine());
+		
+			System.out.printf("%d -> %d%n", a, NumberUtil.nextFibonacciNumber(a));
+			if (a == 0)
+				return;
+		}
+	}
+}
+
+class NumberUtil {
+	public static int nextFibonacciNumber(int a)
+	{
+		if (a < 0)
+			return 0;
+		
+		int prev1 = 1, prev2 = 0, next = prev1 + prev2;
+		
+		while (next <= a) {
+			prev2 = prev1;
+			prev1 = next;
+			next = prev1 + prev2;
+		}
+		
+		return next;
+	}
+}
+```
+
+>**Çözüm-2:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumbeUtilNextFibonacciNumberTest.run();
+	}
+}
+
+
+class NumbeUtilNextFibonacciNumberTest {
+	public static void run()
+	{	
+		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input a value:");
+			int a = Integer.parseInt(kb.nextLine());
+		
+			System.out.printf("%d -> %d%n", a, NumberUtil.nextFibonacciNumber(a));
+			if (a == 0)
+				return;
+		}
+	}
+}
+
+class NumberUtil {
+	public static int nextFibonacciNumber(int a)
+	{
+		if (a < 0)
+			return 0;
+		
+		int next = 1;
+		
+		for (int prev1 = 1, prev2 = 0; next <= a; prev2 = prev1, prev1 = next, next = prev1 + prev2)
+			;	
+		
+		return next;
+	}	
+}
+```
+
+>**Çözüm-3:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumbeUtilNextFibonacciNumberTest.run();
+	}
+}
+
+
+class NumbeUtilNextFibonacciNumberTest {
+	public static void run()
+	{	
+		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input a value:");
+			int a = Integer.parseInt(kb.nextLine());
+		
+			System.out.printf("%d -> %d%n", a, NumberUtil.nextFibonacciNumber(a));
+			if (a == 0)
+				return;
+		}
+	}
+}
+
+class NumberUtil {
+	public static int nextFibonacciNumber(int a)
+	{
+		if (a < 0)
+			return 0;
+		
+		int prev1 = 1, prev2 = 0, next;
+		
+		while (true) {
+			next = prev1 + prev2;
+			
+			if (next > a)
+				return next;
+			
+			prev2 = prev1;
+			prev1 = next;
+		}
+	}	
+}
+```
+
+##### break Deyimi
+
+>break deyimi döngü deyimlerinde ve switch deyiminde kullanılabilen bir kontrol deyimidir. Bir döngüde akış break deyimine geldiğinde dögü sonlanır. break deyiminin genel biçimi şu şekildedir:
+
+```java
+break [etiket (label) ismi];
+```
+Görüldüğü break deyimi ya tek başına (etiketsiz) ya da etiketli (labelled break) olarak kullanılabilmektedir. Aksi durumda error oluşur. break deyiminin tek başına kullanımında akış break deyimine geldiğinde ilgi döngünün sonrasına dallanır ve oradan devam eder. break deyimi hangi dngü içerisinde kullanılmışsa o döngü deyimi sonlanır. break deyimi yazılan algoritmaya bağlı olarak herhangi bir döngü içerisinde kullanılabileceği gibi tipik olarak sonsuz döngüden çıkış için de kullanılabilir. 
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir sayıdan büyük ilk Fibonacci sayısına geri dönen `nextFibonacciNumber` isimli metodu yazınız ve test ediniz.
+
+>**Açıklama:** Metot taşma durumlarını kontrol etmeyecektir.
+
+>**Çözüm-1:** 
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumbeUtilNextFibonacciNumberTest.run();
+	}
+}
+
+
+class NumbeUtilNextFibonacciNumberTest {
+	public static void run()
+	{	
+		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input a value:");
+			int a = Integer.parseInt(kb.nextLine());
+		
+			System.out.printf("%d -> %d%n", a, NumberUtil.nextFibonacciNumber(a));
+			if (a == 0)
+				break;
+		}
+		
+		System.out.println("Do you review Java?");
+	}
+}
+
+class NumberUtil {
+	public static int nextFibonacciNumber(int a)
+	{
+		if (a < 0)
+			return 0;
+		
+		int prev1 = 1, prev2 = 0, next = prev1 + prev2;
+		
+		while (next <= a) {
+			prev2 = prev1;
+			prev1 = next;
+			next = prev1 + prev2;
+		}
+		
+		return next;
+	}
+}
+```
+
+>Aşağıdaki demöo örnekte içteki döngüde bir koşul gerçekleştiğinde dıştaki döngü de dolaylı olarak sonlandırılmıştır
+
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		boolean exitLoopFlag = false;
+		
+		for (int i = 0; i < 20; ++i) {
+			for (int k = 4; k >= 1; --k) {
+				System.out.printf("(%d, %d)%n", i, k);
+				
+				if ((i + k) % 6 == 0) {
+					exitLoopFlag = true;
+					break;
+				}
+			}
+			
+			if (exitLoopFlag)
+				break;			
+		}
+		
+		System.out.println("Do you review Java?");
+	}
+}
+```
+
+>break deyiminin etiketli kullanımında, yazılan etiket isminin bildirilmiş olduğu döngü sonlanır. Etiket bildiriminin genel biçimi şu şekildedir:
+
+```java
+<etiket ismi>:
+```
+
+>Etiket ismi değişken isimlendirme kurallarına uygun her hangi bir isim olabilir ancak bir convention olarak bir etitket isminin tamamı büyük harf ile yazılır, birden fazla kelimeden oluşuyorsa kelimeler arasında alttire karakteri kullanılır. Etiket isimleri döngü deyimlerinde ve switch deyiminde bildirilebilr. Etiketli break deyimi tipik olarak, iç içe döngülerde içteki bir döngü içerisinde dıştaki döngüden çıkş için kullanılır. Etiket ismi bildirildiği deyim boyunca görülebilirdir (scope). 
+
+>Yukarıdaki demo örnek aşağıdaki gibi etiketli break kullanılarak yapılabilir
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		EXIT_LOOP:
+		for (int i = 0; i < 20; ++i)
+			for (int k = 4; k >= 1; --k) {
+				System.out.printf("(%d, %d)%n", i, k);
+				
+				if ((i + k) % 6 == 0)					
+					break EXIT_LOOP;				
+			}						
+	
+		System.out.println("Do you review Java?");
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		EXIT_OUTER_LOOP:
+		for (int i = 0; i < 20; ++i)
+			EXIT_INNER_LOOP:
+			for (int j = 0; j < 10; ++j)
+				for (int k = 4; k >= 1; --k) {
+					System.out.printf("(%d, %d, %d)%n", i, j, k);
+					
+					if ((i + j + k) % 6 == 0)					
+						break EXIT_INNER_LOOP;		
+					
+					if ((i + j + k) % 11 == 0)					
+						break EXIT_OUTER_LOOP;		
+				}
+	
+		
+		System.out.println("Do you review Java?");
+	}
+}
+```
+
+##### continue Deyimi
+
+>Bu deyim döngünün kendisini değil o anki adımını sonlandırır. continue deyimi yalnızca döngü deyimlerinde kullanılabilir. Akış continue deyimine geldiğinde döngünün adımı sonlanır yani bir sonraki adıma geçmek için gereken işlemler yapılır. break deyimi kadar çok kullanılmasa da bazı durumlarda ounabilirliği/algılanabilirliği artırmak için kullanılır
+
+>Aşağıdaki demo örnekte continue deyiminin kullanımına odaklanınız. Şüphesiz continue deyimi kullanılmadan da yapılabilir
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two value:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		for (int i = a; i <= b; ++i) {
+			if (i % 2 != 0)
+				continue;
+			
+			System.out.printf("%d ", i);
+		}
+			
+		System.out.println();
+	}
+}
+```
+
+>Aslında continue deyimi etkiketli olarak da kullanılabilmektedir. Ancak contimue deyiminin etiketli kullanımı yapısal programlama tekniği açısından iyi olmadığından pratikte kullanılmaz (hatta kullanılmamalıdır). 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two value:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		CONTINUE_LOOP:
+		for (int i = a; i <= b; ++i)
+			for (int k = 2 * a; k <= 3 * b; ++k) {
+				System.out.printf("(%d, %d)%n", i, k);
+				
+				if ((i + k) % 7 == 0)
+					continue CONTINUE_LOOP;
+			}
+			
+		System.out.println();
+	}
+}
+```
+
+
