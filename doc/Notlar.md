@@ -7574,6 +7574,32 @@ class App {
 }
 ```
 
+> switch deyiminin genel biçiminden de anlaşılacağı gibi switch deyiminde ne case bölümü ne de default bölüm zorunlu değildir. Hatta bu durumda switch deyiminde hiç bir bölüm de olmayabilir. Ancak pratikte case bölümü olmayan switch deyiminin bir kullanım amacı yoktur. Ancak bazı puzzle tarzı sorularda (hiç iyi sorular olmasa da) karşımıza çıkabilir. 
+
+> Aşağıdaki demo örnekte switch deyimi kullanılarak switch deyimine ilişkin ifadenin değeri ekrana yazdırılmaktadır. (Ne kadar anlamsız olsa da puzzle olarak anlayınız)
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Plaka numarasını giriniz:");
+		int plate = kb.nextInt();
+		
+		switch (plate) {		
+		default:			
+			System.out.printf("plate = %d%n", plate);
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");		
+	}
+}
+```
+
+
 >Aşağıdaki demo menü uygulamasını inceleyiniz
 >**Not:** İleride daha iyisi yazılacaktır
 
