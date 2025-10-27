@@ -7943,3 +7943,228 @@ class DateUtil {
 > 01.01.1900 ile ilgili tarih arasındaki toplam gün sayısı hesaplanır ve 7 değerine göre modu alınır. Bu durumda elde edilen değer 0 ise Pazar, 1 ise Pazartesi, ..., 6 ise Cumartesi gününe ilişkindir.
 >- Metot yukarıdaki metotlar kullanılarak yazılabilir.
 >- 01.01.1900 öncesindeki tarihler geçersiz kabul edilecektir.
+
+>**Not:** İleride daha iyisi yazılacaktır.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		DateUtilGetDayOfWeekTest.run();
+	}
+}
+
+class DateUtilGetDayOfWeekTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input day, month and year:");
+		int day = kb.nextInt();
+		int month = kb.nextInt();
+		int year = kb.nextInt();
+		
+		DateUtil.printDateEN(day, month, year);
+	}
+}
+
+
+class DateUtil {
+	public static void printDateEN(int day, int month, int year)
+	{
+		int dayOfWeek = getDayOfWeek(day, month, year);
+		
+		switch (dayOfWeek) {
+		case 0:
+			System.out.printf("%02d/%02d/%04d Sunday%n", day, month, year);
+			break;
+		case 1:
+			System.out.printf("%02d/%02d/%04d Monday%n", day, month, year);
+			break;
+		case 2:
+			System.out.printf("%02d/%02d/%04d Tuesday%n", day, month, year);
+			break;
+		case 3:
+			System.out.printf("%02d/%02d/%04d Wednesday%n", day, month, year);
+			break;
+		case 4:
+			System.out.printf("%02d/%02d/%04d Thursday%n", day, month, year);
+			break;
+		case 5:
+			System.out.printf("%02d/%02d/%04d Friday%n", day, month, year);
+			break;
+		case 6:
+			System.out.printf("%02d/%02d/%04d Satuday%n", day, month, year);
+			break;
+		default:
+			System.out.println("Invalid date values!...");
+		}
+	}
+	
+	public static int getDayOfWeek(int day, int month, int year)
+	{
+		int totalDays;
+		
+		if (year < 1900 || (totalDays = getDayOfYear(day, month, year)) == -1)
+			return -1;
+		
+		for (int y = 1900; y < year; ++y) {
+			totalDays += 365;
+			if (isLeapYear(y))
+				++totalDays;
+		}
+		
+		return totalDays % 7;				
+	}
+	
+	public static int getDayOfYear(int day, int month, int year)
+	{
+		if (isValidDate(day, month, year))
+			return getDayOfYearValue(day, month, year);
+		
+		return -1;
+	}
+	
+	public static int getDayOfYearValue(int day, int month, int year)
+	{
+		int dayOfYear = day;
+		
+		switch (month - 1) {
+		case 11:
+			dayOfYear += 30;
+		case 10:
+			dayOfYear += 31;
+		case 9:
+			dayOfYear += 30;
+		case 8:
+			dayOfYear += 31;
+		case 7:
+			dayOfYear += 31;
+		case 6:
+			dayOfYear += 30;
+		case 5:
+			dayOfYear += 31;
+		case 4:
+			dayOfYear += 30;
+		case 3:
+			dayOfYear += 31;
+		case 2:
+			dayOfYear += 28;
+			if (isLeapYear(year))
+				++dayOfYear;
+		case 1:
+			dayOfYear += 31;		
+		}
+		
+		
+		return dayOfYear;
+	}
+	
+	public static boolean isValidDate(int day, int month, int year)
+	{
+		return 1 <= day && day <= 31 && 1 <= month && month <= 12 && day <= getMonthDays(month, year);
+	}
+	
+	public static int getMonthDays(int month, int year)
+	{
+		int days = 31;
+		
+		switch (month) {
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			days = 30;
+			break;
+		case 2:
+			days = 28;
+			if (isLeapYear(year))
+				++days;
+		}
+		
+		return days;
+	}
+	
+	public static boolean isLeapYear(int year)
+	{
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	}
+}
+```
+
+##### switch Expression
+
+>switch expression Java 12 ile birlikte preview olarak dile eklenmiştir. Java 14 ile birlikte `release` duruma gelmiştir. Java programcısı açısından switch expression Java 17'den itibaren kullanılabilirdir. switch expression, hem ifade hem de deyim gibi kullanılabilmektedir. İfade olarak kullanıldığında bir değer üretebilmektedir. switch expression ile birlikte klasik switch deyimi de, yeni eklenen **yield** anahtar sözcüğü ile birlikte ifade olarak kullanılabilmektedir. yield anahtar sözcüğü bölüm içerisinde ele alınacaktır. 
+
+**Anahtar Notlar:** Programlamada hem deyim (statement) hem de ifade (expression) olarak kullanılan sentaktik elemanlara **ifadesel deyim (expression statement)** de denilmektedir.
+
+>switch expression'ın genel biçimi şu şekildedir:
+
+```java
+switch (<ifade>) {
+	case <si>[, <si>, ...] -> <deyim veya ifade> 
+	case <si>[, <si>, ...] -> <deyim veya ifade> 
+	...
+	[default -> <deyim veya ifade>]
+}
+```
+
+>switch expression'ın parantezi içerisinde ifadeye ilişkin kurallar switch deyimi ile aynıdır. case bölümüne ilişkin ifadelerin yine sabit ifadesi olması zorunludur. switch expression'da aşağı düşme (fall through) özelliği yoktur. switch expression'da break deyimi switch expression'ı sonlandırmaz. Bu durumda örneğin döngü içerisinde switch expression kullanılmışsa break deyimi ilgili döngü sonlandırılmış olur. switch expression'da bir case bölümüne istenildiği kadar sabit ifadesi virgül atomu ile ayrılacak şekilde yazılabilir. Bu durumda sabit ifadesine ilişkin değerler `OR` işlemi ile karşılaştırılmış olur. switch expression'da bir case bölümüne ilişlki ifadeden sonra `:` yerine `->` atomu kullanılır. Bu anlamda bu iki atom bir switch expression içerisinde karışık olarak kullanılamaz.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input plate:");
+		int plate = kb.nextInt();
+				
+		switch (plate) {
+		case 34 -> System.out.println("İstanbul");
+		case 6 -> System.out.println("Ankara");
+		case 35 -> System.out.println("İzmir");
+		case 67 -> System.out.println("Zonguldak");
+		default -> System.out.println("Invalid plate value!...");
+		}
+		
+		System.out.println("C and System Programmers Association");	
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceletyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input code:");
+		int code = kb.nextInt();
+				
+		switch (code) {
+		case 212, 216 -> System.out.println("İstanbul");
+		case 312 -> System.out.println("Ankara");
+		case 232 -> System.out.println("İzmir");
+		case 372 -> System.out.println("Zonguldak");
+		default -> System.out.println("Invalid code value!...");
+		}
+		
+		System.out.println("C and System Programmers Association");	
+	}
+}
+```
+
+
