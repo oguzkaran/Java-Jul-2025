@@ -7706,7 +7706,7 @@ class DemoMenu {
 	{
 		java.util.Scanner kb = new java.util.Scanner(System.in);
 		
-		while (true) {
+		while (true) {s
 			printMenu();		
 			doOption(Integer.parseInt(kb.nextLine()));
 		}		
@@ -7714,3 +7714,232 @@ class DemoMenu {
 }
 ```
 
+###### 27 Ekim 2025
+
+>**Sınıf Çalışması:** Parametresi ile aldığı bir yılın artık yıl olup olmadığını test eden `isLeapYear` isimli metodu yazınız ve test ediniz.
+
+>**Artık yıl algoritması:** Bir yıl değeri 4 bölünüyor VE 100'e bölünmüyorsa VEYA 400'e bölünüyorsa artık yıldır.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		DateUtilIsLeapYearTest.run();
+	}
+}
+
+class DateUtilIsLeapYearTest {
+	public static void run()
+	{
+		for (int y = 1999; y <= 2104; ++y)
+			if (DateUtil.isLeapYear(y))
+				System.out.println(y);
+	}
+}
+
+
+class DateUtil {
+	public static boolean isLeapYear(int year)
+	{
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	}
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı gün ay ve yıl bilgisine ilişkin tarihin geçerli bir tarih olup olmadığını döndüren `isValidDate` isimli metodu DateUtil sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz.
+
+>**Not:** İleride daha iyisi yazılacaktır.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		DateUtilIsValidDateTest.run();
+	}
+}
+
+class DateUtilIsValidDateTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input day, month and year:");
+		int day = kb.nextInt();
+		int month = kb.nextInt();
+		int year = kb.nextInt();
+		
+		if (DateUtil.isValidDate(day, month, year))
+			System.out.printf("%02d/%02d/%04d is a valid date%n", day, month, year);
+		else
+			System.out.println("Invalid date values!...");
+	}
+}
+
+
+class DateUtil {
+	public static boolean isValidDate(int day, int month, int year)
+	{
+		return 1 <= day && day <= 31 && 1 <= month && month <= 12 && day <= getMonthDays(month, year);
+	}
+	
+	public static int getMonthDays(int month, int year)
+	{
+		int days = 31;
+		
+		switch (month) {
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			days = 30;
+			break;
+		case 2:
+			days = 28;
+			if (isLeapYear(year))
+				++days;
+		}
+		
+		return days;
+	}
+	
+	public static boolean isLeapYear(int year)
+	{
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	}
+}
+```
+
+
+>**Sınıf Çalışması:** Parametresi ile aldığı gün, ay ve yıl bilgilerine ilişkin tarihin yılın kaçıncı günü olduğunu döndüren `getDayOfYear` metodunu DateUtil sınıfı içerisinde aşağıdaki açıklamalara göre yazınız
+>
+>**Açıklamalar:** 
+>- Metot geçersiz bir tarih için `-1` değerine geri dönecektir.
+>- Metot yukarıdaki metotlar kullanılarak yazılabilir.
+>- Metot döngü kullanarak yazılmayacaktır.
+
+>**Not:** İleride daha iyisi yazılacaktır.
+
+>**Çözüm:**
+
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		DateUtilGetDayOfYearTest.run();
+	}
+}
+
+class DateUtilGetDayOfYearTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input day, month and year:");
+		int day = kb.nextInt();
+		int month = kb.nextInt();
+		int year = kb.nextInt();
+		int dayOfYear;
+		
+		if ((dayOfYear = DateUtil.getDayOfYear(day, month, year)) != -1)
+			System.out.printf("Day of year of %02d/%02d/%04d is %d%n", day, month, year, dayOfYear);
+		else
+			System.out.println("Invalid date values!...");
+	}
+}
+
+
+class DateUtil {
+	public static int getDayOfYear(int day, int month, int year)
+	{
+		if (isValidDate(day, month, year))
+			return getDayOfYearValue(day, month, year);
+		
+		return -1;
+	}
+	
+	public static int getDayOfYearValue(int day, int month, int year)
+	{
+		int dayOfYear = day;
+		
+		switch (month - 1) {
+		case 11:
+			dayOfYear += 30;
+		case 10:
+			dayOfYear += 31;
+		case 9:
+			dayOfYear += 30;
+		case 8:
+			dayOfYear += 31;
+		case 7:
+			dayOfYear += 31;
+		case 6:
+			dayOfYear += 30;
+		case 5:
+			dayOfYear += 31;
+		case 4:
+			dayOfYear += 30;
+		case 3:
+			dayOfYear += 31;
+		case 2:
+			dayOfYear += 28;
+			if (isLeapYear(year))
+				++dayOfYear;
+		case 1:
+			dayOfYear += 31;		
+		}
+		
+		
+		return dayOfYear;
+	}
+	
+	public static boolean isValidDate(int day, int month, int year)
+	{
+		return 1 <= day && day <= 31 && 1 <= month && month <= 12 && day <= getMonthDays(month, year);
+	}
+	
+	public static int getMonthDays(int month, int year)
+	{
+		int days = 31;
+		
+		switch (month) {
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			days = 30;
+			break;
+		case 2:
+			days = 28;
+			if (isLeapYear(year))
+				++days;
+		}
+		
+		return days;
+	}
+	
+	public static boolean isLeapYear(int year)
+	{
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	}
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı gün, ay ve yıl bilgilerine ilişkin tarihin yılın hangi günü olduğu bilgisine geri dönen `getDayOfWeek` isimli metodu aşağıdaki açıklamalara göre DateUtil sınıfı içerisinde yazınız ve test ediniz
+>
+>**Açıklamalar:** 
+>- Metot geçersiz bir tarih için `-1` değerine geri dönecektir.
+>- Tarihin haftanın hangi gününe geldiği aşağıdaki yöntemle belirlenecektir:
+> 01.01.1900 ile ilgili tarih arasındaki toplam gün sayısı hesaplanır ve 7 değerine göre modu alınır. Bu durumda elde edilen değer 0 ise Pazar, 1 ise Pazartesi, ..., 6 ise Cumartesi gününe ilişkindir.
+>- Metot yukarıdaki metotlar kullanılarak yazılabilir.
+>- 01.01.1900 öncesindeki tarihler geçersiz kabul edilecektir.
