@@ -8113,7 +8113,7 @@ switch (<ifade>) {
 }
 ```
 
->switch expression'ın parantezi içerisinde ifadeye ilişkin kurallar switch deyimi ile aynıdır. case bölümüne ilişkin ifadelerin yine sabit ifadesi olması zorunludur. switch expression'da aşağı düşme (fall through) özelliği yoktur. switch expression'da break deyimi switch expression'ı sonlandırmaz. Bu durumda örneğin döngü içerisinde switch expression kullanılmışsa break deyimi ilgili döngü sonlandırılmış olur. switch expression'da bir case bölümüne istenildiği kadar sabit ifadesi virgül atomu ile ayrılacak şekilde yazılabilir. Bu durumda sabit ifadesine ilişkin değerler `OR` işlemi ile karşılaştırılmış olur. switch expression'da bir case bölümüne ilişlki ifadeden sonra `:` yerine `->` atomu kullanılır. Bu anlamda bu iki atom bir switch expression içerisinde karışık olarak kullanılamaz.
+>switch expression'ın parantezi içerisinde ifadeye ilişkin kurallar switch deyimi ile aynıdır. case bölümüne ilişkin ifadelerin yine sabit ifadesi olması zorunludur. switch expression'da aşağı düşme (fall through) özelliği yoktur. Bununla birlikte switch expression'da break deyimi switch expression'ı yine sonlandırır. Bu durumda örneğin döngü içerisinde switch expression kullanılmışsa break deyimi ilgili döngü sonlandırılamaz, yine etiketli break kullanılması gerekir. switch expression'da bir case bölümüne istenildiği kadar sabit ifadesi virgül atomu ile ayrılacak şekilde yazılabilir. Bu durumda sabit ifadesine ilişkin değerler `OR` işlemi ile karşılaştırılmış olur. switch expression'da bir case bölümüne ilişlki ifadeden sonra `:` yerine `->` atomu kullanılır. Bu anlamda bu iki atom bir switch expression içerisinde karışık olarak kullanılamaz.
 
 >Aşağıdaki demo örneği inceleyiniz
 
@@ -8141,7 +8141,7 @@ class App {
 }
 ```
 
->Aşağıdaki demo örneği inceletyiniz
+>Aşağıdaki demo örneği inceleyiniz
 
 ```java
 package csd;
@@ -8166,5 +8166,632 @@ class App {
 	}
 }
 ```
+###### 3 Kasım 2025
 
+>switch expression'a ait bir case bölümünde birden fazla deyim kullılacaksa veya break, return, yield vb . deyimler kullanılacasa bileşik deyim olarak yazılır.
+
+>Aşağıdaki demo örneği inceleyiniz. Örnekte etiketli break kullanılarak döngünün sonlandırıldığına dikkat ediniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		EXIT_LOOP:
+		while (true) {
+			System.out.print("Input code:");
+			int code = kb.nextInt();
+			
+			switch (code) {
+			case 212, 216 -> System.out.println("İstanbul");
+			case 312 -> System.out.println("Ankara");
+			case 232 -> System.out.println("İzmir");
+			case 372 -> System.out.println("Zonguldak");
+			case 0 -> {break EXIT_LOOP;}
+			default -> System.out.println("Invalid code value!...");
+			}
+		}
+		
+		System.out.println("C and System Programmers Association");	
+	}
+}
+```
+
+>Aşağıda deyim olarak kullanılan swicth expression'ın ifade olarak kullanımı demo örnekte gösterilmiştir
+
+
+```java
+int plate = -1;
+			
+switch (code) {
+case 212, 216 -> plate = 34;
+case 312 -> plate = 6;
+case 232 -> plate = 35;
+case 372 -> plate = 67;
+default -> plate = -1;
+}
+```
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input code:");
+			int code = kb.nextInt();
+				
+			if (code == 0)
+				break;
+			
+			
+			int plate = switch (code) {
+			case 212, 216 -> 34;
+			case 312 -> 6;
+			case 232 -> 35;
+			case 372 -> 67;
+			default -> -1;
+			}; 
+		
+
+			if (plate != -1)
+				System.out.printf("Code:%d -> Plate:%d%n", code, plate);
+			else
+				System.out.println("Invalid code value!...");
+		}
+		
+		
+		System.out.println("C and System Programmers Association");	
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input code:");
+			int code = kb.nextInt();
+				
+			if (code == 0)
+				break;
+			
+			
+			Util.printCodeAndPlate(code, switch (code) {
+				case 212, 216 -> 34;
+				case 312 -> 6;
+				case 232 -> 35;
+				case 372 -> 67;
+				default -> -1;
+			});
+			
+			
+		}
+		
+		
+		System.out.println("C and System Programmers Association");	
+	}
+}
+
+class Util {
+	public static void printCodeAndPlate(int code, int plate)
+	{
+		if (plate != -1)
+			System.out.printf("Code:%d -> Plate:%d%n", code, plate);
+		else
+			System.out.println("Invalid code value!...");
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input code:");
+			int code = kb.nextInt();
+				
+			if (code == 0)
+				break;
+			
+			Util.printCodeAndPlate(code, Util.getPlateBycode(code));
+		}
+		
+		
+		System.out.println("C and System Programmers Association");	
+	}
+}
+
+class Util {
+	public static void printCodeAndPlate(int code, int plate)
+	{
+		if (plate != -1)
+			System.out.printf("Code:%d -> Plate:%d%n", code, plate);
+		else
+			System.out.println("Invalid code value!...");
+	}
+	
+	public static int getPlateBycode(int code)
+	{
+		return switch (code) {
+			case 212, 216 -> 34;
+			case 312 -> 6;
+			case 232 -> 35;
+			case 372 -> 67;
+			default -> -1;
+		};		
+	}
+}
+```
+
+>switch expression'ın bir case bölümünde ya da default case'de bileşik deyim kullanılacaksa ürettiği değer **yield deyimi (yield statement)** ile elde edilebilir. yield deyiminin genel biçimi şu şekildedir:
+
+```java
+yield <ifade>
+```
+>yield deyimine ilişkin ifadenin değeri üretilir ve şüphesiz switch sonlanmış olur.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input code:");
+			int code = kb.nextInt();
+				
+			if (code == 0)
+				break;
+			
+			Util.printCodeAndPlate(code, Util.getPlateBycode(code));
+		}
+		
+		
+		System.out.println("C and System Programmers Association");	
+	}
+}
+
+class Util {
+	public static void printCodeAndPlate(int code, int plate)
+	{
+		if (plate != -1)
+			System.out.printf("Code:%d -> Plate:%d%n", code, plate);
+		else
+			System.out.println("Invalid code value!...");
+	}
+	
+	public static int getPlateBycode(int code)
+	{
+		return switch (code) {
+			case 212, 216 -> {System.out.println("İstanbul"); yield 34;}
+			case 312 -> {System.out.println("Ankara"); yield 6;}
+			case 232 -> {System.out.println("İzmir"); yield 35;}
+			case 372 -> {System.out.println("Zonguldak"); yield 67;}
+			default -> -1;
+		};		
+	}
+}
+```
+
+>yield deyimi ile klasik switch deyimi de ifade biçiminde kullanılabilir
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input code:");
+			int code = kb.nextInt();
+				
+			if (code == 0)
+				break;
+			
+			Util.printCodeAndPlate(code, Util.getPlateBycode(code));
+		}
+		
+		
+		System.out.println("C and System Programmers Association");	
+	}
+}
+
+class Util {
+	public static void printCodeAndPlate(int code, int plate)
+	{
+		if (plate != -1)
+			System.out.printf("Code:%d -> Plate:%d%n", code, plate);
+		else
+			System.out.println("Invalid code value!...");
+	}
+	
+	public static int getPlateBycode(int code)
+	{
+		return switch (code) {
+		case 212:
+		case 216:
+			yield 34;
+		case 372:
+			yield 67;
+		case 312:
+			yield 6;
+		case 232:
+			yield 35;
+		default:
+			yield -1;
+		};		
+	}
+}
+```
+
+>Ne zaman switch expression ne zaman klasik switch statement kullanılmalıdır? Programcı buna nasıl karar verecektir? Bu sorulara genel olarak şu cevap verilebilir: **Gerekmedikçe klasik swicth deyiminin kullanılması önerilmez.**. switch statement tipik olarak şu iki durumda gerekir:
+>
+>- Aşağı düşme özelliğinin kullanımı algoritmik kolaylık sağlayacaksa switch statment tercih edilir
+>
+>- Java  11 veya öncesi sürümler kullanılarak (profesyonel olarak Java 17 öncesi) geliştirilen projelerde zaten switch expression kullanılamaz. Bu durumda switch statement kullanılır.
+
+>Aşağıdaki demo menü uygulamasını inceleyiniz
+
+>**Not:** İleride daha iyisi yazılacaktır
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		DemoMenuApp.run();
+		
+	}
+}
+
+class DemoMenuApp {
+	public static void run()
+	{
+		DemoMenu.run();
+	}
+}
+
+class DemoMenu {
+	public static void printMenu()
+	{
+		System.out.println("1.Ekle");
+		System.out.println("2.Sil");
+		System.out.println("3.Güncelle");
+		System.out.println("4.Ara");
+		System.out.println("5.Çıkış");
+		System.out.print("Seçenek:");
+	}
+	
+	public static void doInvalidOption()
+	{
+		System.out.println("----------------------------------------------");
+		System.out.println("Geçersiz Seçenek!...");
+		System.out.println("----------------------------------------------");
+	}
+	
+	public static void doAdd()
+	{
+		System.out.println("----------------------------------------------");
+		System.out.println("Ekle Seçildi");
+		System.out.println("----------------------------------------------");
+	}
+	
+	
+	public static void doDelete()
+	{
+		System.out.println("----------------------------------------------");
+		System.out.println("Sil Seçildi");
+		System.out.println("----------------------------------------------");
+	}
+	
+	public static void doUpdate()
+	{
+		System.out.println("----------------------------------------------");
+		System.out.println("Güncelle Seçildi");
+		System.out.println("----------------------------------------------");
+	}
+	
+	
+	public static void doSearch()
+	{
+		System.out.println("----------------------------------------------");
+		System.out.println("Ara Seçildi");
+		System.out.println("----------------------------------------------");
+	}
+	
+	public static void doExit()
+	{
+		System.out.println("----------------------------------------------");
+		System.out.println("Teşekkürler!...");
+		System.out.println("C ve Sistem Programcıları Derneği");
+		System.out.println("----------------------------------------------");
+		System.exit(0);
+	}
+	
+	public static void doOption(int option)
+	{
+		
+		switch (option) {
+		case 1 -> doAdd();
+		case 2 -> doDelete();
+		case 3 -> doUpdate();
+		case 4 -> doSearch();
+		case 5 -> doExit();
+		default -> doInvalidOption();
+		}
+	}
+	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			printMenu();		
+			doOption(Integer.parseInt(kb.nextLine()));
+		}		
+	}
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı gün, ay ve yıl bilgilerine ilişkin tarihin yılın hangi günü olduğu bilgisine geri dönen `getDayOfWeek` isimli metodu aşağıdaki açıklamalara göre DateUtil sınıfı içerisinde yazınız ve test ediniz
+>
+>**Açıklamalar:** 
+>- Metot geçersiz bir tarih için `-1` değerine geri dönecektir.
+>- Tarihin haftanın hangi gününe geldiği aşağıdaki yöntemle belirlenecektir:
+> 01.01.1900 ile ilgili tarih arasındaki toplam gün sayısı hesaplanır ve 7 değerine göre modu alınır. Bu durumda elde edilen değer 0 ise Pazar, 1 ise Pazartesi, ..., 6 ise Cumartesi gününe ilişkindir.
+>- Metot yukarıdaki metotlar kullanılarak yazılabilir.
+>- 01.01.1900 öncesindeki tarihler geçersiz kabul edilecektir.
+
+>**Not:** İleride daha iyisi yazılacaktır.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		DateUtilGetDayOfWeekTest.run();
+	}
+}
+
+class DateUtilGetDayOfWeekTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input day, month and year:");
+			int day = kb.nextInt();
+			int month = kb.nextInt();
+			int year = kb.nextInt();
+			
+			if (day == 0 && month == 0 && year == 0)
+				break;
+			
+			DateUtil.printDateEN(day, month, year);
+		}
+	}
+}
+
+
+class DateUtil {
+	public static void printDateEN(int day, int month, int year)
+	{
+		int dayOfWeek = getDayOfWeek(day, month, year);
+		
+		switch (dayOfWeek) {
+		case 0 -> System.out.printf("%02d/%02d/%04d Sunday%n", day, month, year);
+		case 1 -> System.out.printf("%02d/%02d/%04d Monday%n", day, month, year);
+		case 2 -> System.out.printf("%02d/%02d/%04d Tuesday%n", day, month, year);
+		case 3 -> System.out.printf("%02d/%02d/%04d Wednesday%n", day, month, year);
+		case 4 -> System.out.printf("%02d/%02d/%04d Thursday%n", day, month, year);
+		case 5 -> System.out.printf("%02d/%02d/%04d Friday%n", day, month, year);
+		case 6 -> System.out.printf("%02d/%02d/%04d Satuday%n", day, month, year);
+		default -> System.out.println("Invalid date values!...");
+		}
+	}
+	
+	public static int getDayOfWeek(int day, int month, int year)
+	{
+		int totalDays;
+		
+		if (year < 1900 || (totalDays = getDayOfYear(day, month, year)) == -1)
+			return -1;
+		
+		for (int y = 1900; y < year; ++y) {
+			totalDays += 365;
+			if (isLeapYear(y))
+				++totalDays;
+		}
+		
+		return totalDays % 7;				
+	}
+	
+	public static int getDayOfYear(int day, int month, int year)
+	{
+		if (isValidDate(day, month, year))
+			return getDayOfYearValue(day, month, year);
+		
+		return -1;
+	}
+	
+	public static int getDayOfYearValue(int day, int month, int year)
+	{
+		int dayOfYear = day;
+		
+		switch (month - 1) {
+		case 11:
+			dayOfYear += 30;
+		case 10:
+			dayOfYear += 31;
+		case 9:
+			dayOfYear += 30;
+		case 8:
+			dayOfYear += 31;
+		case 7:
+			dayOfYear += 31;
+		case 6:
+			dayOfYear += 30;
+		case 5:
+			dayOfYear += 31;
+		case 4:
+			dayOfYear += 30;
+		case 3:
+			dayOfYear += 31;
+		case 2:
+			dayOfYear += 28;
+			if (isLeapYear(year))
+				++dayOfYear;
+		case 1:
+			dayOfYear += 31;		
+		}
+		
+		
+		return dayOfYear;
+	}
+	
+	public static boolean isValidDate(int day, int month, int year)
+	{
+		return 1 <= day && day <= 31 && 1 <= month && month <= 12 && day <= getMonthDays(month, year);
+	}
+	
+	public static int getMonthDays(int month, int year)
+	{
+		return switch (month) {
+			case 4, 6, 9, 11 -> 30;			
+			case 2 -> {
+				if (isLeapYear(year))
+					yield 29;
+				
+				yield 28;
+			}
+			default -> 31;
+		};
+		
+
+	}
+	
+	public static boolean isLeapYear(int year)
+	{
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	}
+}
+```
+
+##### Farklı Türlerin Birbirine Atanması (Tür Dönüşümleri)
+
+>Bir türden ifadenin, başka bir türe atanmasına/dönüşmesine **tür dönüşümü (type conversion)** denir. Java'da farklı türlerin birbirine atanmasına yönelik kurallar belirlidir. 
+
+>`T1` ve `T2` birer tür ismi olmak üzere
+
+```java
+T1 a;
+T2 b;
+
+//...
+
+a = b;
+```
+>kodunda `a = b` ifadesine, T2 türünden T1 türüne **doğrudan dönüşüm/atama (implicit conversion)** denir. Java'da hangi türün hangi türe doğrudan atanabileceği/dönüşebileceği bellidir. Doğrudan atanamayan türler,  bazı özel (ama önemli) durumlar dışında **tür dönüştürme operatörü (type cast operator)** ile dönüşebilmektedir. Tür dönüştürme operatörü ile yapılan dönüşüme **explicit conversion** ya da **type casting** denilmektedir. 
+
+>`a = b` ifadesinde T2 türüne **kaynak tür (source type)**, T1 türüne ise **hedef tür (target/destination type)** denir. 
+
+>Bu bölümde temel türler arasındaki dönüşüm (primitive type conversions) kuralları ele alıncaktır.
+
+>Temel türler arasındaki doğrudan dönüşüme ilişkin genel kural şu şekildedir: **Genel olarak bilgi/veri kaybına yol açmayacak dönüşümler doğrudan (implicit) yapılabilir.** 
+
+>Derleyici kaynak türe ilişkin değerin hedef türün sınırları içerisinde olup olmasığına çoğu zaman bakamaz ve dolayısyla bakmaya çalışmaz. Örneğin, kaynak türe ilişkin değer klavyeden okunuyorsa, zaten derleme zamanında değeri hiç bir şekilde bilinemez. Bu durumda derleyici kaynak türden hedef türe doğrudan yapılan atamanın geçerli olup olmadığına göre kodu derlemeye çalışır. Doğrudan atamam geçersizse error oluşur. Doğrudan dönüşüme ilişkin detaylar bu bölümde ele alınacaktır.
+
+>Java Language Specification (JLS) dokümanında uzunluk (size/length) olarak küçük olan türden, uzunluk olarak büyük olan türe yapılan dönüşümlere **widening primitive conversions**, uzunluk olarak büyük olan türden, uzunluk olarak küçük olan türe yapılan dönüşümlere **narrowing primitive conversions**, önce genişletip sonra daraltılan dönüşümlere ise **widening and narrowing primitive conversions** denilmektedir. Buradaki terimler dönüşümün geçerli ya da geçersiz olup olmadığından bağpımsızdır. Sadece uzunluğa bağlı olarak isimlendirilmişlerdir. Aynı uzunluktaki türler arasındaki dmnüşüme genel olarak **identity conversions** denilmektedir. 
+
+>implicit conversion kuralları özel bazı durumlar dışında tüm atama durumları için geçerlidir. Özel durumlar bölüm içerisinde ayrıca ele alınacaktır.
+
+>Aşağıdaki demo örnekte a değişkeni içerisindeki değer derleme zamanında anlaşılabilir olsa da derleyici bu değere göre dönüşümün geçerliliğini belirlemez. Derleyici açısından, long türünden int türüne dönüşümde bilgi kaybı olabileceği için dönüşüm geçersizdir.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		long a = 10;
+		int b;
+		
+		b = a; //error		
+	}
+}
+```
+
+>Aşağıdaki demo örnekte derleyici a değişkenin değerini kesinlikle bilemez. Zaten bilebilseydi de bir şey değişmezdi değil mi?
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		long a = kb.nextLong();
+		int b;
+		
+		b = a; //error		
+	}
+}
+```
+
+>Aşağıdaki demo örnekte int türü sınırları içerisindeki bütün değerler zaten long türü sınırları içerisinde de vardır, bilgi kaybı oluşmaz, dolayısıyla dönüşümm geçerlidir
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a value:");
+		int a = kb.nextInt();
+		long b;
+		
+		b = a;
+		
+		System.out.printf("a = %d, b = %d%n", a, b);
+	}
+}
+```
+
+###### Temel Türler Arasındaki Doğrudan Dönşüme İlişkin Ayrıntılar
 
