@@ -8793,5 +8793,154 @@ class App {
 }
 ```
 
+###### 5 Kasım 2025
+
 ###### Temel Türler Arasındaki Doğrudan Dönşüme İlişkin Ayrıntılar
+
+>Küçük tamsayı türünden büyük tamsayı türüne doğrudan dönüşüm geçerlidir. Bu dönüşümde kaynak türe ilişkin değer pozttif ise sayının yüksek anlamlı byte'larına ilişkin bit değerleri sıfır ile beslenir, değer negatif ise işaretin kaybedilmemesi için yüksek anlamı byte'lara ilişkin bit değerleri 1(bir) ile beslenir.
+
+>Aşağıdaki demo örneği çeşitli değerler ile çalıştırıp sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input a number:");
+			int a = Integer.parseInt(kb.nextLine());
+			long b;
+			
+			b = a;
+			
+			System.out.printf("a = %d%n", a);
+			System.out.printf("a = %08X%n", a);
+			System.out.printf("b = %d%n", b);
+			System.out.printf("b = %016X%n", b);
+			
+			if (a == 0)
+				break;
+		}
+	}	
+}
+```
+
+>Büyük tamsayı türünden küçük tamsayı türüne doğrudan dönüşüm geçersizdir
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{
+		int a = 10;
+		short b;
+		
+		b = a; //error
+	}	
+}
+```
+>Anımsanacağı gibi gibi Java'da byte ve short türden sabit yoktur ancak istisna bir kural olarak **int türden bir sabit hedef türün (byte ya da short) sınırları içerisinde kalıyorsa doğrudan atanabilir.** Aksi durumda error oluşur.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{
+		short a = 10;
+		byte b = 34;
+		short c = 40000; //error
+		short d = 20L; //error
+	}	
+}
+
+```
+
+>Hiç bir türden char türüne doğrudan dönüşüm yapılamaz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{
+		byte a = 10;
+		char c = a; //error
+		
+	}	
+}
+```
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{
+		short a = 10;
+		char c = a; //error
+		
+	}	
+}
+```
+
+>İstisna bir kural olarak **int türden bir sabit char türü sınırları içerisinde kalıyorsa doğrundan dönüşüm geçerlidir.** Aksi durumda error oluşur
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{
+		char c = 67;
+		
+		System.out.println(c);		
+	}	
+}
+```
+>short byte ve char türlerine ilişkin yukarıda belirtilen istisna kurallar metot çağrısında argümandan parametre değişkenlerine aktarımda yapılan atana işleminde geçersizdir, return ifadesinin geçici değişkene atanması işleminde geçerlidir.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{
+		Sample.foo(20); //error
+		Sample.bar(30); //error
+		Sample.tar(123); //error
+	}	
+}
+
+class Sample {
+	public static short foo(short a)
+	{
+		//...
+		
+		return 10;
+	}
+	
+	public static byte bar(byte a)
+	{
+		//...
+		
+		return 110;
+	}
+	
+	public static char tar(char a)
+	{
+		//...
+		
+		return 68;
+	}
+}
+
+```
+
+**Anahtar Notlar:** Yukarıdaki istisna kurallar için argümandan parametrelere yapılan aktarım sırasında derleyicinin verdiği mesajlara ilişkin ayrıntılar şu aşamada anlaşılamayabilir. `Method overloading` konusunda daha detaylı bir biçimde bu mesajlar ele alınacaktır.
+
 
