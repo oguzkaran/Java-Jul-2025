@@ -509,5 +509,398 @@ class NumberUtil {
 >**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
 
 ```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{
+		SatisfyConditionsApp.run();
+	}	
+}
+
+class SatisfyConditionsApp {
+	public static boolean isCondition1Satisfied(int a, int b, int c)
+	{
+		return (100 * c + 10 * b + a) > (100 * a + 10 * b + c);
+	}
+	
+	public static boolean isCondition2Satisfied(int val)
+	{
+		return NumberUtil.isPrime(val);
+	}
+	
+	
+	public static boolean isCondition3Satisfied(int a, int b, int c)
+	{
+		return NumberUtil.isPrime(100 * c + 10 * b + a);
+	}
+	
+	public static boolean isCondition4Satisfied(int a, int b)
+	{
+		return NumberUtil.isPrime(10 * a + b);
+	}
+	
+	public static boolean isCondition5Satisfied(int b, int c)
+	{
+		return NumberUtil.isPrime(10 * b + c);
+	}
+	
+	public static boolean isCondition6Satisfied(int c, int b)
+	{
+		return NumberUtil.isPrime(10 * c + b);
+	}
+	
+	public static boolean isCondition7Satisfied(int b, int a)
+	{
+		return NumberUtil.isPrime(10 * b + a);
+	}
+	
+	public static boolean isAllSatisfied(int val)
+	{
+		int a = val / 100;
+		int b = val / 10 % 10;
+		int c = val % 10;
+		
+		return isCondition1Satisfied(a, b, c) && isCondition2Satisfied(val) && isCondition3Satisfied(a, b, c)
+				&& isCondition4Satisfied(a, b) && isCondition5Satisfied(b, c) && isCondition6Satisfied(c, b)
+				&& isCondition7Satisfied(b, a);		
+	}
+	
+	public static void run()
+	{
+		for (int val = 100; val <= 999; ++val)
+			if (isAllSatisfied(val))
+				System.out.printf("%d ", val);
+		
+		System.out.println();
+	}
+}
+
+class NumberUtil {
+	public static boolean isPrime(long a) 
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0) 
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		return true;
+	}
+}
+```
+
+>2. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{
+		IsPrimeXTest.run();
+	}	
+}
+
+class IsPrimeXTest {	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input n:");
+		long n = kb.nextLong();
+		
+		for (long a = 0; a <= n; ++a)
+			if (NumberUtil.isPrimeX(a))
+				System.out.println(a);
+	}
+}
+
+class NumberUtil {
+	public static boolean isPrimeX(long a) 
+	{
+		long sum = a;
+		boolean result;
+		
+		while ((result = isPrime(sum)) && sum > 9)
+			sum = sumDigits(sum);
+	
+		return result;	
+	}
+	
+	public static boolean isPrime(long a) 
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0) 
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		return true;
+	}
+	
+	
+	public static long sumDigits(long a)
+	{
+		long total = 0;
+		
+		while (a != 0) {
+			total += a % 10;
+			a /= 10;
+		}
+		
+		return Math.abs(total);
+	}
+}
+```
+
+
+
+
+
+>2. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{
+		IsPrimeXTest.run();
+	}	
+}
+
+class IsPrimeXTest {	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input n:");
+		long n = kb.nextLong();
+		
+		for (long a = 0; a <= n; ++a)
+			if (NumberUtil.isPrimeX(a))
+				System.out.println(a);
+	}
+}
+
+class NumberUtil {
+	public static boolean isPrimeX(long a) 
+	{	
+		boolean result;
+		
+		for (long sum = a; (result = isPrime(sum)) && sum > 9; sum = sumDigits(sum))
+			;
+		
+		return result;	
+	}
+	
+	public static boolean isPrime(long a) 
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0) 
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		return true;
+	}
+	
+	
+	public static long sumDigits(long a)
+	{
+		long total = 0;
+		
+		while (a != 0) {
+			total += a % 10;
+			a /= 10;
+		}
+		
+		return Math.abs(total);
+	}
+}
+```
+
+>3. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{
+		CalculateDigitalRootTest.run();
+	}	
+}
+
+class CalculateDigitalRootTest {	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input n:");
+		int n = kb.nextInt();
+		
+		for (int a = 0; a <= n; ++a)
+			System.out.printf("%d -> %d%n", a, NumberUtil.calculateDigitalRoot(a));
+	}
+}
+
+class NumberUtil {
+	public static int calculateDigitalRoot(int a) 
+	{	
+		int root = Math.abs(a);
+		
+		while (root > 9)
+			root = sumDigits(root);
+		
+		return root;
+	}
+		
+
+	public static int sumDigits(int a)
+	{
+		int total = 0;
+		
+		while (a != 0) {
+			total += a % 10;
+			a /= 10;
+		}
+		
+		return Math.abs(total);
+	}
+}
+```
+
+>4. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args)
+	{
+		CalculateDigitalRootTest.run();
+	}	
+}
+
+class CalculateDigitalRootTest {	
+	public static void run()
+	{
+		for (int n = 0; n <= 100_000; ++n)
+			if (NumberUtil.isFactorian(n))
+				System.out.printf("%d ", n);
+		
+		System.out.println();
+	}
+}
+
+class NumberUtil {
+	public static boolean isFactorian(int n) 
+	{	
+		return n > 0 && sumFactorialDigits(n) == n;
+	}
+	
+	public static int sumFactorialDigits(int n)
+	{
+		int total = 0;
+		
+		while (n != 0) {
+			total += factorial(n % 10);
+			n /= 10;
+		}
+		
+		return total;
+	}
+		
+
+	public static int factorial(int n)
+	{
+		int result = 1;
+		
+		for (int i = 2; i <= n; ++i)
+			result *= i;
+		
+		return result;
+	}
+}
+```
+
+>5. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+
+```java
+
+```
+
+>6. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+
+```java
+
+```
+
+>7. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+
+```java
+
+```
+
+>8. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+
+```java
 
 ```
