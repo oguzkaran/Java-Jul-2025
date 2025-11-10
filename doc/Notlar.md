@@ -8943,4 +8943,209 @@ class Sample {
 
 **Anahtar Notlar:** Yukarıdaki istisna kurallar için argümandan parametrelere yapılan aktarım sırasında derleyicinin verdiği mesajlara ilişkin ayrıntılar şu aşamada anlaşılamayabilir. `Method overloading` konusunda daha detaylı bir biçimde bu mesajlar ele alınacaktır.
 
+##### 10 Kasım 2025
+
+>char türünden short türüne doğrudan dönüşüm geçersizdir. Çünkü char türü sınırları içerisinde short türü sınırları içerisinde tutulabilecek değerlerden daha büyük değerler de vardır
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	char c = 67;
+    	short a;
+    	
+    	a = c; //error
+    }
+}
+```
+
+>char türünden, size olarak kendisinden büyük olan tüm türlere doğrudan dönüşüm geçerlidir
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	char c = 67;
+    	int a;
+    	double b;
+    	
+    	a = c;
+    	b = c;
+    	
+    	//...
+    }
+}
+```
+
+>Bir gerçek sayı türünden nbir tamsayı türüne ndoğrudan dönüşüm geçersizdir
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	float a = 2;
+    	long b;
+    	
+    	b = a; //error
+    }
+}
+```
+
+>Bir tamsayı türünden bir gerçek sayı türüne doğrudan atama geçerlidir. Aşağıdaki demo örnekte logn türünün uzunluğu float türünün uzunluğundan büyük olmasına karşın atama işlemi yapılabilir. Gerçek sayıların tutuluş formatı tamsayıların tutuluş formatından farklı olduğunu anımsayınız
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	long a = 2;
+    	float b;
+    	
+    	b = a;
+    }
+}
+
+```
+
+>double türünden float türüne doğrudan atama geçersizdir
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	double a = 3.4;
+    	float b;
+    	
+    	b = a; //error
+    }
+}
+
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	float a;
+    	
+    	a = 3.4; //error
+    }
+}
+
+```
+>float türünden double türüne doğrudan atama geçerlidir
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	System.out.print("Input a number:");
+    	float a = kb.nextFloat();
+    	double b;
+    	
+    	b = a;
+    	
+    	System.out.printf("a = %.20f%nb = %.20f%n", a, b);    	
+    }
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	float a;
+    	
+    	a = 3.4F;
+    	
+    	System.out.printf("a = %.20f%n", a);
+    }
+}
+```
+>boolean türünden herhangi bir türe, herhangi bir türden boolean türüne doğrudan dönüşüm geçersizdir
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	boolean b = true;
+    	int a;
+    	
+    	a = b; //error
+    }
+}
+```
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	int a = 1;
+    	boolean b;
+    	
+    	b = a; //error
+    }
+}
+```
+
+>Geçerli olan doğrudan dönüşümler (implicit conversions) şu şekilde özetlenebilir:
+
+```java
+byte -> short, int, long, float, double
+short -> int, long, float, double
+int -> long, float, double
+long -> float, double
+float -> double
+char -> int, long, float, double
+```
+
+**Anahtar Notlar:** Bir değişkenin türü yaşamı boyunca değişmez. Bir değişkene ilişkin ifadenin değerinin başka bir türe dönüşmesi o değerin hedef tür ile temsil edilmesi anlamına gelir.
+
+##### İşlem Öncesi Otomatik Tür Dönüşümleri
+
+>İki operandlı bir operatör için aşağı seviyede farklı türden operandlarla işlem yapılamaz. Örneğin aşağı seviyede int türden bir değer ile long türden bir değer toplama işlemine sokulamaz. İşte derleyiciler iki operandlı bir operatörün farklı türler ile işlem yaptığını gördüğünde ilgili işlemi ortak bir tür ile yapmak için gereken kodları üretir. Derleyicinin yaptığı bu işleme **işlem öncesi otomatik tür dönüşümü** denir. Derleyici bu dönüştürme işlemini 3 farklı şekilde ele alabilir:
+
+>T1 ve T2 birer tür olmak üzere :
+
+```java
+T1 t1;
+T2 t2;
+
+//...
+
+t1 <operand> t2
+```
+>işlemi için:
+>1. T1'i T2'ye dönüştürür. İşlem T2 türünden yapılır ve sonuç T2 türünden elde edilir
+>2. T1 ve T2 ortak bir türe (T3) dönüştürülür. İşlem T3 türünden yapılır. Sonuç T3 türünden elde edilir.
+>3. Her hangi bir ortak türe dönüşüm yapılamaz. Error oluşur.
+
+>Java'da işlem öncesi otomatik tür dönüşümü kuralları belirlidir ve implicit conversion kurallarına göre yapılır. 
+
+
+
 
