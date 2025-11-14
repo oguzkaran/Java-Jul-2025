@@ -878,6 +878,77 @@ class NumberUtil {
 >**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
 
 ```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	NumberUtilIsSuperPrimeTest.run();
+    }
+}
+
+
+class NumberUtilIsSuperPrimeTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.print("Input n:");
+		long n = kb.nextLong();
+		
+		for (long i = 0; i <= n; ++i)
+			if (NumberUtil.isSuperPrime(i))
+				System.out.printf("%d ", i);
+		
+		System.out.println();
+	}
+}
+
+class NumberUtil {
+	public static boolean isSuperPrime(long a)
+	{
+		return isPrime(a) && isPrime(indexOfPrime(a));
+	}
+	
+	public static int indexOfPrime(long a)
+	{
+		int i = 1;
+		long val = 2;
+		
+		while (true) {
+			if (val == a)
+				return i;
+			
+			if (isPrime(val))
+				++i;
+			
+			++val;
+		}	
+	}
+	
+	public static boolean isPrime(long a) 
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0) 
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		return true;
+	}
+}
 
 ```
 
@@ -886,7 +957,50 @@ class NumberUtil {
 >**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
 
 ```java
+package csd;
 
+class App {
+    public static void main(String[] args)
+    {
+    	FindHardyRamanujanNumbersApp.run();
+    }
+}
+
+class FindHardyRamanujanNumbersApp {
+	public static void run()
+	{
+		for (int n = 1; n < 100_000; ++n)
+			if (NumberUtil.isHardyRamanujan(n))
+				System.out.printf("%d ", n);
+		
+		System.out.println();
+	}
+}
+
+class NumberUtil {
+	public static boolean isHardyRamanujan(int n)
+	{
+		return n > 0 && countHardyRamanujanPairs(n) == 2;
+	}
+	
+	public static int countHardyRamanujanPairs(int n)
+	{
+		int count = 0;
+		
+		EXIT_LOOP:
+		for (int a = 1; a * a * a < n; ++a)
+			for (int b = a + 1; a * a * a + b * b * b <= n; ++b) {
+				if (a * a * a + b * b * b == n) {
+					if (++count == 2)
+						break EXIT_LOOP;
+					
+					++b;
+				}
+			}
+		
+		return count;
+	}
+}
 ```
 
 >7. sorunun bir çözümü
@@ -894,7 +1008,46 @@ class NumberUtil {
 >**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
 
 ```java
+package csd;
 
+class App {
+    public static void main(String[] args)
+    {
+    	NumberUtilIsDecimalHarshadTest.run();
+    }
+}
+
+class NumberUtilIsDecimalHarshadTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.print("Input n:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i <= n; ++i)
+			if (NumberUtil.isDecimalHarshad(i))
+				System.out.printf("%d%n", i);
+	}
+}
+
+class NumberUtil {
+	public static boolean isDecimalHarshad(int a)
+	{
+		return a > 0 && a % sumDigits(a) == 0;
+	}
+	
+	public static int sumDigits(int a)
+	{
+		int total = 0;
+		
+		while (a != 0) {
+			total += a % 10;
+			a /= 10;
+		}
+		
+		return Math.abs(total);
+	}
+}
 ```
 
 >8. sorunun bir çözümü
@@ -902,5 +1055,58 @@ class NumberUtil {
 >**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
 
 ```java
+package csd;
 
+class App {
+    public static void main(String[] args)
+    {
+    	NumberUtilPrintCollatztest.run();
+    }
+}
+
+class NumberUtilPrintCollatztest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input a value:");
+			int n = Integer.parseInt(kb.nextLine());
+			
+			if (n == 0)
+				break;
+			
+			System.out.println("-----------------------------------------");
+			NumberUtil.printCollatz(n);
+			System.out.println("-----------------------------------------");
+		}
+	}
+}
+
+class NumberUtil {
+	public static void printCollatz(int n)
+	{
+		if (n <= 0) {
+			System.out.println("Invalid numbers");
+			return;
+		}
+		
+		System.out.println(n);
+		
+		while (n != 1) {
+			if (n % 2 == 0)
+				n /= 2;
+			else
+				n = 3 * n + 1;
+			
+			System.out.println(n);
+		}			
+	}
+}
 ```
+
+#### Homework-004
+
+>1. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
