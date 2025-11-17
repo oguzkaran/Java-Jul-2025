@@ -9125,6 +9125,8 @@ char -> int, long, float, double
 
 **Anahtar Notlar:** Bir değişkenin türü yaşamı boyunca değişmez. Bir değişkene ilişkin ifadenin değerinin başka bir türe dönüşmesi o değerin hedef tür ile temsil edilmesi anlamına gelir.
 
+###### 17 Kasım 2025
+
 ##### İşlem Öncesi Otomatik Tür Dönüşümleri
 
 >İki operandlı bir operatör için aşağı seviyede farklı türden operandlarla işlem yapılamaz. Örneğin aşağı seviyede int türden bir değer ile long türden bir değer toplama işlemine sokulamaz. İşte derleyiciler iki operandlı bir operatörün farklı türler ile işlem yaptığını gördüğünde ilgili işlemi ortak bir tür ile yapmak için gereken kodları üretir. Derleyicinin yaptığı bu işleme **işlem öncesi otomatik tür dönüşümü** denir. Derleyici bu dönüştürme işlemini 3 farklı şekilde ele alabilir:
@@ -9144,8 +9146,456 @@ t1 <operand> t2
 >2. T1 ve T2 ortak bir türe (T3) dönüştürülür. İşlem T3 türünden yapılır. Sonuç T3 türünden elde edilir.
 >3. Her hangi bir ortak türe dönüşüm yapılamaz. Error oluşur.
 
->Java'da işlem öncesi otomatik tür dönüşümü kuralları belirlidir ve implicit conversion kurallarına göre yapılır. 
+>Java'da işlem öncesi otomatik tür dönüşümü kuralları belirlidir ve implicit conversion kurallarına uygun olarak yapılır. 
 
+>İşlem öncesi otomatik tür dönüşümü kurallarına ilişkin detaylar şunlardır: (maddeleri else-if biçiminde değerlendiriniz)
+>
+>- short, byte ve char türleri kendi aralarında işleme sokulduklarında (türlerin her ikisi aynı da olabilir) önce operandlara ilişkin değerler int türüne dönüştürülür. Sonuç int türden elde edilir. Bu işleme **integral/integer promotion** denir.
+>
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	short a = 10;
+    	short b = 20;
+    	short c;
+    	
+    	c = a + b; //error
+    	
+    }
+}
+
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	char a = 10;
+    	byte b = 20;
+    	short c;
+    	
+    	c = a + b; //error
+    	
+    }
+}
+```
+
+**Anahtar Notlar:** Modern sistemlerde iki operandlı tamsayı işlemleri ilgili sistemdeki int ve üstü tamsayı türleri ile yapılabilmektedir. Yani int türünden uzunluk olarak küçük olan tamsayı türleri ile işlem yapılamaz. Bu anlamda 32 bit sistemlerde tamsayılar için iki operandlı işlemler genel olarak minimum 32 bir ve üstü uzunlukta yapılabilmektedir. Benzer şekilde yine 64 bit sistemlerde de genel olarak 32 bit ve üstü uzunluktaki tamsayılar ile işlem yapılabilmektedir. Burada anlatılanların oldukça fazla detayları vardır, yalnızca fikir vermek açısından belirli ölçüde anlatılmıştır.
+
+>- Bölme işleminde operandlardan her ikisi de tamsayı türlerindense, işlemin sonucu tamsayı olarak elde edilir. Bölme işleminde elde edilen sonucun noktadan sonraki kısmı atılır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	System.out.print("Input two values:");
+    	int a = kb.nextInt();
+    	int b = kb.nextInt();
+    	int c;
+    	
+    	c = a / b;
+    	
+    	System.out.printf("c = %d%n", c);
+    }
+}
+
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	System.out.print("Input two values:");
+    	int a = kb.nextInt();
+    	int b = kb.nextInt();
+    	double c;
+    	
+    	c = a / b;
+    	
+    	System.out.printf("c = %f%n", c);
+    }
+}
+```
+>- Uzunluk olaral büyük tamsayı türü ile uzunluk olarak küçük tamsayı türü işleme sokulduğunda, küçük tamsayı türüne ilişkin değer büyük tamsayı türüne dönüştürülür, işlem büyük tamsayı türünden çıkar
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	short a = 10;
+    	long b = 20;
+    	long c;
+    	
+    	c = a + b;
+    	
+    	System.out.printf("c = %d%n", c);
+    }
+}
+```
+
+>- char türü ile kendisinden uzunluk olarak büyük olan bir tür işleme girdiğinde char türüne ilişkin değer ilgili türe dönüştürülür ve sonuç diğer türden (yani büyük tür türünden) çıkar
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	char ch = 'D';
+    	int a = 32;
+    	int b;
+    	
+    	b = a + ch;
+    	
+    	System.out.printf("b = %d%n", b);
+    }
+}
+```
+
+>- Bir tamsayı türü ile gerçek sayı türü işleme sokulduğunda tamsayı türüne ilişkin değer gerçek sayı türüne dönüştürülür ve sonuç o gerçek sayı türünden çıkar
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	long a = 10;
+    	float b = 34;
+    	float c;    	
+    	
+    	c = a + b;
+    	
+    	System.out.printf("c = %f%n", c);
+    }
+}
+```
+
+>- float ve double işleme sokulduğunda float türüne ilişkin değer double türüne dönüştürülür ve sonuç double türünden çıkar
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	double a = 10.3;
+    	float b = 34;
+    	double c;    	
+    	
+    	c = a + b;
+    	
+    	System.out.printf("c = %.20f%n", c);
+    }
+}
+
+```
+
+>- boolean türü ile hiç bir tür işleme sokulamaz
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	boolean a = true;
+    	int b = 0;
+    	int c;
+    	
+    	c = a + b;  //error
+    	
+    }
+}
+```
+>
+>Derleyici, işlem öncesi otomatik tür dönüşümüne ilişkin kodları nasıl üretir? Derleyici bu işlemi geçici değişken (temporary variable) yaratarak yapar. Başka bir deyişle derleyici geçici değişken yaratan kodları üretir.
+
+>Aşağıdaki demo örnekte `**` ile belirtilen deyime ilişkin ürettiği yaklaşık kod şu şekildedir:
+
+```java
+{
+	long temp = b;
+
+	c = temp + a;
+}
+```
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	int a = 10;
+    	long b = 20;
+    	long c;
+    	
+    	c = a + b; //**
+    	
+    	//...
+    	
+    }
+}
+```
+
+>Aşağıdaki demo örnekte `**` ile belirtilen deyime ilişkin ürettiği yaklaşık kod şu şekildedir:
+
+```java
+{
+	int temp1 = a;
+	int temp2 = b;
+
+	c = temp1 + temp2;
+}
+```
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	short a = 10;
+    	short b = 20;
+    	int c;
+    	
+    	c = a + b; //**
+    	
+    	//...
+    	
+    }
+}
+```
+
+##### Tür Dönüştürme Operatörü
+
+>Tür dönüştürme operatörü (type casting operator) özel amaçlı, tek operandlı ve önek durumundadır. Bu operatörün kullanımına ilişkin genel biçimi şu şekildedir:
+
+```java
+(<tür ismi>)<ifade>
+```
+
+>Operatör, operandına ilişkin ifadenin değerini belirtilen türe dönüştürür. Operatörün yan etkisi yoktur. Bu operatör operatör öncelik tablosunda ikinic seviyededir. Yani, çarpma, bölme ve mod operatörlerinden önceki, metot çağırma operatöründen sonraki seviyededir. Operatörün ürettiği değer operandına ilişkin ifadenin değerinin, belirtilen türe dönüştürüldüğünde elde edilen değeridir. Bu operatör ile tür dönüştürme işlemi geçici değişken yaratılarak yapılır. Bu operatör ile yapılan dönüşüme **explicit conversion** ya da **type casting** denilmektedir. Bu operatör ile genel olarak, implicit olarak geçersiz olan dönüşümler yapılabilmektedir. implicit olarak yapılabilen bir dönüşüm bu operatör ile de yapılabilir. Java'da implicit olarak yapılamayan ancak explicit olarak yapılabilen dönüşümlerde değerin nasıl elde edileceği (yani veri/bilgi kaybıu varsa nasıl olacağı) belirlidir. bu bölüme temel türler arasındaki explicit dönüşümlerin olası veri/kaybı detaylaroı ele alınacaktır.
+
+**Anahtar Notlar:** Bir dönüşüm, implicit olarak yapılamıyor, explicit olarak yapılabiliyorsa şu anlam çıkartılmalıdır: **Çalışma zamanında bir problem oluşabilir, dolayısıyla derleyici programcının yanlışlıkla yapmasını engellemek için buna izin vermiyor ancak programcı isterse tür dönüştürme operatörü (explicit olarak) buunu yapabilir.** Yani programcı tür dönüştürme operatörü kullanarak derleyiciye mantıksal olarak şunu şöylemiş olur: **Durumun farkındayım bana izin ver, sonuçlarını göze alıyorum.** Explicit olarak yapılamayan dönüşümler zaten anlamsız olduklarından geçersizdir. 
+
+>Aşağıdaki demo örrnekte bölme işlemi double türü ile yapılacağından sonuç double türden elde edilir
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	System.out.print("Input two values:");
+    	int a = kb.nextInt();
+    	int b = kb.nextInt();
+    	double c;
+    	
+    	c = (double)a / b;
+    	
+    	System.out.printf("c = %.20f%n", c);
+    }
+}
+
+```
+
+>Bu bölümde implicit olarak yapılamayan dönüşümlerin explicit olarak yapılıp yapılamadığını, yapılabiliyorsa veri/bilgi kaybının nasıl olduğu ele alınacaktır. Detaylar şu şekildedir:
+
+>- Büyük tamsayı türünden küçük tamsayı türüne yapılan explicit dönüşümde değerin yüksek anlamlı byte'ları atılır. Bu durumda sayı hedef türün sınırları içerisinde kalıyorsa bilgi kaybı oluşmaz, kalmıyorsa oluşur
+
+
+>Aşağıdaki demo örnekte çeşitli değerler girerek sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	while (true) {    	
+	    	System.out.print("Input a value:");
+	    	long a = kb.nextLong();  	
+	    	int b;
+	    	
+	    	b = (int)a;
+	    	
+	    	System.out.printf("a = %d, a = %016X%n", a, a);
+	    	System.out.printf("b = %d, b = %08X%n", b, b);
+	    	
+	    	if (a == 0)
+	    		break;	    	
+    	}
+    }
+}
+```
+
+>Büyük tamsayıt türünden char türüne yapılan explicit dönüşümde sayının yüksek anlamlı byte değerleri atılır. Elde edilen değer char türüne atanır.
+
+>Aşağıdaki demo örnekte çeşitli değerler girerek sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	while (true) {    	
+	    	System.out.print("Input a value:");
+	    	long a = kb.nextLong();  	
+	    	char b;
+	    	
+	    	b = (char)a;
+	    	
+	    	System.out.printf("a = %d, a = %016X%n", a, a);
+	    	System.out.printf("b = %c, b = %d, = %04X%n", b, (int)b, (int)b);
+	    	
+	    	if (a == 0)
+	    		break;	    	
+    	}
+    }
+}
+```
+
+>short türünden char türüne yapılan explicit dönüşümde sayının bit kalıbı değişmez, yorumlanışı değişir.
+
+>Aşağıdaki demo örnekte çeşitli değerler girerek sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	while (true) {    	
+	    	System.out.print("Input a value:");
+	    	short a = kb.nextShort();  	
+	    	char b;
+	    	
+	    	b = (char)a;
+	    	
+	    	System.out.printf("a = %d, a = %04X%n", a, a);
+	    	System.out.printf("b = %c, b = %d, = %04X%n", b, (int)b, (int)b);
+	    	
+	    	if (a == 0)
+	    		break;	    	
+    	}
+    }
+}
+```
+
+>char türünden short türüne yapılan explicit dönüşümde sayının bit kalıbı değişmez, yorumlanışı değişir.
+
+>Aşağıdaki demo örmeği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	char c = '\uFFE3';
+    	short a;
+    	
+    	a = (short)c;
+    	
+    	System.out.printf("c = %c, c = %d, c = %04X%n", c, (int)c, (int)c);
+    	System.out.printf("a = %d, a = %04X%n", a, a);
+    }
+}
+```
+
+>byte türünden char türüne explicit dönüşüm iki aşamada gerçekleşir. Birinci aşamada byte türüne ilişkin değer int türüne yükseltilir. İkinci adımda, elde edilen değerin yüksek anlamlı iki byte'ı atılır.
+
+>Aşağıdaki demo örnekte çeşitli değerler girerek sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	while (true) {    	
+	    	System.out.print("Input a value:");
+	    	byte a = kb.nextByte();  	
+	    	char b;
+	    	
+	    	b = (char)a;
+	    	
+	    	System.out.printf("a = %d, a = %02X, a = %08X%n", a, a, (int)a);
+	    	System.out.printf("b = %c, b = %d, = %04X%n", b, (int)b, (int)b);
+	    	
+	    	if (a == 0)
+	    		break;	    	
+    	}
+    }
+}
+```
+
+>char türünden byte türüne yapılan explicit dönüşümde değerin yüksek anlamlı byte'ı atılır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	char c = '\uFFE3';
+    	byte a;
+    	
+    	a = (byte)c;
+    	
+    	System.out.printf("c = %c, c = %d, c = %04X%n", c, (int)c, (int)c);
+    	System.out.printf("a = %d, a = %02X%n", a, a);
+    }
+}
+```
 
 
 
