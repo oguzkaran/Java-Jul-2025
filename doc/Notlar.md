@@ -9409,7 +9409,7 @@ class App {
 (<tür ismi>)<ifade>
 ```
 
->Operatör, operandına ilişkin ifadenin değerini belirtilen türe dönüştürür. Operatörün yan etkisi yoktur. Bu operatör operatör öncelik tablosunda ikinic seviyededir. Yani, çarpma, bölme ve mod operatörlerinden önceki, metot çağırma operatöründen sonraki seviyededir. Operatörün ürettiği değer operandına ilişkin ifadenin değerinin, belirtilen türe dönüştürüldüğünde elde edilen değeridir. Bu operatör ile tür dönüştürme işlemi geçici değişken yaratılarak yapılır. Bu operatör ile yapılan dönüşüme **explicit conversion** ya da **type casting** denilmektedir. Bu operatör ile genel olarak, implicit olarak geçersiz olan dönüşümler yapılabilmektedir. implicit olarak yapılabilen bir dönüşüm bu operatör ile de yapılabilir. Java'da implicit olarak yapılamayan ancak explicit olarak yapılabilen dönüşümlerde değerin nasıl elde edileceği (yani veri/bilgi kaybıu varsa nasıl olacağı) belirlidir. bu bölüme temel türler arasındaki explicit dönüşümlerin olası veri/kaybı detaylaroı ele alınacaktır.
+>Operatör, operandına ilişkin ifadenin değerini belirtilen türe dönüştürür. Operatörün yan etkisi yoktur. Bu operatör operatör öncelik tablosunda ikinic seviyededir. Yani, çarpma, bölme ve mod operatörlerinden önceki, metot çağırma operatöründen sonraki seviyededir. Operatörün ürettiği değer operandına ilişkin ifadenin değerinin, belirtilen türe dönüştürüldüğünde elde edilen değeridir. Bu operatör sağdan sola önceliklidir (right associative). Bu operatör ile tür dönüştürme işlemi geçici değişken yaratılarak yapılır. Bu operatör ile yapılan dönüşüme **explicit conversion** ya da **type casting** denilmektedir. Bu operatör ile genel olarak, implicit olarak geçersiz olan dönüşümler yapılabilmektedir. implicit olarak yapılabilen bir dönüşüm bu operatör ile de yapılabilir. Java'da implicit olarak yapılamayan ancak explicit olarak yapılabilen dönüşümlerde değerin nasıl elde edileceği (yani veri/bilgi kaybıu varsa nasıl olacağı) belirlidir. bu bölüme temel türler arasındaki explicit dönüşümlerin olası veri/kaybı detaylaroı ele alınacaktır.
 
 **Anahtar Notlar:** Bir dönüşüm, implicit olarak yapılamıyor, explicit olarak yapılabiliyorsa şu anlam çıkartılmalıdır: **Çalışma zamanında bir problem oluşabilir, dolayısıyla derleyici programcının yanlışlıkla yapmasını engellemek için buna izin vermiyor ancak programcı isterse tür dönüştürme operatörü (explicit olarak) buunu yapabilir.** Yani programcı tür dönüştürme operatörü kullanarak derleyiciye mantıksal olarak şunu şöylemiş olur: **Durumun farkındayım bana izin ver, sonuçlarını göze alıyorum.** Explicit olarak yapılamayan dönüşümler zaten anlamsız olduklarından geçersizdir. 
 
@@ -9597,5 +9597,389 @@ class App {
 }
 ```
 
+###### 19 Kasım 2025
+
+>double türünden float türüne türüne yapılan explicit dönüşümde sayı, float türü ile temsil edilebilen en yakın sayıya yuvarlanır. Bu durumda gerçek sayıların tutuluş formatına göre yuvarlama hataları (rounding error) oluşabilir.
+
+>Aşağıdaki demo örnekte çeşitli değerler girerek sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	while (true) {
+    		System.out.print("Input a value:");
+    		double a = kb.nextDouble();
+    		float b;
+    		
+    		b = (float)a;
+    		
+    		System.out.printf("a = %.20f%nb = %.20f%n", a, b);
+    		
+    		if (Math.abs(a) < 0.000001)
+    			break;
+    	}
+    }
+}
+```
+>boolean türünden herhangi bir türe, herhangi bir türden boolean türüne explicit dönüşüm geçersizdir
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	boolean a = true;
+    	int b;
+    	
+    	b = (int)a; //error
+    	
+    	int c = 1;
+    	boolean d;
+    	
+    	d = (boolean)c; //error
+    }
+}
+```
+
+>int türünün en büyük değerine `Integer.MAX_VALUE`, en küçük değerine `Integer.MIN_VALUE` ifadeleri ile erişilebilir. Benzer şekilde long türünün en büyük değerine `Long.MAX_VALUE`, en küçük değerine `Long.MIN_VALUE` ifadeleri ile erişilebilir. İfadelere ilişkin detaylar ileride ele alınacaktır.
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	System.out.printf("int -> [%d, %d]%n", Integer.MIN_VALUE, Integer.MAX_VALUE);
+    	System.out.printf("long -> [%d, %d]%n", Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+}
+```
+
+>Gerçek sayı türünden tamsayı türüne ya da char explicit dönüşün şu şekilde gerçekleşir:
+- Sayının noktadan sonraki kısmı atılır
+  - Elde edilen değer hedef türün sınırları içerisinde kalıyorsa doğrudan sönüştürülür.
+  - Elde edilen değer hedef türün sınırları içerisinde kalmıyorsa
+    - Hedef tür `int, short, byte, char` türlerinden biriyse
+      - Değer int türü sınırları içerisinde kalıyorsa tamsayılar (ve char türü) arasındaki dönüşüm kuralları uygulanır.
+      - Değer int türü sınırları içerisinde kalmıyorsa sayının pozitif ya da negatif olmasına göre sırasıyla int türünün en büyük ve en küçük değeri alınır ve tamsayılar (ve char türü) arasındaki dönüşüm kuralları uygulanır.
+    - Hedef tür `long` türüyse
+      - Değer long türü içerisinde kalıyorsa elde edilen değer doğrudan atanır
+      - Değer long türü sınırları içerisinde kalmıyorsa sayının pozitif ya da negatif olmasına göre sırasıyla long türünün en büyük ve en küçük değeri alınır ve doğrudan atanır.
+  
+>Aşağıdaki demo örnekleri inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	double a = 56.89;
+    	byte b;
+    	
+    	b = (byte)a;
+    	
+    	System.out.printf("b = %d%n", b);
+    }
+}
+```
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	double a = 128.89;
+    	byte b;
+    	
+    	b = (byte)a;
+    	
+    	System.out.printf("(byte)128 = %d, %02X%n", (byte)128, (byte)128);
+    	System.out.printf("128 = %08X%n", 128);
+    	System.out.printf("b = %d, %02X%n", b, b);
+    }
+}
+```
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	double a = 5_000_000_000.9;
+    	byte b;
+    	
+    	b = (byte)a;
+    
+    	
+    	System.out.printf("b = %d, %02X%n", b, b);    	
+    	System.out.printf("5_000_000_000 = %016X%n", 5_000_000_000L);
+    	System.out.printf("int -> max value:%08X%n", Integer.MAX_VALUE);
+    }
+}
+```
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	double a = -4_000_000_005.9;
+    	byte b;
+    	
+    	b = (byte)a;
+    	
+    	System.out.printf("b = %d, %02X%n", b, b);    	
+    	System.out.printf("-4_000_000_005 = %016X%n", -4_000_000_005L);
+    	System.out.printf("int -> min value:%08X%n", Integer.MIN_VALUE);
+    }
+}
+```
+
+>Bazen tür dönüştürme operatörü kullanılmazsa bilgi kaybı oluşur.
+
+>Aşağıdaki demo örneği çalıştırıp sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	int sum, count;
+    	
+    	sum = count = 0;
+    	
+    	while (true) {
+    		System.out.print("Input a value:");
+    		int a = Integer.parseInt(kb.nextLine());
+    		
+    		if (a == 0)
+    			break;
+    		
+    		sum += a;
+    		++count;    		
+    	}
+    	
+    	double average = (double)sum / count;
+    	
+    	System.out.printf("Average:%f%n", average);
+    }
+}
+```
+
+>Aşağıdaki demo örneği çalıştırıp sonuçları gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	while (true) {
+    		System.out.print("Input first value:");
+    		int a = Integer.parseInt(kb.nextLine());
+    		System.out.print("Input second value:");
+    		int b = Integer.parseInt(kb.nextLine());
+    		
+    		if (a == 0 && b == 0)
+    			break;
+    		
+    		long sum = (long)a + b;
+    		
+    		System.out.printf("Total:%d%n", sum);
+    	}    	
+    }
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	int sum = 0;
+    	
+    	for (int i = 0; i < 5; ++i) {
+    		System.out.print("Input a value:");
+    		int a = Integer.parseInt(kb.nextLine());
+    		
+    		sum += a;
+    	}
+    	
+    	double average = sum / 5.;
+    	
+    	System.out.printf("Average:%f%n", average);
+    		
+    }
+}
+```
 
 
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	int sum = 0;
+    	
+    	for (int i = 0; i < 5; ++i) {
+    		System.out.print("Input a value:");
+    		int a = Integer.parseInt(kb.nextLine());
+    		
+    		sum += a;
+    	}
+    	
+    	double average = sum / 5D;
+    	
+    	System.out.printf("Average:%f%n", average);
+    }
+}
+```
+
+
+>Aşağıdaki örnekte long türden bir sayının basamak sayısı döngü kullanılmadan bulunmuştur. Bu yöntemin bilinmesi önerilir.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilCountDigitsTest.run();
+	}
+}
+
+class NumberUtilCountDigitsTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input a number:");
+			long a = Long.parseLong(kb.nextLine());
+			
+			System.out.printf("Value:%d -> Number of Digits:%d%n", a, NumberUtil.countDigits(a));
+			
+			if (a == 0)
+				break;
+		}
+	}
+}
+
+
+class NumberUtil {
+	public static int countDigits(long a)
+	{
+		if (a == 0)
+			return 1;
+		
+		return (int)Math.log10(Math.abs(a)) + 1;
+	}
+}
+```
+
+>Aslında işlemli atama operatörşerinin geneş biçimi şu şekildedir:
+`T1`ve `T2`birer tür olmak üzere
+```java
+T1 a;
+T2 b;
+
+a <op>= b; //*** 
+```
+
+>Burada `***` ile belirtilen deyime ilişkin ifadenin açık olarak biçimi şu şekidedir:
+
+```java
+a = (T1)(a <op> b)
+```
+
+>Aşağıdaki demo örneği inceleyimniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilIsArmstronTest.run();
+	}
+}
+
+class NumberUtilIsArmstronTest {
+	public static void run()
+	{
+		int a = -10;
+		
+		while (a <= 999_999) {
+			if (NumberUtil.isArmstrong(a))
+				System.out.println(a);
+			
+			++a;
+		}
+	}
+}
+
+class NumberUtil {
+	public static boolean isArmstrong(int a)
+	{
+		return a >= 0 && getDigitsPowSum(a) == a;
+	}
+	
+	public static int getDigitsPowSum(int a)
+	{
+		int n = countDigits(a);		
+		int total = 0;
+		
+		while (a != 0) {
+			total += Math.pow(a % 10, n);
+			a /= 10;
+		}
+		
+		return total;
+	}
+	
+	public static int countDigits(int a)
+	{
+		if (a == 0)
+			return 1;
+		
+		return (int)Math.log10(Math.abs(a)) + 1;
+	}	
+}
+```
+
+##### Koşul Operatörü
+
+>Koşul operatörü özel amaçlı, 3 operandlı (ternary) ve araek durumundadır. Bu operatör Java'nın tek 3 operanndlı operatörüdür. Bu operatöre İngilizce olarak **conditional operator** ya da **ternary operator** denilmektedir. Operatörün genel biçimi şu şekildedir:
+
+```java
+<ifade1> ? <ifade2> : <ifade3>
+```
+
+>Burada `<ifade1>` boolean türden olmalıdır. Aksi durumda error oluşur. Burada `<ifade1>` hesaplandığında elde edilen değer true ise `<ifade2>` hesaplanır ve değeri üretilir, false ise `<ifade3>` hesaplanor ve değeri üretilir. Yani bu operatör için önce `<ifade1>` hesaplanır, duruma göre `<ifade2>` veya `<ifade3>` hesaplanır.
