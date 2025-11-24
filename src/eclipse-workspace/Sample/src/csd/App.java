@@ -3,49 +3,44 @@ package csd;
 class App {
 	public static void main(String[] args) 
 	{
-		NumberUtilIsArmstronTest.run();
+	
 	}
 }
 
-class NumberUtilIsArmstronTest {
-	public static void run()
+class Sample {
+	public static void foo()  //imza: foo
 	{
-		int a = -10;
-		
-		while (a <= 999_999) {
-			if (NumberUtil.isArmstrong(a))
-				System.out.println(a);
-			
-			++a;
-		}
+		//...
+				
+	}
+	
+	public static void foo(int a) //imza: foo, int
+	{
+		//...
+				
+	}
+	
+	public static void foo(int a, double b) //imza: foo, int, double
+	{
+		//...
+	}
+	
+	public static void foo(double a, int b) //imza: foo, double, int
+	{
+		//...
+				
+	}
+	
+	public static void foo(int a, int b) //imza: foo, int, int
+	{
+		//...
+				
+	}
+	
+	public static void bar(int a, int b) //imza: bar, int, int
+	{
+		//...				
 	}
 }
 
-class NumberUtil {
-	public static boolean isArmstrong(int a)
-	{
-		return a >= 0 && getDigitsPowSum(a) == a;
-	}
-	
-	public static int getDigitsPowSum(int a)
-	{
-		int n = countDigits(a);
-		
-		int total = 0;
-		
-		while (a != 0) {
-			total += Math.pow(a % 10, n);
-			a /= 10;
-		}
-		
-		return total;
-	}
-	
-	public static int countDigits(int a)
-	{
-		if (a == 0)
-			return 1;
-		
-		return (int)Math.log10(Math.abs(a)) + 1;
-	}	
-}
+

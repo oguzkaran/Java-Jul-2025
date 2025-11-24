@@ -9927,11 +9927,11 @@ package csd;
 class App {
 	public static void main(String[] args) 
 	{
-		NumberUtilIsArmstronTest.run();
+		NumberUtilIsArmstrongTest.run();
 	}
 }
 
-class NumberUtilIsArmstronTest {
+class NumberUtilIsArmstrongTest {
 	public static void run()
 	{
 		int a = -10;
@@ -9973,13 +9973,710 @@ class NumberUtil {
 	}	
 }
 ```
+###### 24 Kasım 2025
 
 ##### Koşul Operatörü
 
->Koşul operatörü özel amaçlı, 3 operandlı (ternary) ve araek durumundadır. Bu operatör Java'nın tek 3 operanndlı operatörüdür. Bu operatöre İngilizce olarak **conditional operator** ya da **ternary operator** denilmektedir. Operatörün genel biçimi şu şekildedir:
+>Koşul operatörü özel amaçlı, 3 operandlı (ternary) ve araek durumundadır. Bu operatör Java'nın tek 3 operandlı operatörüdür. Bu operatöre İngilizce olarak **conditional operator** ya da **ternary operator** denilmektedir. Operatörün genel biçimi şu şekildedir:
 
 ```java
 <ifade1> ? <ifade2> : <ifade3>
 ```
 
->Burada `<ifade1>` boolean türden olmalıdır. Aksi durumda error oluşur. Burada `<ifade1>` hesaplandığında elde edilen değer true ise `<ifade2>` hesaplanır ve değeri üretilir, false ise `<ifade3>` hesaplanor ve değeri üretilir. Yani bu operatör için önce `<ifade1>` hesaplanır, duruma göre `<ifade2>` veya `<ifade3>` hesaplanır.
+>Burada `<ifade1>` boolean türden olmalıdır. Aksi durumda error oluşur. Bu operatör için `<ifade1>` hesaplandığında elde edilen değer true ise `<ifade2>` hesaplanır ve değeri üretilir, false ise `<ifade3>` hesaplanır ve değeri üretilir. Yani bu operatör için önce `<ifade1>` hesaplanır, duruma göre `<ifade2>` veya `<ifade3>` hesaplanır. Bu operatörün yan etkisi yoktur.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two values:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int result;
+		
+		result = a < b ? a : b;
+		
+		System.out.printf("min(%d, %d) = %d%n", a, b, result);		
+	}
+}
+```
+
+>Koşul operatöründe `:` atomundan sonraki ifadenin tamamı üçüncü operand olarak ele alınır
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two values:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int result;
+		
+		
+		result = a < b ? a : b - 300;
+		
+		System.out.printf("result = %d%n", result);		
+	}
+}
+```
+>Aşağıdaki demo örnekte koşul operatörüne ilişkin ifade paranteze alınarak ürettği değer 300 sayısı ile çıkarma işlemine sokulmuştur
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two values:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int result;
+		
+		result = (a < b ? a : b) - 300;
+		
+		System.out.printf("result = %d%n", result);		
+	}
+}
+```
+
+>Aşağıdaki demo örnekte `b + a < b` ifadesinin tamamı koşul operatörünün birinci operandı olarak ele alınır
+
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two values:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int result;
+		
+		result = b + a < b ? a : b;
+		
+		System.out.printf("result = %d%n", result);		
+	}
+}
+```
+
+>Aşağıdaki demo örnekte koşul operatörüne ilişkin ifade paranteze alınarak ürettiği değer işleme sokulmuştur
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two values:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int result;
+		
+		result = b + (a < b ? a : b);
+		
+		System.out.printf("result = %d%n", result);		
+	}
+}
+```
+
+>Koşul operatörünün aşağıdaki durumlarda kullanımı okunabilirliği/algılanabilirliği artırır ve bu sebeple bu durumlarda if deyimi yerine kullanılması önerilir:
+>- Atama operatörü (ve duruma göre işlemli atama operatörleri) ile kullanım.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two values:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int result;
+		
+		result = a < b ? a : b;
+		
+		System.out.printf("result = %d%n", result);		
+	}
+}
+```
+
+>- Metot çağrısında argüman olarak kullanım.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two values:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		System.out.printf("result = %d%n", a < b ? a : b);		
+	}
+}
+```
+>- Metodun geri dönüş değeri için return deyiminin ifadesinde kullanım.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two values:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		System.out.printf("result = %d%n", Util.min(a, b));		
+	}
+}
+
+class Util {
+	public static int min(int a, int b)
+	{
+		return a < b ? a : b;
+	}
+}
+```
+>- Operatörün ürettiği değerin doğrudan işleme sokulnası durumunda kullanım.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input two values:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		a += a < b ? a : b;
+		
+		System.out.printf("a = %d%n", a);		
+	}
+}
+```
+
+>Aşağıdaki demo örnekte koşul operatörünün ikinci ve üçüncü opeerandları da koşul operatörlerine ilişkin ifadelerdir. Adeta iç içe koşul operatörleri kullanılmıştır. Örnekte herhangi paranteze alma zorunluluğu yoktur.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input three values:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int c = kb.nextInt();
+		int result;
+		
+		result = a < b ? a < c ? a : c : b < c ? b : c; 
+		
+		System.out.printf("result = %d%n", result);		
+	}
+}
+```
+>Koşul operatöründe ifadelerin karmaşık olması durumunda gerekmese de okunabilirlik/algılanabilirlik açısından parantez içerisinde yazılması tavsiye edilir.
+
+>Aşağıdaki demo örneği inceleyiniz.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input three values:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int c = kb.nextInt();
+		int result;
+		
+		result = (a < b) ? (a < c ? a : c) : (b < c ? b : c); 
+		
+		System.out.printf("result = %d%n", result);		
+	}
+}
+```
+
+>Aşağıdaki örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		NumberUtilIsArmstrongTest.run();
+	}
+}
+
+class NumberUtilIsArmstrongTest {
+	public static void run()
+	{
+		int a = -10;
+		
+		while (a <= 999_999) {
+			if (NumberUtil.isArmstrong(a))
+				System.out.println(a);
+			
+			++a;
+		}
+	}
+}
+
+class NumberUtil {
+	public static boolean isArmstrong(int a)
+	{
+		return a >= 0 && getDigitsPowSum(a) == a;
+	}
+	
+	public static int getDigitsPowSum(int a)
+	{
+		int n = countDigits(a);		
+		int total = 0;
+		
+		while (a != 0) {
+			total += Math.pow(a % 10, n);
+			a /= 10;
+		}
+		
+		return total;
+	}
+	
+	public static int countDigits(int a)
+	{
+		return a != 0 ? (int)Math.log10(Math.abs(a)) + 1 : 1;
+	}	
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı gün, ay ve yıl bilgilerine ilişkin tarihin yılın hangi günü olduğu bilgisine geri dönen `getDayOfWeek` isimli metodu aşağıdaki açıklamalara göre DateUtil sınıfı içerisinde yazınız ve test ediniz
+>
+>**Açıklamalar:** 
+>- Metot geçersiz bir tarih için `-1` değerine geri dönecektir.
+>- Tarihin haftanın hangi gününe geldiği aşağıdaki yöntemle belirlenecektir:
+> 01.01.1900 ile ilgili tarih arasındaki toplam gün sayısı hesaplanır ve 7 değerine göre modu alınır. Bu durumda elde edilen değer 0 ise Pazar, 1 ise Pazartesi, ..., 6 ise Cumartesi gününe ilişkindir.
+>- Metot yukarıdaki metotlar kullanılarak yazılabilir.
+>- 01.01.1900 öncesindeki tarihler geçersiz kabul edilecektir.
+
+>**Not:** İleride daha iyisi yazılacaktır.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		DateUtilGetDayOfWeekTest.run();
+	}
+}
+
+class DateUtilGetDayOfWeekTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input day, month and year:");
+			int day = kb.nextInt();
+			int month = kb.nextInt();
+			int year = kb.nextInt();
+			
+			if (day == 0 && month == 0 && year == 0)
+				break;
+			
+			DateUtil.printDateEN(day, month, year);
+		}
+	}
+}
+
+
+class DateUtil {
+	public static void printDateEN(int day, int month, int year)
+	{
+		int dayOfWeek = getDayOfWeek(day, month, year);
+		
+		switch (dayOfWeek) {
+		case 0 -> System.out.printf("%02d/%02d/%04d Sunday%n", day, month, year);
+		case 1 -> System.out.printf("%02d/%02d/%04d Monday%n", day, month, year);
+		case 2 -> System.out.printf("%02d/%02d/%04d Tuesday%n", day, month, year);
+		case 3 -> System.out.printf("%02d/%02d/%04d Wednesday%n", day, month, year);
+		case 4 -> System.out.printf("%02d/%02d/%04d Thursday%n", day, month, year);
+		case 5 -> System.out.printf("%02d/%02d/%04d Friday%n", day, month, year);
+		case 6 -> System.out.printf("%02d/%02d/%04d Satuday%n", day, month, year);
+		default -> System.out.println("Invalid date values!...");
+		}
+	}
+	
+	public static int getDayOfWeek(int day, int month, int year)
+	{
+		int totalDays;
+		
+		if (year < 1900 || (totalDays = getDayOfYear(day, month, year)) == -1)
+			return -1;
+		
+		for (int y = 1900; y < year; ++y) 
+			totalDays += isLeapYear(y) ? 366 : 365;
+		
+		return totalDays % 7;				
+	}
+	
+	public static int getDayOfYear(int day, int month, int year)
+	{
+		return isValidDate(day, month, year) ? getDayOfYearValue(day, month, year) : -1;	
+	}
+	
+	public static int getDayOfYearValue(int day, int month, int year)
+	{
+		int dayOfYear = day;
+		
+		switch (month - 1) {
+		case 11:
+			dayOfYear += 30;
+		case 10:
+			dayOfYear += 31;
+		case 9:
+			dayOfYear += 30;
+		case 8:
+			dayOfYear += 31;
+		case 7:
+			dayOfYear += 31;
+		case 6:
+			dayOfYear += 30;
+		case 5:
+			dayOfYear += 31;
+		case 4:
+			dayOfYear += 30;
+		case 3:
+			dayOfYear += 31;
+		case 2:
+			dayOfYear += isLeapYear(year) ? 29 : 28;
+		case 1:
+			dayOfYear += 31;		
+		}
+		
+		
+		return dayOfYear;
+	}
+	
+	public static boolean isValidDate(int day, int month, int year)
+	{
+		return 1 <= day && day <= 31 && 1 <= month && month <= 12 && day <= getMonthDays(month, year);
+	}
+	
+	public static int getMonthDays(int month, int year)
+	{
+		return switch (month) {
+			case 4, 6, 9, 11 -> 30;			
+			case 2 -> isLeapYear(year) ? 29 : 28;
+			default -> 31;
+		};
+	}
+	
+	public static boolean isLeapYear(int year)
+	{
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	}
+}
+```
+
+>Aşağıdaki demo örnekte etkisiz ifade dolayısıyla error oluşur
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.printf("Input a value:");
+		int a = kb.nextInt();
+		
+		a > 0 ? Sample.foo() : Sample.bar(); //error
+	}
+}
+
+class Sample {
+	public static void foo()
+	{
+		System.out.println("foo");
+	}
+	
+	public static void bar()
+	{
+		System.out.println("bar");
+	}
+}
+
+```
+>Yukarıdaki demo örnek if deyimi ile yapılabilir
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.printf("Input a value:");
+		int a = kb.nextInt();
+		
+		if (a > 0)
+			Sample.foo();
+		else
+			Sample.bar();
+	}
+}
+
+class Sample {
+	public static void foo()
+	{
+		System.out.println("foo");
+	}
+	
+	public static void bar()
+	{
+		System.out.println("bar");
+	}
+}
+```
+
+##### Method Overloading
+
+>Bir sınıf içerisinde aynı isimde birden fazla metot bildirilmesi durumuna **method overloading** denir. Farklı sınıflar içerisindeki aynı isimli metotlar olması durumu method overloading değildir. Çünkü zaten metotlar farklı sınıflardadır. Method overloading konusu bölüm içerisinde sentaks ve semantik olarak iki başlıkta ele alınacaktır:
+>
+>- Method overloading yapılması kuralları
+>
+>-Bir metot çağrısında derleyicinin hangi metodun çağrılacağını belirlemesi süreci
+>
+>Method overloading konusumun gereklilği yani hangi amaçla kullanıldığı (ne işe yaradığı) ileride ele alınacaktır.
+
+>Aşağıdaki demo örnekte foo metotları overload edilmemiştir
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		Sample.foo();
+		Mample.foo();
+	}
+}
+
+class Sample {
+	public static void foo()
+	{
+		System.out.println("Sample.foo");
+	}
+}
+
+class Mample {
+	public static void foo()
+	{
+		System.out.println("Mample.foo");
+	}
+}
+```
+
+###### Method Overloading Yapılması Kuralları
+
+>Aslında genel olarak şu söylenebilir: **Bir sınıf içerisinde AYNI metottan birden fazla bildirilmesi geçersizdir**. Farklı bir şekilde söylemek gerekirse: **Bir sınıf içerisindeki tüm metotların birbirinden FARKLı olması gerkir.** Burada iki metot için **AYNI OLMA** veya **AYNI OLMAMA**, **FARKLI OLMA** veya **FARKLI OLMAMA** kuralları ele alınacaktır. 
+
+>Bir metodun erişim belirleyicini değiştime o metodu FARKLI yapmaz. Yani erişim belirleyinin overload'a etkisi yoktur.
+
+```java
+class Sample {
+	public static void foo() //error
+	{
+		//...
+	}
+	
+	private static void foo() //error
+	{
+		//...
+	}
+}
+```
+
+>Bir metodun static veya non-static olmasının oveerload işlemine etkidsi yoktur.
+
+```java
+class Sample {
+	public static void foo() //error
+	{
+		//...
+	}
+	
+	public void foo() //error
+	{
+		//...
+	}
+}
+
+```
+
+>Bir metodun geri dönüş değeri bilgisinin overload işlemine etkisi yoktur
+
+```java
+class Sample {
+	public static void foo() //error
+	{
+		//...
+	}
+	
+	public static int foo() //error
+	{
+		//...
+		
+		return 0;
+				
+	}
+}
+```
+
+>Bir metodun parametre değişken isimlerinin overload işlemine etkisi yoktur
+
+```java
+class Sample {
+	public static void foo(int a, double b) //error
+	{
+		//...
+	}
+	
+	public static void foo(int x, double y) //error
+	{
+		//...
+				
+	}
+}
+```
+
+>Aynı sınıf içerisinde aynı isimli iki metodun FARKLI olabilmesi için **parametre türlerinin ve dizilimlerinin** olması gerekir. Bir metot için parametre türleri ve dizilimlerine **parametrik yapı (parameter structure** da denilmektedir. Öyleyse bir metodun overload edilebilmesi için parametrik yapı olarak aynı isimde olanlardan farklı olması gerekir.
+
+```java
+class Sample {
+	public static void foo() 
+	{
+		//...
+				
+	}
+	
+	public static void foo(int a) 
+	{
+		//...
+				
+	}
+	
+	public static void foo(int a, double b)
+	{
+		//...
+	}
+	
+	public static void foo(double a, int b)
+	{
+		//...
+				
+	}
+	
+	public static void foo(int a, int b)
+	{
+		//...
+				
+	}
+}
+```
+
+>Aslında bir sınıf içerisinde her metodun tekil (unique) bir bilgisi olmalıdır. Bu tekil bilgiye **metodun imzası (method signature)** ya da **imza (signature)** denilmektedir. Bir metodunb imzası, **metodun ismi ile parametrik yapı kombinasyonudur.** Ana kural şudur: **Bir sınıf içerisinde aynı imzaya sahip birden fazla metot bildiirmi geçersizdir.** ya da başka bir deyişle **bir sınıf içerisindeki her metodun imzası diğerlerinden farklı olmalıdır.** Aksi durumda error oluşur. Bu ana kurala göre method overloading için isimler aynı kalacağından imzanın farklı olması ancak parametrik yapının farklı olması ile gerçeklenir.
+
+```java
+class Sample {
+	public static void foo()  //imza: foo
+	{
+		//...
+				
+	}
+	
+	public static void foo(int a) //imza: foo, int
+	{
+		//...
+				
+	}
+	
+	public static void foo(int a, double b) //imza: foo, int, double
+	{
+		//...
+	}
+	
+	public static void foo(double a, int b) //imza: foo, double, int
+	{
+		//...
+				
+	}
+	
+	public static void foo(int a, int b) //imza: foo, int, int
+	{
+		//...
+				
+	}
+	
+	public static void bar(int a, int b) //imza: bar, int, int
+	{
+		//...				
+	}
+}
+```
+
+###### Bir Metot Çağrısında Derleyicinin Hangi Metodun Çağrılacağını Belirlemesi
+
+>Bir metot çağrısında derleyicinin hangi metodun çağrılacağını belirlemesi sürecine **method overload resolution** ya da **overload resolution** denir. Derleyici `overload resolution` işlemini aşağıdaki adımlardan geçerek yapar:
+>
+>**1. Aday metotlar (Candidate methods) belirlenir:** Sınıf içerisindeki, çağrılan metot ile aynı isimdeki tüm metotlardır.
+>
+>**2. Uygun metotlar (Applicable methods) belirlenir:** Aday metotlar içerisinde, çağrılan metodun argüma sayısı ile parametre sayısı aynı olan **VE** argümanların türünden karşılık geldikleri paramatrelerin türüne implicit conversion'ın geçerli olduğu metotlardır.
+>
+>**3. En Uygun metotlar (The most applicable methods) belirlenir:** En uygun metot öyle bir metottur ki, **uygun metotların her bir argümanının karşılık geldiği parametrelerin türleri ile yarışa sokulduğunda toplamda daha iyi dönüşümü sunan ya da daha kötü olmayan dönüşümü (yani daha kaliteli bir dönüşümü) sunar.** Dönüşümün kalitesi şu kurallar ile belirlenir:
