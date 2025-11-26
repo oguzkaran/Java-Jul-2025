@@ -10671,6 +10671,9 @@ class Sample {
 }
 ```
 
+###### 26 Kasım 2025
+
+
 ###### Bir Metot Çağrısında Derleyicinin Hangi Metodun Çağrılacağını Belirlemesi
 
 >Bir metot çağrısında derleyicinin hangi metodun çağrılacağını belirlemesi sürecine **method overload resolution** ya da **overload resolution** denir. Derleyici `overload resolution` işlemini aşağıdaki adımlardan geçerek yapar:
@@ -10679,4 +10682,361 @@ class Sample {
 >
 >**2. Uygun metotlar (Applicable methods) belirlenir:** Aday metotlar içerisinde, çağrılan metodun argüma sayısı ile parametre sayısı aynı olan **VE** argümanların türünden karşılık geldikleri paramatrelerin türüne implicit conversion'ın geçerli olduğu metotlardır.
 >
->**3. En Uygun metotlar (The most applicable methods) belirlenir:** En uygun metot öyle bir metottur ki, **uygun metotların her bir argümanının karşılık geldiği parametrelerin türleri ile yarışa sokulduğunda toplamda daha iyi dönüşümü sunan ya da daha kötü olmayan dönüşümü (yani daha kaliteli bir dönüşümü) sunar.** Dönüşümün kalitesi şu kurallar ile belirlenir:
+>**3. En Uygun metot (The most applicable methods) belirlenir:** En uygun metot öyle bir metottur ki, **uygun metotların her bir argümanının karşılık geldiği parametrelerin türleri ile yarışa sokulduğunda toplamda daha iyi dönüşümü sunar ya da daha kötü olmayan dönüşümü (yani daha kaliteli bir dönüşümü) sunar.** Dönüşümün kalitesi şu kurallar ile belirlenir (else-if biçiminde değerlendiriniz):
+
+>T1 argümanın türü, T2 ve T3 yarışa sokulan parametrelerin türleri olsun.
+>
+>- T1 -> T2, T1 -> T3 için, T2 veya T3'den biri T1 ile aynı ise, aynı olan daha kalitelidir. Örneğin
+
+```java
+int -> int //Daha kaliteli
+int -> long
+```
+>
+>- T1 -> T2, T1 -> T3 için, T2'den T3' implicit conversion geçerli, T3'den T2'ye implicit conversion geçersizse T2 daha kalitelidir. Örneğin:
+
+```java
+int -> long //Daha kalitelidir
+int -> float
+```
+
+ya da örneğin
+
+```java
+byte -> short //Daha kaliteli
+byte -> int
+```
+
+>Bu 3 adımdan herhangi birisinde problem olursa error oluşur. Yani örneğin, aday metot yoksa VEYA aday metot var, uygun metot yoksa VEYA aday metot var, uygun metot var ancak en uygun metot yoksa error oluşur.
+>
+>Yukarıdaki kurallara göre, metot çağrısında arügmanların türleri ile karşılık geldikleri parametrelerin türlerinin birebir aynı olduğu bir metot varsa o en kalitelidir. Bu duruma, özel olarak **best match** denilmektedir. 
+
+>Aşağıdaki demo örnek bir best match durumudur. Olası adımlara ilişkin metotlar şunlardır:
+>
+>1. Aday metotlar: 1, 2, 3, 4, 5, 6
+>
+>2. Uygun metotlar: 3, 4
+>
+>3. En uygun metot: 3
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		int a = 10;
+		double b = 3.4;
+		
+		Sample.foo(a, b);
+	}
+}
+
+class Sample {
+	public static void foo()  //#1
+	{
+		System.out.println("foo");				
+	}
+	
+	public static void foo(int a) //#2
+	{
+		System.out.println("foo, int");		
+	}
+	
+	public static void foo(int a, double b) //#3
+	{
+		System.out.println("foo, int, double");
+	}
+	
+	public static void foo(double a, double b) //#4
+	{
+		System.out.println("foo, double, double");				
+	}
+	
+	public static void foo(int a, int b) //#5
+	{
+		System.out.println("foo, int, int");		
+	}
+	
+	public static void foo(int a, int b, double c) //#6
+	{
+		System.out.println("foo, int, int, double");			
+	}
+	
+	public static void bar(int a, int b) //#7
+	{
+		System.out.println("bar, int, int");
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+>
+>1. Aday metotlar: 1, 2, 3, 4, 5, 6
+>
+>2. Uygun metotlar: 3, 4, 5
+>
+>3. En uygun metot: 5
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		short a = 10;
+		int b = 3;
+		
+		Sample.foo(a, b);
+	}
+}
+
+class Sample {
+	public static void foo()  //#1
+	{
+		System.out.println("foo");				
+	}
+	
+	public static void foo(int a) //#2
+	{
+		System.out.println("foo, int");		
+	}
+	
+	public static void foo(int a, double b) //#3
+	{
+		System.out.println("foo, int, double");
+	}
+	
+	public static void foo(double a, double b) //#4
+	{
+		System.out.println("foo, double, double");				
+	}
+	
+	public static void foo(int a, int b) //#5
+	{
+		System.out.println("foo, int, int");			
+	}
+	
+	public static void foo(int a, int b, double c) //#6
+	{
+		System.out.println("foo, int, int, double");			
+	}
+	
+	public static void bar(int a, int b) //#7
+	{
+		System.out.println("bar, int, int");
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+>
+>1. Aday metotlar: Yok
+
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		short a = 10;
+		int b = 3;
+		
+		Sample.fo(a, b); //error
+	}
+}
+
+class Sample {
+	public static void foo()  //#1
+	{
+		System.out.println("foo");				
+	}
+	
+	public static void foo(int a) //#2
+	{
+		System.out.println("foo, int");		
+	}
+	
+	public static void foo(int a, double b) //#3
+	{
+		System.out.println("foo, int, double");
+	}
+	
+	public static void foo(double a, double b) //#4
+	{
+		System.out.println("foo, double, double");				
+	}
+	
+	public static void foo(int a, int b) //#5
+	{
+		System.out.println("foo, int, int");			
+	}
+	
+	public static void foo(int a, int b, double c) //#6
+	{
+		System.out.println("foo, int, int, double");			
+	}
+	
+	public static void bar(int a, int b) //#7
+	{
+		System.out.println("bar, int, int");
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+>
+>1. Aday metotlar: 1, 2, 3, 4, 5, 6
+>
+>2. Uygun metotlar: Yok
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		double a = 10;
+		boolean b = true;
+		
+		Sample.foo(a, b); //error
+	}
+}
+
+class Sample {
+	public static void foo()  //#1
+	{
+		System.out.println("foo");				
+	}
+	
+	public static void foo(int a) //#2
+	{
+		System.out.println("foo, int");		
+	}
+	
+	public static void foo(int a, double b) //#3
+	{
+		System.out.println("foo, int, double");
+	}
+	
+	public static void foo(double a, double b) //#4
+	{
+		System.out.println("foo, double, double");				
+	}
+	
+	public static void foo(int a, int b) //#5
+	{
+		System.out.println("foo, int, int");			
+	}
+	
+	public static void foo(int a, int b, double c) //#6
+	{
+		System.out.println("foo, int, int, double");			
+	}
+	
+	public static void bar(int a, int b) //#7
+	{
+		System.out.println("bar, int, int");
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+>
+>1. Aday metotlar: 1, 2, 3, 4, 5
+>
+>2. Uygun metotlar: 3, 4
+>
+>3. En uygun metot: yok
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		int a = 10;
+		int b = 20;
+		
+		Sample.foo(a, b);
+	}
+}
+
+class Sample {
+	public static void foo()  //#1
+	{
+		System.out.println("foo");				
+	}
+	
+	public static void foo(int a) //#2
+	{
+		System.out.println("foo, int");		
+	}
+	
+	public static void foo(int a, double b) //#3
+	{
+		System.out.println("foo, int, double");
+	}
+	
+	public static void foo(double a, int b) //#4
+	{
+		System.out.println("foo, double, int");				
+	}
+
+	
+	public static void foo(int a, int b, double c) //#5
+	{
+		System.out.println("foo, int, int, double");			
+	}
+	
+	public static void bar(int a, int b) //#6
+	{
+		System.out.println("bar, int, int");
+	}
+}
+```
+
+>Uygun metotlar olup, en uygun metodun bulunmadğı duruma **ambiguity** denir. Method overload resolution kavramının temel türler içinn bazı ayrıntıları ve temel türler dışındaki türler için ayrıntıları konular içerisinde ele alınacaktır.
+
+##### Nesne Yönelimli Programlamaya Giriş
+
+>Nesne Yönelimli Programlama Tekniğini (NYPT) tek bir cümle açıklamak pek mümkün değildir ancak bu tekniği bilen ya da belirli ölçüde fikre sahşp olan birisine **sınıflar kullanarak program yazma tekmniğidir** denebilir. Aslında NYPT pek çok anahtar kavramın birleşimi biçimindedir. Bu anahtar kavramlar iç içe geçmiş daireler biçiminde düşünülmeldir. Tüm bu anahtar kavramların temelinde kodun **daha iyi yöntilmesi** ve **okunabilir/algılanabilir olması** vardır. Örneğin, benzer işi yapan metotlara aynı ismin verilmesi (method overloading) programcıyı **çok şey var** algısından uzaklaştırıp, **az şey var** gibi bir algı oluşturur. Bu da hatırlamayı kolaylaştırır ve kofun okubabilirlğini/algılanabilirliğini artırır.
+
+
+>NYPT insanın doğayı algılama biçimini model alır. İnsanlar her şeyi nesne biçimibde alıp kullanırlar. Örneğin, herkesin bilgisayarı olabilse de konuşurken bunun bilgisayar olarak anlatırız. Yani aslında bilgisayar **soyut (abstract)** bir kavramdır. Örneğin bize ait bir bilgisayar artık **somut (concrete)** olmuştur. Bu durumda herkesin sahip olduğu bilgisayarlar artık birer nesnelerdir. 
+
+>NYPT'de artık fonksiyonlar (Java'da metotlar) ile değil sınıf ile konuşulur. Böylece yine **çok şey var** algısından uzaklaşıp, **az şey var** algısı oluşur. Bu anlamda sınıf ve nesne seviyesinde detaylar programcıdan gizlenmiş olur dolayısıyla algıyı kolaylaştırır. Bizim açımızdan bu kavramın metotlar ile başladığını anımsayınız.
+
+**Anahtar Notlar:** Burada anlatılanların pek çok detayı vardır. Özet biçiminde ele alınmıştır. Anlatılan kavramlar ve diğer pek çok NYPT kavramı konular içerisinde detaylandırılacaktır.
+
+##### Bilgisayarın Kısa Tarihi
+
+>Elektronik düzeyde bugün kullandığımız bilgisayarlara benzer ilk aygıtlar 1940’lı yıllarda geliştirilmeye başlanmıştır. Ondan önce hesaplama işlemlerini yapmak için pek çok mekanik aygıt üzerinde çalışılmıştır. Bunların bazıları kısmen başarılı olmuştur ve belli bir süre kullanılmıştır. Mekanik bilgisayarlarlardaki en önemli girişim Charles Babbage tarafından yapılan “Analytical Engine” ve “Diffrenece Engine” aygıtlarıdır.  Analytical Engine tam olarak bitirilememiştir. Fakat bunlar pek çok çalışmaya ilham kaynağı olmuştur. Hatta bir dönem Babbage’in asistanlığını yapan Ada Lovelace bu Analytical Engine üzerindeki çalışmalarından dolayı dünyanın ilk programcısı kabul edilmektedir. Şöyle ki: Rivayete göre Babbage Ada’dan Bernolli sayılarının bulunmasını sağlayan bir yönerge yazmasını istemiştir. Ada’nın yazdığı bu yönergeler dünyanın ilk programı kabul edilmektedir. (Gerçi bu yönergelerin bizzat Babbage’in kendisi tarafından yazılmış olduğu neredeyse ispatlanımış olsa bile böyle atıf vardır.) 1800’lü yılların son çeyreğinden itibaren elektronikte hızlı bir ilerleme yaşanmıştır. Bool cebri (Boolean algebra) ortaya atılmış, çeşitli devre elemanları kullanılmaya başlanmış ve mantık devreleri üzerinde çalışmalar başlatılmıştır. 1900’lü yılların başlarında artık yavaş yavaş elektromekanik bilgisayar fikri belirmeye başlamıştır. 1930’lu yıllarda Alan Turing konuya matematiksel açıdan yaklaşmış ve böyle bir bilgisayarın hangi matematik problemleri çözebileceği üzerine kafa yormuştur. Turing, bir şerit üzerinde ilerleyen bir kafadan oluşan ve ismine “Turing Makinası” denilen soyut makina tanımlamıştır ve bu makinanın neler yapabileceği üzerinde kafa yormuştur. ACM, Turing’in anısına bilgisayarın Nobel ödülü gibi kabul edilen Turing ödülleri vermektedir.
+>
+>Dünyanın ilk elektronik bilgisayarının ne olduğu konusunda bir fikir birliği yoktur. Bazıları Konrad Zuse’nin 1941’de yaptığı Z3 bilgisayarını ilk bilgisayar olarak kabul ederken bazıları Harward Mark 1, bazıları da ENIAC’ı kabul etmektedir.
+>
+>Ilk bilgisayarlarda transistör yerine vakum tüpler kullanılıyordu. (Vakum tüpler transistör görevi yapan büyük, ısınma problemi olan lambaya benzer devre elemanlarıdır). Modern bilgisayar tarihi 3 döneme ayrılarak incelenebilir:
+>
+>1. Transistör öncesi dönem (1940-1950’lerin ortalarına kadar)
+>2. Transistör dönemi (1950’lerin ortalarından 1970’lerin ortalarına kadar)
+>3. Entegre devre dönemi (1970’lerin ortalarından günümüze kadarki dönem)
+>
+>Transistör icad edilince bilgisayarlar transistörlerle yapılmaya başlandı ve önemli aşamalar bu sayede kaydedildi. Bilgisayar devreleri küçüldü ve kuvvetlendi. O zamanların en önemli firmaları IBM, Honeywell, DEC gibi firmalardı.
+>
+>Transistörü bulan ekipten Shockley bir şirket kurarak yanına genç mühendisler aldı. Bu ekipteki Noyce ve arkadaşları ilk entegre devreleri yaptılar ve Intel firmasını kurdular. Böylece Entegre devre devrine geçilmiş oldu.
+>
+>Dünyanın entegre olarak üretilen ilk mikroişlemcisi Intel’in 8080’i kabul edilmektedir. Intel daha önce 4004, 8008 gibi entegreller yaptıysa da bunlar tam bir mikroişlemci olarak kabul edilmemektedir. O yıllara kadar dünyadaki bilgisayarlar sayılabilecek kadar azdı. Bunlar yüzbinlerce dolar fiyatı olan dev makinalardı ve IBM gibi şirketler çoğu kez bunları kiraya verirdi. Kişilerin evine bilgisayar alması uçuk bir fikirdi.
+>
+>Intel 8080’i yaptığında bundan bir kişisel bilgisayar yapılabileceği onların aklına gelmemiştir. Kişisel bilgisayar fikri Ed Roberts isimli bir  girişimci tarafından ortaya atılmıştır. Ed Roberts 8080’i kullanarak Altair isimli ilk kişsel bilgisayarı yaptı ve “Popular Electronics” isimli dergiye kapak oldu. Altair makina dilinde kodlanıyordu. Roberts buna Basic derleyicisi yazacak kişi aradı ve Popular Electronics dergisine ilan verdi. İlana o zaman Harward’ta öğrenci olan Bill Gates ve Paul Allen başvurdular. Böylece Altair daha sonra Basic ile piyasaya sürüldü. Gates ve Allen okuldan ayrıldılar Microsoft firmasını kurdular. (O zamanlar bu yeni kişisel bilgisayarlara mikrobilgisayarlar denilmekteydi). Amerika’da bu süreç içerisinde bilgisayar kulüpleri kuruldu ve pek çok kişi kendi kişisel bilgisayarlarını yapmaya çalıştı. Steve Jobs ve Steve Wozniak Apple’ı böyle bir süreçte kurmuştur.
+>
+>IBM kişisel bilgisayar konusunu hafife aldı. Fakat yine de bir ekip kurarak bugün kullandığımız PC’lerin donanımını IBM tasarlamıştır. Ancak IBM küçük iş olduğu gerekçesiyle bunlara işletim sistemini kendisi yazmadı taşeron bir firmaya yazdırmak istedi. Microsoft IBM ile anlaşarak DOS işletim sistemini geliştirdi. İlk PC’lerin donanımı IBM tarafından, yazılımı Microsoft tarafından yapılmıştır. Microsoft IBM’le iyi bir anlaşma yaptı. IBM uzağı göremedi. Anlaşmaya göre başkalarına DOS’un satışını tamamaen Microsoft yapacaktı. IBM PC için patentleri ihmal etti. Pek çok firma IBM uyumlu daha ucuz PC yaptılar. Fakat bunların hepsi işletim sistemini Microsoft’tan satın aldı. Böylece Microsoft 80’li yıllarda çok büyüdü.
+>
+>İlk devirlerde bilgisayar programları ancak birkaç sayfa uzunluğunda oluyordu. Sonra transistör devrinde onbin satırdan oluşan projeler yazılmaya başlandı. Sonra yüzbin satırlara çıkıldı. PC’lerin başlarında donanım yetersizdi. PC projeleri genellikle onbinlerle ölçülen satırlarda kalıyordu. Ancak donanımlar iyileştikçe yazılımlarda kod büyümesi yaşanmaya başladı. O zamanlar kullanılan prosedürel tekniğin artık yetersiz kaldığı görülmüştür. İşte NYPT donanımların gelişmesiyle yazılımlarda ortaya çıkan kod büyümesi ile algısal olarak mücadele etmek için geliştirilmiştir. NYPT’de artık fonksiyonlarla değil sınıflarla konuşulur. Böylece “çok şey var” duygusundan uzaklaşılarak “az şey var” duygusuna kapılınır.
+> 
+> NYPT yazılım endüstrisine 90’lı yıllarda girmiştir. Fakat ilk denemeler 80’lerin başlarında yapılmıştır. Bugün yazılım endüstrisinde ağırlıklı olarak NYPT kullanılmaktadır.
+
+##### Adres Kavramı
+
+
+
