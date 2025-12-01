@@ -1107,6 +1107,378 @@ class NumberUtil {
 
 #### Homework-004
 
+>Sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+>
+>**Açıklama*:* Sorudan birden fazla Scanner nesnesi yaratılmaması için döngü içerisi metotlara bölmeden yazılmıştır. Sorunun verildiği tarihte referans parametreli metotlar henüz anlatılmadığından bu şekilde yazılmıştır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		CalculateMinMaxAverageApp.run();
+	}
+}
+
+
+class CalculateMinMaxAverageApp {
+	public static void printReport(int count, int total, int min, int max)
+	{	
+		System.out.printf("Toplam %d değer girildi.%n", count);
+		System.out.printf("Maksimum = %d%n", max);
+		System.out.printf("Minimum = %d%n", min);
+		System.out.printf("Ortalama = %.6f%n", (double)total / count);
+	}
+	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		int count = 0;
+		int total = 0;
+		int min = 100;
+		int max = 0;
+		
+		while (true) {
+			int val;
+			
+			while (true) {
+				System.out.print("Bir tamsayı giriniz:");
+				val = Integer.parseInt(kb.nextLine());
+				
+				if (0 <= val && val <= 100)
+					break;
+				
+				System.out.print("Geçersiz değer girdiniz!...Yeni bir değer giriniz:");
+			}
+			
+			++count;
+			total += val;
+			min = Math.min(min, val);
+			max = Math.max(max, val);
+			
+			System.out.print("Yeni bir değer girmek istiyor musunuz? [Evet için 1(bir) Hayır için 0(sıfır) değerlerinden birini giriniz]");
+			int option;
+			
+			do 
+				option = Integer.parseInt(kb.nextLine());
+			while (option != 0 && option != 1);
+			
+			if (option == 0)
+				break;			
+		}		
+		printReport(count, total, min, max);
+	}
+}
+```
+
+#### Homework-005
+
 >1. sorunun bir çözümü
 >
 >**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		FindEulerNumberViaSeriesApp.run();
+	}
+}
+
+class FindEulerNumberViaSeriesApp {
+	public static void run()
+	{
+		System.out.println(Util.e());
+		System.out.println(Math.abs(Util.e() - Math.E) < 0.0000001);
+	}
+}
+
+class Util {
+	public static double e()
+	{
+		double result = 2;
+		
+		for (int i = 2; i <= 10; ++i)
+			result += 1. / NumberUtil.factorial(i);
+		
+		return result;
+	}
+}
+
+
+class NumberUtil {
+	public static int factorial(int n)
+	{
+		int result = 1;
+		
+		for (int i = 2; i <= n; ++i)
+			result *= i;		
+		
+		return result;
+	}
+}
+```
+
+>2. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+>
+>**Açıklama:** Bu çözüm çok büyük sayılar söz konusu olduğunda ve dolayısıyla metodun long parametreli olanı da yazıldığında performansı olumsuz etkiler. Bu durumda bir sonraki çözm tercih edilebilir.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		SumFactorsTest.run();
+	}
+}
+
+class SumFactorsTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int a = Integer.parseInt(kb.nextLine());
+			
+			if (a == 0)
+				break;
+			
+			System.out.printf("%d sayısının kendisi hariç çarpanları toplamı:%d%n", a, NumberUtil.sumFactors(a));
+		}
+	}
+}
+
+class NumberUtil {
+	public static int sumFactors(int a)
+	{
+		int result = 1;
+		
+		for (int i =  2; i <= a / 2; ++i)
+			result += a % i == 0 ? i : 0;
+		
+		return result;
+	}
+}
+```
+
+>2. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		SumFactorsTest.run();
+	}
+}
+
+class SumFactorsTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			long a = Long.parseLong(kb.nextLine());
+			
+			if (a == 0)
+				break;
+			
+			System.out.printf("%d sayısının kendisi hariç çarpanları toplamı:%d%n", a, NumberUtil.sumFactors(a));
+		}
+	}
+}
+
+class NumberUtil {
+	public static long sumFactors(long a)
+	{
+		long result = 1;
+		
+		for (int i =  2; i * i <= a; ++i) 
+			if (a % i == 0)
+				result += (i == a / i) ? i : (i + a / i);
+		
+		return result;
+	}
+}
+```
+
+>3. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		AreFriendsTest.run();
+	}
+}
+
+class AreFriendsTest {
+	public static void run()
+	{
+		AreFriends2DigitsTest.run();
+		AreFriends3DigitsTest.run();
+		AreFriends4DigitsTest.run();
+	}
+}
+
+class AreFriends2DigitsTest {
+	public static void run()
+	{
+		System.out.println("2 basamaklı arkadaş sayılar:");
+		for (int a = 10; a <= 99; ++a)
+			for (int b = a + 1; b <= 99; ++b)
+				if (NumberUtil.areFriends(a, b))
+					System.out.printf("(%d, %d)%n", a, b);
+	}
+}
+
+class AreFriends3DigitsTest {
+	public static void run()
+	{
+		System.out.println("3 basamaklı arkadaş sayılar:");
+		for (int a = 100; a <= 999; ++a)
+			for (int b = a + 1; b <= 999; ++b)
+				if (NumberUtil.areFriends(a, b))
+					System.out.printf("(%d, %d)%n", a, b);
+	}
+}
+
+class AreFriends4DigitsTest {
+	public static void run()
+	{
+		System.out.println("4 basamaklı arkadaş sayılar:");
+		for (int a = 1000; a <= 9999; ++a)
+			for (int b = a + 1; b <= 9999; ++b)
+				if (NumberUtil.areFriends(a, b))
+					System.out.printf("(%d, %d)%n", a, b);
+	}
+}
+
+class NumberUtil {
+	public static boolean areFriends(int a, int b)
+	{
+		return sumFactors(a) == b && sumFactors(b) == a;
+	}
+	
+	public static long sumFactors(long a)
+	{
+		long result = 1;
+		
+		for (int i =  2; i * i <= a; ++i) 
+			if (a % i == 0)
+				result += (i == a / i) ? i : (i + a / i);
+		
+		return result;
+	}
+}
+```
+
+
+>4. sorunun bir çözümü
+>
+>**Not:** Çözüm, çalışma sorusunun verildiği tarihe kadar işlenmiş olan konular kullanılarak yazılmıştır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		IsPerfectTest.run();
+	}
+}
+
+class IsPerfectTest {
+	public static void run()
+	{
+		IsPerfect1DigitsTest.run();
+		IsPerfect2DigitsTest.run();
+		IsPerfect3DigitsTest.run();
+		IsPerfect4DigitsTest.run();
+	}
+}
+
+class IsPerfect1DigitsTest {
+	public static void run()
+	{
+		System.out.print("1 basamaklı mükemmel sayılar:");
+		for (int a = 1; a <= 9; ++a)
+			if (NumberUtil.isPerfect(a))
+				System.out.printf("%d ", a);
+		System.out.println();		
+	}
+}
+
+class IsPerfect2DigitsTest {
+	public static void run()
+	{
+		System.out.print("2 basamaklı mükemmel sayılar:");
+		for (int a = 10; a <= 99; ++a)
+			if (NumberUtil.isPerfect(a))
+				System.out.printf("%d ", a);
+		System.out.println();		
+	}
+}
+
+class IsPerfect3DigitsTest {
+	public static void run()
+	{
+		System.out.print("3 basamaklı mükemmel sayılar:");
+		for (int a = 100; a <= 999; ++a)
+			if (NumberUtil.isPerfect(a))
+				System.out.printf("%d ", a);
+		
+		System.out.println();
+	}
+}
+
+class IsPerfect4DigitsTest {
+	public static void run()
+	{
+		System.out.print("4 basamaklı mükemmel sayılar:");
+		for (int a = 1000; a <= 9999; ++a)
+			if (NumberUtil.isPerfect(a))
+				System.out.printf("%d ", a);
+		
+		System.out.println();
+	}
+}
+
+class NumberUtil {
+	public static boolean isPerfect(int a)
+	{
+		return sumFactors(a) == a;
+	}
+	
+	public static long sumFactors(long a)
+	{
+		long result = 1;
+		
+		for (int i =  2; i * i <= a; ++i) 
+			if (a % i == 0)
+				result += (i == a / i) ? i : (i + a / i);
+		
+		return result;
+	}
+}
+```
+
+
