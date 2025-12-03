@@ -11101,6 +11101,83 @@ a = 0x000A; //10
 
 **Anahtar Notlar:** Bu kavramlar yalnızca değişkenlerin bellekte tutulmasıyla ilgili değildir. Network işlemlerinde de verinin iletilmesi noktasında özellikle `IP` protokol ailesinde kullanılmaktadır. Bu konuya ilişkin detaylar `Java ile Uygulama Geliştirme 1 ve 2` ve `Android Programlama` kurslarında ele alınmaktadır. 
 
+###### 3 Aralık 2025
 
 ##### Değişkenlerin Ömürleri
+
+>Bir değişkenin bellekte yaratılmasıyla yani o değişken için bellekte yer ayrılmasıyla yok edilmesi o bellek alanının artık o değişken için kullanılmaması (mantıksal olarak değişkenin bellekten atılması da denebilir) arasındaki süreye **ömür (storage duration)** denir. 
+
+>Çalıştırılabilen (executable) bir dosya diskte bulunur. Çalıştırılmak istendiğinde diskten alınarak belleğe yüklenir. Programın çalışması bittiğinde program için yüklenenler bellekten boşaltılır. 
+
+>Peki, bir değişken için ayrılan bellek bölgesi neresidir? Bir Java uygulaması çalıştırıldığında, o uygulama için tipik olarak iki tane bellek alanı ayrılır: **stack alanı (stack memory)** ya da kısaca **stack**, **heap alanı (heap memory)** ya da kısaca **heap.** Aslında başka bellek alanları da ayrılır. Şu aşamada bu alanların önemi yoktur. Stack ve heap RAM'de organize edilir. Program çalıştırılırken, bu alanların uzunlukları belirlenebilir. Her hangi bir belirleme yapılmazsa bu alanlar için default değerler kullanılır. Default uzunluklar sistemden sisteme değişiklik gösterebilir.
+
+**Anahtar Notlar:** Veri yapısı (data structure), genel olarak birbiri ile ilişkili olan verilerin bir arada ve bir takım algoritmalar kullanılarak tutulmasını sağlayan ve istenildiğinde bu verilere erişilebilen yapıladır. Örneğin dizi, elemanları aynı türden olan ve bellekte peş peşe olarak yaratılan bir veri yapısıdır. **Stack**, **LIFO (Last In First Out)** kuyruk (queue) biçiminde çalışan bir veri yapısıdır. Tipik olarak editör programlarınının `undo-redo` mekanizmaları bu şekilde implemente edilir. Stack veri yapısına ekleme yapma işlemine **push**, eleman silme (bazı yaklaşımlara göre hem elemanı silme hem de elemanı elde etme) işlemine **pop** denilmektedir. Uygulama için ayrılan `stack`alanında yer ayrılması stack veri yapısı biçiminde yapıldığından bu alana `stack alanı`denilmektedir. Stack alanında yaratma ve yok etme işlemi (tipik olarak push ve pop işlemi) çok hızlı bir biçimde gerçekleşmektedir.
+
+>**Yerel değişkenler ve parametre değişkenleri stack alanında yaratılırlar.** Stack alanı doldur-boşalt biçiminde çalışan bellek alanıdır. Böylece programın çalışma zamanı boyunca, toplamda stack alanının uzunluğundan daha fazla değişken için yer ayrılabilir.
+>
+>Bir değişken, akış kod bakımından bildirim noktasına geldiğinde yaratılır, bildirildiği blok sonunda yok edilir. Bir yerel değişkenin yaratılması `push` komutu ile, yok edilmesi ise `pop` komutu ile aşağı seviyede yapılır. Peş peşe bildirilen yani çalışma zamanında peş peşe yaratılan (peş peşe push edilen) yarel değişkenlerin yok edilmesi (pop edilmesi) ters sırada yapılır. Buna göre faaliyer alanı (scope) ve ömür (storage duration) arasında dolaylı bir ilişki vardır. Yine de unutulmamalıdır ki faaliyet alanı derleme zamanına, ömür çalışma zamanına ilişkin kavramlardır. Yani, yerel bir değişkenin bildirildiği blok sonunda yok edilmesi dolayısıyla faaliyet alanı da bildirildiği yerden bildirildiği bloğun sonuna kadardır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		Sample.foo(); 
+		//foo içerisindeki a yok edildi (pop a)
+	}
+}
+
+class Sample {
+	public static void foo()
+	{
+		int a; //a yaratılıdı (push a)
+		
+		{
+			float x; //x yaratıldı (push x)
+			double y; // y yaratıldı (push y)
+			
+			//...
+			
+			
+		} // y yok edildi (pop y) -> x yok edildi (pop x)
+	}
+}
+```
+
+>Bir parametre değişkeni ait olduğu metot çağrıldığında yaratılır, metot çağrısı bittiğinde yok edilir. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		Sample.foo(10, 3.4);// x yaratıldı (push x) <-> y yaratıldı (push y) -> a yaratıldı (push a) -> b yaratıldı (push b)		
+		// x yok edildi (pop x) <-> y yok edildi (push y) -> b yok edildi (pop b) -> a yok edildi (pop y)
+		
+		//...
+		
+		Sample.foo(20, 13.4);// x yaratıldı (push x) <-> y yaratıldı (push y) -> a yaratıldı (push a) -> b yaratıldı (push b)		
+		// x yok edildi (pop x) <-> y yok edildi (push y) -> b yok edildi (pop b) -> a yok edildi (pop y)		
+		
+	}
+}
+
+class Sample {
+	public static void foo(int x, double y)
+	{
+		int a; 
+		float b;
+		
+		//...	
+	}
+}
+```
+
+##### Sınıfların Veri Elemanları
 
