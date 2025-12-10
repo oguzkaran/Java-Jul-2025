@@ -11179,5 +11179,218 @@ class Sample {
 }
 ```
 
+###### 10 Aralık 2025
+
 ##### Sınıfların Veri Elemanları
+
+>Sınıf içerisinde, tüm metotların dışında. bildirilen değişkenlere **sınıf veri elemanı (data member, field, member variable)** denir. Sınıf veri elemanları da metotlarda olduğu gibi erişim belirleyiciye (public, protected, no-modifier, private) sahip olabilirler. Metotlarda olduğu gibi, ilgili konuya gelene kadar veri elemanlarımızı `public` olarak bildireceğiz. Sınıf veri elemanları da metotlarda olduğu gibi static ya da non-static olabilirler. static anahtar sözcüğü ile bildirilen bir elemanı static, bildirilmeyen veri elemanları non-static olur.
+
+
+>Sınıf içerisindeki bildirimlere sınıfın **elemanları (members)** denir. Bu anlamda veri elemanları ve metotlar sınıfın elemanlarıdır. Sınıfın bunlar dışında da  elemanları olabilmektedir, konular içerisinde ayrıca ele alınacaktır.
+
+>Sınıf veri elemanlarının faaliyet alanı (scope) ve ömrü (storage duration) konu içerisinde ele alınacaktır. Sınıf veri elemanları aynı türdense, aynı erişim belirleyiciye sahipse ve static veya non-static olma bakımında aynı ise virgül ile ayrılarak bildirilebilir. Bir sınıfta aynı isimde birden fazla veri elemanı bildirimi geçersizdir. 
+
+>Aşağıdaki demo inceleyiniz
+
+```java
+class Sample {
+	public int x;
+	private double y;
+	
+	public static void foo()
+	{
+		//...
+	}
+	
+	int z;
+	
+	public static void bar()
+	{
+		//...
+	}
+	
+	protected static float t, u;
+}
+```
+
+>Java'da sınıf dışında değişken bildirimi geçersizdir ya da başka bir deyişle bir değişkenin bir sınıfın içerisinde yani ya sınıf veri elemanı olarak ya paremetre değişkeni olarak ya da sınıf veri elemanı olarak bildirilmiş olması gerekir. 
+
+```java
+package csd;
+
+
+int a; //error
+```
+
+>Sınıf bildirimi aslında bir tür bildirimidir. Sınıflar dışında da tür bildirimleri söz konusudur. Bu şekilde programcının bildirdiği türlere **user defined type (UDT)** denir. Sınıf dışındaki UDT'lern konular içerisinde ele alınacaktır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+class Person {
+	//...
+}
+
+class TCPServer {
+	//...
+}
+
+class UDPServer {
+	//...
+}
+
+class Sensor {
+	//...
+}
+
+class Student {
+	//...
+}
+```
+
+>Madem ki sınıf bildirimi bir tür bildirimidir, o zaman sınıf türünden değişkenler bildirilebilir
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String[] args) 
+	{
+		Person p;
+		TCPServer tcpServer;
+		UDPServer udpServer;
+		Sensor sensor1, sensor2;
+		Student student;
+		
+		//...
+	}
+}
+
+
+class Person {
+	//...
+}
+
+class TCPServer {
+	//...
+}
+
+class UDPServer {
+	//...
+}
+
+class Sensor {
+	//...
+}
+
+class Student {
+	//...
+}
+```
+
+>Java'da türler kategori olarak iki gruba ayrılır: **değer türleri (value types), referans türleri (reference types).**
+>T bir tür ismi olmak üzere, **T türden bir değişken içerisinde bir adres tutuluyorsa ya da başka bir deyişle T türden bir değişkenin içerisinde değer bir adres ise T bir referans türüdür, değilse değer türüdür.** Java'da temel türler değer türü kategorisindedir. Yani teml türden bir değişken içerisinde adres tutulmaz. Java'da bir sınıf referans türüdür. Öyleyse bir sınıf türünden değişkenin içerisinde adres tutulur. Java'da temel türler dışında kaln tüm türler yani UDT'ler referans türü kategorisindedir.
+
+>Bir UDT türünden değişkene **referans değişken (reference variable)** ya da kısaca **referans (reference)** denir. Java'da `adres (address)` terimi yerine de `referans (reference)` terimi kullanılmaktadır. Referans dendiğinde, ya adres ya da referans değişken denmiş olur. Buna göre örneğin bir cümlede, `reference to an object` ya da benzeri bir içerik söz konusu ise, burada `reference` adres anlamındadır, cümle içerisinde `address of an object is assigned to a reference` gibi bir cümle söz konusu ise, buradaki referans `reference variable` anlamındadır. Bu içerik `reference of an object is assigned to a reference` biçiminde olsaydı, ilk `reference` adres, ikinci `reference`, değişken anlamında olurdu.
+
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		Person p; //p reference (variable) 
+		TCPServer t; //t reference (variable)
+		UDPServer u; //u reference (variable)
+		Sensor s; //s reference (variable)
+		
+		//...
+	}
+}
+
+
+class Person {
+	//...
+}
+
+class TCPServer {
+	//...
+}
+
+class UDPServer {
+	//...
+}
+
+class Sensor {
+	//...
+}
+
+```
+
+>**Tüm bu anlatılanlara göre, bir referans değişkene değer olarak verilecek adresi nasıl elde edeceğiz?** Bu sorunun cevabı konu içerisinde ele alınacaklır.
+
+###### Sınıf ve Nesne Kavramları
+
+>Sınıf ve nesne kavramlarına ilişkin aşağıdaki `çok önemli` maddeler bir temel oluşturmaktadır:
+>
+>1. Sınıf türünden bellekte ayrılan (yaratılan) bir alana o sınıf türünden **nesne (object)** denir.
+>
+>2. Nesneler heap'de yaratılır. Java'da stack'de nesne yaratılamaz. 
+>
+>3. Java'da bir nesnenin kendisi bir değişkende tutulamaz, adresi tutulabilir. Bu adres ilgili sınıf türünden bir refeerans değişkende tutulabilir.
+>
+>4. Java'da nesne yaratılması **new** operatörü ile yapılır. new operatörünün kullanımına ilişkin genel biçimi şu şekildedir:
+
+```java
+new <sınıf ismi>([argümanlar]);
+```
+
+>Bu operatör özel amaçlı, tek operandlı ve önek durumundadır. Operatör, yaratılmış olan nesnenin adresini üretir. Bu operatörün yan etkisi yoktur. Bir nesne ve referans değişken için bellekte ne kadar ayrıldığı yani uzunluk bilgisi konu içerisinde ayrıca ele alınacaktır.
+
+>Aşağıdaki demo örnekte `p, t, u ve s` birer nesne **DEĞİLDİR**, ilgili türden nesnelerin adreslerini tutabilen referans değişkenlerdir. Örnekte, `1, 2, 3 ve 4` ile belirtilen deyimlerde ilgili türden nesneler yaratılmış ve adresleri ilgili türden referanslara atanmıştır. Buna göre, bir referans değişkene bir nesnenin adresi verildiğinde, o referans değişken o nesneyi **gösteriyor (reference to)** duruma gelmiş olur.
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		Person p; //p reference (variable) 
+		TCPServer t; //t reference (variable)
+		UDPServer u; //u reference (variable)
+		Sensor s; //s reference (variable)
+		
+		
+		p = new Person(); //1
+		t = new TCPServer(); //2
+		u = new UDPServer(); //3
+		s = new Sensor(); //4
+		//...
+	}
+}
+
+
+class Person {
+	//...
+}
+
+class TCPServer {
+	//...
+}
+
+class UDPServer {
+	//...
+}
+
+class Sensor {
+	//...
+}
+```
+
 
