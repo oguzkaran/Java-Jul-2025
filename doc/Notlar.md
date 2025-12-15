@@ -11335,13 +11335,15 @@ class Sensor {
 
 >**Tüm bu anlatılanlara göre, bir referans değişkene değer olarak verilecek adresi nasıl elde edeceğiz?** Bu sorunun cevabı konu içerisinde ele alınacaklır.
 
+###### 15 Aralık 2025
+
 >**Sınıf, Referans ve Nesne Kavramları:** Sınıf ve nesne kavramlarına ilişkin aşağıdaki `çok önemli` maddeler bir temel oluşturmaktadır:
 >
 >1. Sınıf türünden bellekte ayrılan (yaratılan) bir alana o sınıf türünden **nesne (object)** denir.
 >
 >2. Nesneler heap'de yaratılır. Java'da stack'de nesne yaratılamaz. 
 >
->3. Java'da bir nesnenin kendisi bir değişkende tutulamaz, adresi tutulabilir. Bu adres ilgili sınıf türünden bir refeerans değişkende tutulabilir.
+>3. Java'da bir nesnenin kendisi bir değişkende tutulamaz, adresi tutulabilir. Bu adres ilgili sınıf türünden bir referans değişkende tutulabilir.
 >
 >4. Java'da nesne yaratılması **new** operatörü ile yapılır. new operatörünün kullanımına ilişkin genel biçimi şu şekildedir:
 
@@ -11391,4 +11393,139 @@ class Sensor {
 }
 ```
 
+>Bu örnekte yaratılan, `1, 2, 3 ve 4` numara ile belirtilen nesneler ve ilgili referanslara atanması sonucunda belleğin temsili durumu aşağıdaki gibidir:
+
+![objectsandreferences](./media/objectsandreferences.png)
+
+>Buradaki adresin sayısal değerleri temsili olarak yazılmıştır.
+
+>5. Bir nesne aslında ilgili sınıf türünden bir örnektir. Bu sebeple nesne için **instance** terimi de kullanılmaktadır. Bu anlamda nesne yaratma işlemi için **create** ve **instantiate** filleri kullanılmaktadır.
+>
+>6. Referans ve nesne ayrı kavramlardır. Referans bir nesneyi gösterir ancak nesnenin kendisi değildir.
+>
+>7. Her new işlemi yeni bir nesne yaratmak demektir. 
+
+>Aşağıdaki demo örneğe ilişkin belleğin temsili durumu şu şekildedir:
+
+![new-object](./media/new-obejct.png)
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		TCPServer t1, t2;
+		//...
+		
+		t1 = new TCPServer();
+		t2 = new TCPServer();
+	}
+}
+
+class TCPServer {
+	//...
+}
+```
+
+###### Sınıfın Non-static Veri Elemanları
+
+>Sınıfın non-static veri elemanına sınıf dışından (yani başka bir sınıfın içinden) referans ve nokta operatörü ile erişilir. Nokta operatörü, özel amaçlı, iki operandlı ve araek durumundadır. Bu operatörün birinci operandı bir referans, ikinci operandı non-static bir veri elemanı ise bu durumda o veri elemanına ilişkin değişkeni üretir.
+
+>**Sınıfın non-static bir veri elemanı her nesne yaratıldığında o nesnenin içerisinde yaratılır. Yani, sınıfın nons-static veri elemanları nesneye özgüdür ya da başka bir deyişle her nesne ayrıdır.** Bu durumda referans ile non-static bir veri elemanına erişmek aslında o referansın gösterdiği nesnenin içerisindeki yani ilgili nesneye ait veri elemanına erişmek anlamına gelir.
+
+>Aşağıdaki demo örneğe ilişkin belleğin temsili durumu şu şekildedir:
+
+![non-static-fields](./media/non-static-fields.png)
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		Sample s1, s2;
+		
+		s1 = new Sample();
+		s2 = new Sample();
+		
+		s1.x = 10;
+		s1.y = true;
+		s2.x = 20;
+		s2.y = false;
+		
+		System.out.printf("s1.x = %d, s1.y = %b%n", s1.x, s1.y);
+		System.out.printf("s2.x = %d, s2.y = %b%n", s2.x, s2.y);
+	}
+}
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+}
+```
+
+>Bir nesne yaratıldığında nesneye ait non-static veri elemanlarına **varsayılan değer (default/zero value)** verilir. Varsayılan değer, türe özgü mantıksal sıfır değeridir. Yani örneğin `int` türü için `0`, `double` türü için `0.0`, `boolean` türü için `false`değeri verilir. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		Sample s1, s2;
+		
+		s1 = new Sample();
+		s2 = new Sample();
+		
+		System.out.println("----------------------------------------");
+		System.out.printf("s1.x = %d, s1.y = %b%n", s1.x, s1.y);
+		System.out.printf("s2.x = %d, s2.y = %b%n", s2.x, s2.y);
+		System.out.println("----------------------------------------");
+		
+		s1.x = 10;
+		s1.y = true;
+		s2.x = 20;
+		s2.y = false;
+		
+		System.out.println("----------------------------------------");
+		System.out.printf("s1.x = %d, s1.y = %b%n", s1.x, s1.y);
+		System.out.printf("s2.x = %d, s2.y = %b%n", s2.x, s2.y);
+		System.out.println("----------------------------------------");
+	}
+}
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+}
+```
+
+>Aşağıdaki demo örnekte, s referansına değer verilmediği için error oluşur
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{		
+		Sample s;
+		
+		s.x = 10; //error		
+	}
+}
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+}
+```
 
