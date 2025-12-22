@@ -2,71 +2,47 @@ package csd;
 
 class App {
 	public static void main(String[] args) 
-	{
-		DemoSpaceWarApp.run();
+	{			
+		Sample s1, s2;
+		
+		s1 = new Sample();
+		s1.x = 10;
+		s1.y = true;
+		
+		s2 = s1;
+		
+		System.out.printf("s1.x = %d, s1.y = %b%n", s1.x, s1.y);
+		System.out.printf("s2.x = %d, s2.y = %b%n", s2.x, s2.y);		
+		System.out.println("----------------------------------------------");
+		
+		++s1.x;
+		s2.y = false;
+		
+		System.out.printf("s1.x = %d, s1.y = %b%n", s1.x, s1.y);
+		System.out.printf("s2.x = %d, s2.y = %b%n", s2.x, s2.y);		
+		System.out.println("----------------------------------------------");
+		
+		
+		s1 = new Sample();
+		
+		System.out.printf("s1.x = %d, s1.y = %b%n", s1.x, s1.y);
+		System.out.printf("s2.x = %d, s2.y = %b%n", s2.x, s2.y);		
+		System.out.println("----------------------------------------------");
+		
+		++s2.x;
+		s2.y = true;
+		
+		System.out.printf("s1.x = %d, s1.y = %b%n", s1.x, s1.y);
+		System.out.printf("s2.x = %d, s2.y = %b%n", s2.x, s2.y);		
+		System.out.println("----------------------------------------------");		
 	}
 }
 
-class DemoSpaceWarApp {
-	public static void run()
-	{
-		//...
-		
-		for (int i = 0; i < 30; ++i) {
-			Alien alien = new Alien();
-			
-			//...
-		}
-		
-		for (int i = 0; i < 40; ++i) {
-			Soldier soldier = new Soldier();
-			
-			//...
-		}
-		
-		System.out.printf("Number of aliens:%d%n", Alien.count);
-		System.out.printf("Number of soldiers:%d%n", Soldier.count);
-		//...
-	}
-}
 
-
-class Alien {
-	public static int count;
-	public int headsCount;
-	public int armsCount;
-	//...
+class Sample {
+	public int x;
+	public boolean y;
 	
-	public Alien() //**
-	{
-		++count;
-	}
-}
-
-class Soldier {
-	public static int count;
-	public int title;
-	public int gunCount;
-	
-	public Soldier() //***
-	{
-		++count;
-	}
 	//...
 }
 
-class Civilian {
-	//...
-}
-
-class Animal {
-	//...
-}
-
-class Building {
-	//...
-}
-
-class Tree {
-	//...
-}
