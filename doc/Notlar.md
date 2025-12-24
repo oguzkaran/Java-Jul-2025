@@ -4538,6 +4538,8 @@ olarak belirlenir. Buna göre kökler şu şekilde hesaplanır:
   
 - Program çıktısı, eğer iki kök varsa ayrı ayrı, çakışık kök varsa örneğin `x1 = x2 = 4` biçiminde yazılacaktır. Gerçek kök yok ise ekran çıktısı olarak `No real root` biçiminde olacaktır. 
 
+>**Not:** İleride daha iyisi yazılacaktır.
+
 >**Çözüm:**
 ```java
 package csd;
@@ -12007,5 +12009,116 @@ class Sample {
 >2. Argümanlardan parametrelere aktarım.
 >3. Metodun geri dönüş değerinin geçici değişkene atanması. 
 
-###### Referans Parametreli Metotlar
+###### 24 Aralık 2025
+
+>Bir metodun parametresi bir referans olabilir. Bu durumda metot aynı türden bir referans ile çağrılabilir. Referans parametreli bir metot çağrıldığında, parametre değişkeni olan referans ile argümana ilişkin referans aynı nesneyi gösterir duruma gelir. Bu çağrı ile metot içerisinde de aynı nesneye erişilebilir. Hatta metot içerisinde nesnede değişiklik de yapılabilir.
+
+
+>Bir metodun geri dönüş değeri bir referans türünden olabilir. Bu durumde metodun geri dönüş değerine ilişkin return deyimindeki ifade aynı türden bir adres olabilir.
+
+
+>Aşağıdaki demo örnekte `*` ile `**` arasındaki işlemler için belleği temsil eden şekli ve kodları inceleyiniz.
+
+![reference assignment3](./media/reference-assignment3.png)
+
+>Demo örnekte akış `***` ile belirtilen noktaya geldiğinde belleğin temsili şu şekildedir:
+
+![reference assignment4](./media/reference-assignment4.png)
+
+>printTime metodu çağrıldığında belleğin temsili şu şekildedir:
+
+![reference assignment5](./media/reference-assignment5.png)
+
+>`****` ile belirtilen noktada metot çağrısı ile belleğin temsili şu şekildedir:
+
+![reference assignment6](./media/reference-assignment6.png)
+
+>changeTime çağrısı sonlandığında belleğin temsili şu şekildedir:
+
+![reference assignment4](./media/reference-assignment4.png)
+
+>prinTime metodu çağrısı yukarıda ele alınmıştı
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{			
+		Time t; //*
+		
+		t = TimeUtil.createTime(20, 3, 21);	//**
+		TimeUtil.printTime(t); //***
+		TimeUtil.changeTime(t, 21, 23, 4);//****
+		TimeUtil.printTime(t);
+	}
+}
+
+
+class TimeUtil {
+	public static void changeTime(Time t, int hour, int minute, int second)
+	{
+		//...
+		
+		t.hour = hour;
+		t.minute = minute;
+		t.second = second;		
+	}
+	
+	
+	public static Time createTime(int hour, int minute, int second)
+	{
+		//...
+		Time t;
+		
+		t = new Time();
+		
+		t.hour = hour;
+		t.minute = minute;
+		t.second = second;
+		
+		return t;
+	}
+	
+	public static void printTime(Time t)
+	{
+		System.out.printf("%02d:%02d:%02d%n", t.hour, t.minute, t.second);
+	}
+}
+
+
+class Time {
+	public int hour;
+	public int minute;
+	public int second;
+	
+	//...
+}
+```
+>Aşağıdaki demo örnekte foor metodunun, main içerisinde bildirilen a'nın değerini değiştiremeyeceğine dikkat ediniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String[] args) 
+	{
+		int a = 10;
+		
+		Sample.foo(a);
+		
+		System.out.printf("main -> a = %d%n", a);
+	}
+}
+
+
+class Sample {
+	public static void foo(int a)
+	{
+		System.out.printf("foo -> a = %d%n", a);
+		++a;
+		System.out.printf("foo -> a = %d%n", a);
+	}
+}
+```
 
