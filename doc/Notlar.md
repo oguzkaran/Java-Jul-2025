@@ -12121,4 +12121,420 @@ class Sample {
 	}
 }
 ```
+###### 5 Ocak 2026
 
+Aşağıdaki örnekte sınıf kullanılarak mantıksal olarak birden fazla değere geri dönülmüştür. Java'da bir metot yalnızca tek bir değere geri dönebilir. Buradaki dönülen tek değer bir nesnenin adresidir
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		QuadraticEquationSolverApp.run();
+	}
+}
+
+class QuadraticEquationSolverApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input coefficients:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();
+		double c = kb.nextDouble();
+		
+		QuadraticEquationRootsInfo rootsInfo = EquationUtil.findQuadraticEquationRoots(a, b, c);
+		
+		if (rootsInfo.exists)
+			System.out.printf("x1 = %f, x2 = %f%n", rootsInfo.x1, rootsInfo.x2);
+		else
+			System.out.println("No real root");
+	}
+}
+
+class QuadraticEquationRootsInfo {
+	public boolean exists;
+	public double x1;
+	public double x2;
+}
+
+class EquationUtil {
+	public static QuadraticEquationRootsInfo findQuadraticEquationRoots(double a, double b, double c)
+	{
+		QuadraticEquationRootsInfo rootsInfo = new QuadraticEquationRootsInfo();
+		double delta = b * b - 4 * a * c;	
+		
+		if (delta > 0) {
+			double sqrtDelta = Math.sqrt(delta);
+			
+			rootsInfo.x1 = (-b + sqrtDelta) / (2 * a);
+			rootsInfo.x2 = (-b - sqrtDelta) / (2 * a);
+			rootsInfo.exists = true;
+		}
+		else if (delta == 0) {
+			rootsInfo.x1 = rootsInfo.x2 = -b / (2 * a);
+			rootsInfo.exists = true;
+		}
+		
+		return rootsInfo;
+	}
+}
+```
+
+##### Sınıf Elemanlarına Sınıf İçerisinden Erişim
+
+>Bu bölümde sınıfın bir elemanına sınıf içerisinde **doğrudan** erişme kuralları ele alınacaktır. Doğrudan erişim nokta operatörü kullanmadan erişim demektir. Şüphesiz sınıf dışından, sınıfın bir elemanına doğrudan erişim yapılamaz. İlgili kurallar şunlardır:
+>
+>- Sınıfın non-static bir metodu içerisinde, aynı sınıfın non-static bir veri elemanına doğrudan erişilebilir. Doğrudan erişilen bu eleman, non-static metodun çağrıldığı referansın gösterdiği nesnenin veri elemanıdır. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample s1, s2;
+		
+		s1 = new Sample();
+		s2 = new Sample();
+		
+		s1.foo(20);
+		s2.foo(30);
+		
+		System.out.printf("s1.x = %d, s2.x = %d%n", s1.x, s2.x);
+	}
+}
+
+class Sample {
+	public int x;
+	
+	public void foo(int a)
+	{
+		x = a;
+	}
+}
+```
+
+>- Sınıfın non-static bir metodu içerisinde, aynı sınıfın non-static bir metodu doğrudan çağrılabilir. Doğrudan çağrılan metot, çağıran metodun çağrıldığı referans ile çağrılmış olur.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample s1, s2;
+		
+		s1 = new Sample();
+		s2 = new Sample();
+		
+		s1.foo(20);
+		s2.foo(30);
+		
+		System.out.printf("s1.x = %d, s2.x = %d%n", s1.x, s2.x);
+	}
+}
+
+class Sample {
+	public int x;
+	
+	public void foo(int a)
+	{
+		bar(a);
+	}
+	
+	public void bar(int a)
+	{
+		x = a;
+	}
+}
+```
+
+>Yukarıdaki son iki maddenin özeti olarak şu söylenebilir: **Sınıfın non-static bir metodu içerisinde, aynı sınıfın non-static elemanlarına (members) doğrudan erişilebilir.**
+>
+>- Sınıfın non-static bir metou içerisinde, aynı sınıfın static bir veri elemanına doğrudan erişebilir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample s1, s2;
+		
+		s1 = new Sample();
+		s2 = new Sample();
+		
+		s1.foo(20);
+		System.out.printf("Sample.x = %d%n", Sample.x);
+		s2.foo(30);		
+		System.out.printf("Sample.x = %d%n", Sample.x);
+	}
+}
+
+class Sample {
+	public static int x;
+	//...
+	
+	public void foo(int a)
+	{
+		x = a;
+	}
+}
+
+```
+
+>- Sınıfın non-static bir metou içerisinde, aynı sınıfın static bir metodu doğrudan çağrılabilir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample s1, s2;
+		
+		s1 = new Sample();
+		s2 = new Sample();
+		
+		s1.foo(20);
+		System.out.printf("Sample.x = %d%n", Sample.x);
+		s2.foo(30);		
+		System.out.printf("Sample.x = %d%n", Sample.x);
+	}
+}
+
+class Sample {
+	public static int x;
+	//...
+	
+	public void foo(int a)
+	{
+		bar(a);
+	}
+	
+	
+	public static void bar(int a)
+	{
+		x = a;
+	}
+}
+```
+
+>Yukarıdaki son iki maddenin özeti olarak şu söylenebilir: **Sınıfın non-static bir metodu içerisinde, aynı sınıfın static elemanlarına (members) doğrudan erişilebilir.**
+>
+>Yukarıdaki son dört maddenin özeti olarak şu söylenebilir: **Sınıfın non-static bir metodu içerisinde, aynı sınıfın static veya non-static bakımdan tüm elemanlarına doğrudan erişilebilir.**
+>
+>- Sınıfın static bir metodu içerisinde, aynı sınıfın non-static bir veri elemanına doğrudan erişilemez.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+class Sample {
+	public int x;
+	//...
+	
+	public static void foo(int a)
+	{
+		x = a; //error
+	}
+}
+```
+
+>- Sınıfın static bir metodu içerisinde, aynı sınıfın non-static bir metodu doğrudan çağrılamaz
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+class Sample {
+	//...
+	
+	public static void foo(int a)
+	{
+		bar(); //error
+	}
+	
+	public void bar()
+	{
+		//...
+	}
+}
+```
+>Yukarıdaki son iki maddenin özeti olarak şu söylenebilir: **Sınıfın static bir metodu içerisinde, aynı sınıfın non-static elemanlarına (members) doğrudan erişilemez.**
+>
+>- Sınıfın static bir metodu içerisinde aynı sınıfın static bir veri elemanına doğrudan erişilebilir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample.foo(10);
+		System.out.printf("Sample.x = %d%n", Sample.x);
+		Sample.foo(20);
+		System.out.printf("Sample.x = %d%n", Sample.x);
+	}
+}
+
+class Sample {
+	public static int x;
+	
+	//...
+	
+	public static void foo(int a)
+	{
+		x = a;				
+	}
+}
+```
+>- Sınıfın static bir metodu içerisinde aynı sınıfın static bir metodu doğrudan çağrılabilir
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample.foo(10);
+		System.out.printf("Sample.x = %d%n", Sample.x);
+		Sample.foo(20);
+		System.out.printf("Sample.x = %d%n", Sample.x);
+	}
+}
+
+class Sample {
+	public static int x;
+	
+	//...
+	
+	public static void foo(int a)
+	{
+		bar(a);				
+	}
+	
+	public static void bar(int a)
+	{
+		x = a;				
+	}
+}
+```
+
+>Yukarıdaki son iki maddenin özeti olarak şu söylenebilir: **Sınıfın static bir metodu içerisinde, aynı sınıfın static elemanlarına (members) doğrudan erişilembilir**
+>
+>Yukarıdaki son dört maddenin özeti olarak şu söylenebilir: **Sınıfın static bir metodu içerisinde, aynı sınıfın yalnızca static elemanlarına doğrudan erişilebilir.**
+
+>Yukarıdaki son sekiz maddenin özeti olarak şu söylenebilir: **Sınıfın non-static bir metodu içerisinde, aynı sınıfın tüm elemanlarına doğrudan erişilebilirken, sınıfın static bir metodu içerisinde, aynı sınıfın yalnızca static elemanlarına doğrudan erişilebilir.**
+
+>Peki, bir metodu ne zaman static, ne zaman non-static yapılmalıdır? Java programcısı buna nasıl karar verecektir?Bir metot ait olduğu sınıfın non-static bir elemanına doğrudan erişecekse zaten non-static olmalıdır ancak bir metot ait olduğu sınıfın hiç bir non-static elemanına erişmeyecekse, non-static yapılabilse de static yapılmalıdır. Bu durumda, bu metodu çağırırken bir referansa (dolayısıyla nesneye) ihtiyaç olmaz ayrıca bir metodun static yapılması okunabilirliği/algılanabilirliği artırır yani bu durumda bir metot non-static ise sınıfın non-static en az bir elemanına kesinlikle erişiyordur algısı oluşur. Bu bir convention'dır ve programcılar bu convention'a uyarlar (uymalıdırlar).
+>
+>Aşağıdaki, analitik düzlemde (cartesian plane) bir noktayı temsil `Point` sınıfını ve test kodlarını inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		PointPrintTest.run();				
+	}
+}
+
+class PointPrintTest {
+	public static void run()
+	{		
+		Point p1, p2;
+		
+		p1 = new Point();
+		p2 = new Point();
+		
+		p1.x = 345.67;
+		p1.y = 34.89;		
+		p2.x = -45;
+		p2.y = 37;
+		
+		p1.print();
+		p2.print();
+	}
+}
+```
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		PointOffsetTest.run();				
+	}
+}
+
+class PointOffsetTest {
+	public static void run()
+	{		
+		Point p1, p2;
+		
+		p1 = new Point();
+		p2 = new Point();
+		
+		p1.x = 345.67;
+		p1.y = 34.89;		
+		p2.x = -45;
+		p2.y = 37;
+		
+		p1.print();
+		p2.print();
+		
+		p1.offset(-30, 40);
+		p2.offset(34, -10);
+		
+		System.out.println("------------------------------");
+		p1.print();
+		p2.print();
+		
+		p1.offset(-30);
+		p2.offset(34);
+		
+		System.out.println("------------------------------");
+		p1.print();
+		p2.print();
+		
+	}
+}
+```
+
+```java
+class Point {
+	public double x, y;
+	
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+	
+	public void offset(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+	
+	public void print()
+	{
+		System.out.printf("(%f, %f)%n", x, y);
+	}
+}
+```
