@@ -12441,7 +12441,10 @@ class Sample {
 >Yukarıdaki son sekiz maddenin özeti olarak şu söylenebilir: **Sınıfın non-static bir metodu içerisinde, aynı sınıfın tüm elemanlarına doğrudan erişilebilirken, sınıfın static bir metodu içerisinde, aynı sınıfın yalnızca static elemanlarına doğrudan erişilebilir.**
 
 >Peki, bir metodu ne zaman static, ne zaman non-static yapılmalıdır? Java programcısı buna nasıl karar verecektir?Bir metot ait olduğu sınıfın non-static bir elemanına doğrudan erişecekse zaten non-static olmalıdır ancak bir metot ait olduğu sınıfın hiç bir non-static elemanına erişmeyecekse, non-static yapılabilse de static yapılmalıdır. Bu durumda, bu metodu çağırırken bir referansa (dolayısıyla nesneye) ihtiyaç olmaz ayrıca bir metodun static yapılması okunabilirliği/algılanabilirliği artırır yani bu durumda bir metot non-static ise sınıfın non-static en az bir elemanına kesinlikle erişiyordur algısı oluşur. Bu bir convention'dır ve programcılar bu convention'a uyarlar (uymalıdırlar).
->
+
+
+###### 12 Ocak 2026
+
 >Aşağıdaki, analitik düzlemde (cartesian plane) bir noktayı temsil `Point` sınıfını ve test kodlarını inceleyiniz
 
 ```java
@@ -12498,21 +12501,64 @@ class PointOffsetTest {
 		
 		p1.print();
 		p2.print();
+		System.out.println("------------------------------");
 		
 		p1.offset(-30, 40);
-		p2.offset(34, -10);
+		p2.offset(34, -10);		
 		
-		System.out.println("------------------------------");
 		p1.print();
 		p2.print();
-		
+		System.out.println("------------------------------");
+
 		p1.offset(-30);
-		p2.offset(34);
+		p2.offset(34);		
 		
-		System.out.println("------------------------------");
 		p1.print();
 		p2.print();
+		System.out.println("------------------------------");
+	}
+}
+
+```
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		PointDistanceTest.run();				
+	}
+}
+
+class PointDistanceTest {
+	public static void run()
+	{		
+		Point p1, p2;
 		
+		p1 = new Point();
+		p2 = new Point();
+		
+		p1.x = 200;
+		p1.y = 100;		
+		p2.x = 196;
+		p2.y = 103;
+		
+		p1.print();
+		p2.print();
+		System.out.println("------------------------------");
+		
+		double result = p1.euclideanDistance(p2);
+		
+		System.out.printf("Distance:%f%n", result);
+		
+		result = p1.euclideanDistance(196, 103);
+		
+		System.out.printf("Distance:%f%n", result);
+		
+		result = p1.euclideanDistance();
+		
+		System.out.printf("Distance to origin:%f%n", result);
 	}
 }
 ```
@@ -12520,6 +12566,21 @@ class PointOffsetTest {
 ```java
 class Point {
 	public double x, y;
+
+	public double euclideanDistance()
+	{
+		return euclideanDistance(0, 0);
+	}
+	
+	public double euclideanDistance(double a, double b)
+	{
+		return Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
+	}
+	
+	public double euclideanDistance(Point other)
+	{
+		return euclideanDistance(other.x, other.y);
+	}	
 	
 	public void offset(double dxy)
 	{
@@ -12537,4 +12598,237 @@ class Point {
 		System.out.printf("(%f, %f)%n", x, y);
 	}
 }
+
+
 ```
+
+>Aşağıdaki, bir karmaşık sayıyı (complex number) temsil eden `Complex`sınıfını ve test kodlarını inceleyiniz.
+>**Açıklamalar:** a ve b gerçek sayılar olmak üzere, $z = a + i * b$, $z_1 = a_1 + i * b_1$, $z_2 = a_2 + i * b_2$ karmaşık sayıları için aşağıdaki kurallar tanımlıdır:
+>- $\sqrt{-1} = i$
+>- a gerçek (real) kısım, b sanal (imaginary) kısım
+>- $\bar{z} = a - i * b$ `->` eşlenik (conjugate)
+>- $|z| = \sqrt{a^2 + b^2}$ `->` Uzunluğu norm (length)  
+>- $z_1 \pm z_2 = (a_1 \pm a_2) + i * (b_1 \pm b2)$
+>- $z_1z_2 = (a_1 * a_2 - b_1 * b_2) + i * (a_1 * b_2 + a_2 * b_1)$
+>- $z_1 / z_2 =  (1 / |\bar{z_2}|) * (z_1 * \bar{z_2})$ 
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		ComplexGetConjugateTest.run();						
+	}
+}
+
+class ComplexGetConjugateTest {
+	public static void run()
+	{
+		Complex z1 = new Complex();
+		Complex z2 = new Complex();
+		
+		z1.real = 3.4;
+		z1.imag = 4.5;
+		z2.real = 9.3;
+		z2.imag = -6.4;
+		
+		z1.print();
+		z2.print();
+		
+		Complex z1c = z1.getConjugate();
+		Complex z2c = z2.getConjugate();
+		
+		z1c.print();
+		z2c.print();		
+	}
+}
+```
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		ComplexGetLengthTest.run();						
+	}
+}
+
+class ComplexGetLengthTest {
+	public static void run()
+	{
+		Complex z1 = new Complex();
+		Complex z2 = new Complex();
+		
+		z1.real = 3.4;
+		z1.imag = 4.5;
+		z2.real = 9.3;
+		z2.imag = -6.4;
+		
+		z1.print();
+		z2.print();
+		
+		System.out.printf("Length of z1:%f%n", z1.getLength());
+		System.out.printf("Length of z2:%f%n", z2.getNorm());
+	}
+}
+
+```
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		ComplexAddTest.run();						
+	}
+}
+
+class ComplexAddTest {
+	public static void run()
+	{
+		Complex z1 = new Complex();
+		Complex z2 = new Complex();
+		
+		z1.real = 3.4;
+		z1.imag = 4.5;
+		z2.real = 9.3;
+		z2.imag = -6.4;
+		
+		z1.print();
+		z2.print();
+		
+		Complex z;
+		
+		z = z1.add(z2); // z1 + z2
+		z.print();
+		
+		z = z1.add(2.3); // z1 + 2.3
+		z.print();
+		
+		z = Complex.add(2.3, z1); // 2.3 + z1
+		
+		z.print();
+	}
+}
+```
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		ComplexSubtractTest.run();						
+	}
+}
+
+class ComplexSubtractTest {
+	public static void run()
+	{
+		Complex z1 = new Complex();
+		Complex z2 = new Complex();
+		
+		z1.real = 3.4;
+		z1.imag = 4.5;
+		z2.real = 9.3;
+		z2.imag = -6.4;
+		
+		z1.print();
+		z2.print();
+		
+		Complex z;
+		
+		z = z1.subtract(z2); // z1 - z2
+		z.print();
+		
+		z = z1.subtract(2.3); // z1 - 2.3
+		z.print();
+		
+		z = Complex.subtract(2.3, z1); // 2.3 - z1
+		
+		z.print();
+	}
+}
+```
+
+```java
+class Complex {
+	public double real;
+	public double imag;
+	
+	public static Complex add(double real1, double imag1, double real2, double imag2) //İleride bunu gizleyeceğiz
+	{
+		Complex z = new Complex();
+		
+		z.real = real1 + real2;
+		z.imag = imag1 + imag2;
+		
+		return z;
+	}
+	
+	public static Complex subtract(double real1, double imag1, double real2, double imag2) //İleride bunu gizleyeceğiz
+	{
+		return add(real1, imag1, -real2, -imag2);
+	}
+	
+	public double getLength()
+	{
+		return getNorm();
+	}
+	
+	public double getNorm()
+	{
+		return Math.sqrt(real * real + imag * imag);
+	}
+	
+	public Complex getConjugate()
+	{
+		Complex z = new Complex();
+		
+		z.real = real;
+		z.imag = -imag;
+		
+		return z;
+	}
+	
+	public Complex add(Complex other)
+	{
+		return add(real, imag, other.real, other.imag);
+	}
+	
+	public Complex add(double val)
+	{
+		return add(real, imag, val, 0);
+	}
+	
+	public static Complex add(double val, Complex z)
+	{
+		return add(val, 0, z.real, z.imag);
+	}
+	
+	
+	public Complex subtract(Complex other)
+	{
+		return subtract(real, imag, other.real, other.imag);
+	}
+	
+	public Complex subtract(double val)
+	{
+		return subtract(real, imag, val, 0);
+	}
+	
+	public static Complex subtract(double val, Complex z)
+	{
+		return subtract(val, 0, z.real, z.imag);
+	}
+	
+	
+	public void print()
+	{
+		System.out.printf("(%f, %f)%n", real, imag);
+	}
+}
+```
+
