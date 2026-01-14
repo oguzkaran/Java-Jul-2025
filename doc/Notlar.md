@@ -12602,6 +12602,8 @@ class Point {
 
 ```
 
+###### 14 Ocak 2026
+
 >Aşağıdaki, bir karmaşık sayıyı (complex number) temsil eden `Complex`sınıfını ve test kodlarını inceleyiniz.
 >**Açıklamalar:** a ve b gerçek sayılar olmak üzere, $z = a + i * b$, $z_1 = a_1 + i * b_1$, $z_2 = a_2 + i * b_2$ karmaşık sayıları için aşağıdaki kurallar tanımlıdır:
 >- $\sqrt{-1} = i$
@@ -12673,9 +12675,7 @@ class ComplexGetLengthTest {
 		System.out.printf("Length of z2:%f%n", z2.getNorm());
 	}
 }
-
 ```
-
 ```java
 package csd;
 
@@ -12753,24 +12753,129 @@ class ComplexSubtractTest {
 }
 ```
 
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		ComplexMultiplTest.run();						
+	}
+}
+
+class ComplexMultiplTest {
+	public static void run()
+	{
+		Complex z1 = new Complex();
+		Complex z2 = new Complex();
+		
+		z1.real = 3.4;
+		z1.imag = 4.5;
+		z2.real = 9.3;
+		z2.imag = -6.4;
+		
+		z1.print();
+		z2.print();
+		
+		Complex z;
+		
+		z = z1.multiply(z2); // z1 * z2
+		z.print();
+		
+		z = z1.multiply(2.3); // z1 * 2.3
+		z.print();
+		
+		z = Complex.multiply(2.3, z1); // 2.3 * z1
+		
+		z.print();
+	}
+}
+```
+
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		ComplexDivideTest.run();						
+	}
+}
+
+class ComplexDivideTest {
+	public static void run()
+	{
+		Complex z1 = new Complex();
+		Complex z2 = new Complex();
+		
+		z1.real = 3.4;
+		z1.imag = 4.5;
+		z2.real = 9.3;
+		z2.imag = -6.4;
+		
+		z1.print();
+		z2.print();
+		
+		Complex z;
+		
+		z = z1.divide(z2); // z1 / z2
+		z.print();
+		
+		z = z1.divide(2.3); // z1 / 2.3
+		z.print();
+		
+		z = Complex.divide(2.3, z1); // 2.3 / z1
+		
+		z.print();
+	}
+}
+```
+
 ```java
 class Complex {
 	public double real;
 	public double imag;
 	
-	public static Complex add(double real1, double imag1, double real2, double imag2) //İleride bunu gizleyeceğiz
+	public static Complex add(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
 	{
 		Complex z = new Complex();
 		
-		z.real = real1 + real2;
-		z.imag = imag1 + imag2;
+		z.real = a1 + a2;
+		z.imag = b1 + b2;
 		
 		return z;
 	}
 	
-	public static Complex subtract(double real1, double imag1, double real2, double imag2) //İleride bunu gizleyeceğiz
+	public static Complex subtract(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
 	{
-		return add(real1, imag1, -real2, -imag2);
+		return add(a1, b1, -a2, -b2);
+	}
+	
+	
+	public static Complex multiply(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		Complex z = new Complex();
+		
+		z.real = a1 * a2 - b1 * b2;
+		z.imag = a1 * b2 + a2 * b1;
+		
+		return z;		
+	}
+	
+	public static Complex divide(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		double val = 1 / getNorm(a2, -b2);
+		Complex z = multiply(a1, b1, a2, -b2);
+		
+		return multiply(val, z);		
+	}
+	
+
+	public static double getNorm(double a, double b) //İleride bunu gizleyeceğiz
+	{
+		return Math.sqrt(a * a + b * b);
 	}
 	
 	public double getLength()
@@ -12780,7 +12885,7 @@ class Complex {
 	
 	public double getNorm()
 	{
-		return Math.sqrt(real * real + imag * imag);
+		return getNorm(real, imag);
 	}
 	
 	public Complex getConjugate()
@@ -12824,6 +12929,35 @@ class Complex {
 		return subtract(val, 0, z.real, z.imag);
 	}
 	
+	public Complex multiply(Complex other)
+	{
+		return multiply(real, imag, other.real, other.imag);
+	}
+	
+	public Complex multiply(double val)
+	{
+		return multiply(real, imag, val, 0);
+	}
+	
+	public static Complex multiply(double val, Complex z)
+	{
+		return multiply(val, 0, z.real, z.imag);
+	}
+
+	public Complex divide(Complex other)
+	{
+		return divide(real, imag, other.real, other.imag);
+	}
+	
+	public Complex divide(double val)
+	{
+		return divide(real, imag, val, 0);
+	}
+	
+	public static Complex divide(double val, Complex z)
+	{
+		return divide(val, 0, z.real, z.imag);
+	}
 	
 	public void print()
 	{
@@ -12832,3 +12966,20 @@ class Complex {
 }
 ```
 
+##### Sınıfın Constructor Elemanı
+
+>Çalışma zamanında bir nesnenin yaratılma adımları sırasıyla şunlar:
+>
+>1. Bellekte yer ayrılır.
+>
+>2. Non-static olan (ancak final olmayan) veri elemanlarına default değerler verilir.
+>
+>3. Constructor (ctor) çağrılır.
+
+> **Bu 3 adım tamamlandığında nesne yaratılmış olur. Herhangi bir adımda bir problem oluştuğunda nesnenin yaratılması tamamlanMAmış olur.** Buna ilişkin detaylar konular içerisinde ele alınacaktır.
+
+
+**Anahtar Notlar:** final veri elemanları ileride ele alınacaktır.
+
+>ctor aşağıdaki özelliklere sahip bir metottur:
+>- 
