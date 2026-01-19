@@ -12599,7 +12599,6 @@ class Point {
 	}
 }
 
-
 ```
 
 ###### 14 Ocak 2026
@@ -12853,6 +12852,538 @@ class Complex {
 		return add(a1, b1, -a2, -b2);
 	}
 	
+	public static Complex multiply(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		Complex z = new Complex();
+		
+		z.real = a1 * a2 - b1 * b2;
+		z.imag = a1 * b2 + a2 * b1;
+		
+		return z;		
+	}
+	
+	public static Complex divide(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		double val = 1 / getNorm(a2, -b2);
+		Complex z = multiply(a1, b1, a2, -b2);
+		
+		return multiply(val, z);		
+	}
+	
+
+	public static double getNorm(double a, double b) //İleride bunu gizleyeceğiz
+	{
+		return Math.sqrt(a * a + b * b);
+	}
+	
+	public double getLength()
+	{
+		return getNorm();
+	}
+	
+	public double getNorm()
+	{
+		return getNorm(real, imag);
+	}
+	
+	public Complex getConjugate()
+	{
+		Complex z = new Complex();
+		
+		z.real = real;
+		z.imag = -imag;
+		
+		return z;
+	}
+	
+	public Complex add(Complex other)
+	{
+		return add(real, imag, other.real, other.imag);
+	}
+	
+	public Complex add(double val)
+	{
+		return add(real, imag, val, 0);
+	}
+	
+	public static Complex add(double val, Complex z)
+	{
+		return add(val, 0, z.real, z.imag);
+	}
+	
+	public Complex subtract(Complex other)
+	{
+		return subtract(real, imag, other.real, other.imag);
+	}
+	
+	public Complex subtract(double val)
+	{
+		return subtract(real, imag, val, 0);
+	}
+	
+	public static Complex subtract(double val, Complex z)
+	{
+		return subtract(val, 0, z.real, z.imag);
+	}
+	
+	public Complex multiply(Complex other)
+	{
+		return multiply(real, imag, other.real, other.imag);
+	}
+	
+	public Complex multiply(double val)
+	{
+		return multiply(real, imag, val, 0);
+	}
+	
+	public static Complex multiply(double val, Complex z)
+	{
+		return multiply(val, 0, z.real, z.imag);
+	}
+
+	public Complex divide(Complex other)
+	{
+		return divide(real, imag, other.real, other.imag);
+	}
+	
+	public Complex divide(double val)
+	{
+		return divide(real, imag, val, 0);
+	}
+	
+	public static Complex divide(double val, Complex z)
+	{
+		return divide(val, 0, z.real, z.imag);
+	}
+	
+	public void print()
+	{
+		System.out.printf("(%f, %f)%n", real, imag);
+	}
+}
+```
+
+###### 19 Ocak 2026
+
+##### Sınıfın Constructor Elemanı
+
+>Çalışma zamanında bir nesnenin yaratılma adımları sırasıyla şunlar:
+>
+>1. Bellekte yer ayrılır.
+>
+>2. Non-static olan (ancak final olmayan) veri elemanlarına default değerler verilir.
+>
+>3. Constructor (ctor) çağrılır.
+
+> **Bu 3 adım tamamlandığında nesne yaratılmış olur. Herhangi bir adımda bir problem oluştuğunda nesnenin yaratılması tamamlanMAmış olur.** Buna ilişkin detaylar konular içerisinde ele alınacaktır.
+
+
+**Anahtar Notlar:** final veri elemanları ileride ele alınacaktır.
+
+>ctor aşağıdaki özelliklere sahip bir metottur:
+>
+>- ctor nesnenin yaratılması aşamasında çağrılır.
+>
+>- ctor overload edilebilir. Buna **constructor overloading** denir.
+>
+>- Programcı tarafından her hangi bir ctor bildirilmemişse **parametresi ctor (default ctor)** derleyici tarafından içi boş ve public olarak yazılır. Programcı sınıf içerisinde en az bir tane ctor bildirmişse derleyici artık default ctor'u yazmaz.
+>
+>- ctor, **ait olduğu sınıf ile aynı isimde olan ve geri dönüş değeri kavramı olmayan** metottur. Burada, geri dönüş değeri kavramı olmaması, geri dönüş değeri olmaması anlamına gelmez. ctor için geri dönüş bilgisi yerine her hangi bir bilgi yazılmaz. Hatta sınıf içerisinde sınıf ismi ile aynı isimde olan ve geri dönüş değeri bilgisi yazılmış olan bir metot bildirimi geçerlidir ancak hiç bir programcı böylesi bir metot bildirimi yapmaz, yapmaya da ihtiyaç duymaz. Çünkü bu metot ctor anlamına gelmez. 
+>
+>- ctor non-static bir metottur.
+>
+>- Hangi ctor'un çağrılacağı new operatöründe geçilen argümanlara göre klasik `method overload resolution` kuralları ile belirlenir. 
+>
+>- ctor, programcı tarafından çağrılamaz. Programcı, nesne yaratılması sırasında hangi ctor'un çağrılacağının belirlendiği kodu yazar.
+>
+>- Nesne yaratılması adımlarından da anlaşılacağı gibi ctor çağrılmadan önce non-static olan (ancak final olmayan) veri elemanlarına default değerleri verilmiş olur.
+>
+>- ctor, geri dönüş değeri kavramı olmayan bir metot olsa da, void bir metot gibi istenirse return deyimi ctor'u sonlandırmak için kullanılabilir. Buradaki sonlandırma normal bir sonlandırmadır yani nesne yaratılmış olur. 
+>
+>Aşağıdaki demo örnekte Sample sınıfında default ctor da dahil 4 tane ctor overload edilmiştir. Mample sınıfında herhangi bir ctor bildirilmediğinden derleyici default ctor'u public ve içi boş olarak yazar
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample s1, s2, s3, s4;
+		Mample m;
+		
+		s1 = new Sample(); //Sample()
+		s2 = new Sample(10); //Sample(int)
+		s3 = new Sample(3.4); // Sample(double)
+		s4 = new Sample(20, true); //Sample(int, boolean)
+		m = new Mample(); //Mample()
+		
+		//...
+	}
+}
+
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+	
+	public Sample()
+	{
+		System.out.println("I am a default ctor");
+	}
+	
+	public Sample(int a)
+	{
+		System.out.println("I am a ctor with parameter type: int");
+	}
+	
+	
+	public Sample(double a)
+	{
+		System.out.println("I am a ctor with parameter type: double");
+	}
+	
+	public Sample(int a, boolean b)
+	{
+		System.out.println("I am a ctor with parameter types: int, boolean");
+	}
+	
+	//...
+}
+
+
+class Mample {
+	//...
+}
+```
+
+>Aşağıdaki demo örnekte Sample sınıfının default ctor'u artık derleyici tarafınfan otomatik olarak yazılmaz. Çünkü, Sample sınıfını yazan programcı bir ctor bildirimi yapmıştır. Bu durumda Sample sınıfı için default ctor gerekiyorsa artık programcı yazmalıdır.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample s;
+		
+		s = new Sample(); //error
+	}
+}
+
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+	
+	public Sample(int a)
+	{
+		System.out.println("I am a ctor with parameter type: int");
+	}	
+	
+	//...
+}
+```
+
+>Aşağıdaki demo örnekte ctor çağrısından önce non-static veri elemanlarına default değerler verildiğini gözlemleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample s1, s2, s3, s4;
+		
+		s1 = new Sample();
+		
+		System.out.println("------------------------------");
+		s2 = new Sample(10);
+		System.out.println("------------------------------");
+		s3 = new Sample(3.4);
+		System.out.println("------------------------------");
+		s4 = new Sample(20, true);
+		System.out.println("------------------------------");
+		
+		//...
+	}
+}
+
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+	
+	public Sample()
+	{
+		System.out.printf("x = %d, y = %b%n", x, y);
+		System.out.println("I am a default ctor");
+	}
+	
+	public Sample(int a)
+	{
+		System.out.printf("x = %d, y = %b%n", x, y);;
+		System.out.println("I am a ctor with parameter type: int");
+	}
+	
+	
+	public Sample(double a)
+	{
+		System.out.printf("x = %d, y = %b%n", x, y);
+		System.out.println("I am a ctor with parameter type: double");
+	}
+	
+	public Sample(int a, boolean b)
+	{
+		System.out.printf("x = %d, y = %b%n", x, y);
+		System.out.println("I am a ctor with parameter types: int, boolean");
+	}
+	
+	//...
+}
+```
+
+>Aşağıdaki demo örnekte Sample sınıfının parametresiz `Sample` isimli metodu bildirilmiştir. Bu durumda bu sınıfı yazan programcı hiç bir ctor yazmadığından derleyici default ctor'u otomatik olarak (içi boş ve public) yazar
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample s = new Sample();
+		
+		//...
+	}
+}
+
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+	
+	public void Sample() //Dikkat ctor değil
+	{
+		System.out.printf("x = %d, y = %b%n", x, y);
+		System.out.println("Sample()");
+	}
+	
+	
+	
+	//...
+}
+```
+
+>Aşağıdaki demo örnekte derleyici artık default ctor'u yazmayacaktır
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample s = new Sample(); //error
+		
+		//...
+	}
+}
+
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+	
+	public void Sample() //Dikkat ctor değil
+	{
+		System.out.printf("x = %d, y = %b%n", x, y);
+		System.out.println("Sample()");
+	}
+	
+	public Sample(int x)
+	{
+		System.out.println("I am ctor with parameter type: int");
+	}	
+	
+	//...
+}
+```
+
+>Sınıf ismi ile aynı isimde bir metot yazılması tavsiye edilmez.
+
+>Aşağıdaki örnekte ctor içerisinde return deyimiş kullanılmıştır
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample s1 = new Sample(10, true);
+		Sample s2 = new Sample(-10, true);
+		
+		System.out.printf("s1.x = %d, s1.y = %b%n", s1.x, s1.y);
+		System.out.printf("s2.x = %d, s2.y = %b%n", s2.x, s2.y);
+		
+		//...
+	}
+}
+
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...	
+	
+	public Sample(int a, boolean b)
+	{
+		if (a >= 0)
+			return;
+		
+		x = a;
+		y = b;
+	}	
+	
+	//...
+}
+```
+
+>Peki, ctor ne işe yarar? Ctor, nesne yaratılmadan önce bir takım ilk işlemlerin yapılması amacıyla kullanılır. Bu işlemlerden en tipik olanı non-static veri elemanlarında değer verilmesidir (set fields). Sınıfın ilgili ctor'unda parametre değişkenleri kullanılarak veri elemanlarına değer verilebilir. Bu durum sınıfın domain'ine bağlıdır. Örneğin, zaman işlemi yapan bir `Time` sınıfı, saat, dakika, saniye bilgilerini ctor ile alıp kontrol ederek ilgili veri elemanlarına değer verebilir ya da örneğin bir sınıf ağ üzerinde başka bir uygulama ile habeleşebilmek için bağlantı işlemini ctor içerisinde yapabilir. Bu durumda nesne yaratıldığında ilgili işlemler hazırlanmış olur. 
+
+>Point sınfının ctor'ları ve test kodları
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		PointCtorsTest.run();
+	}
+}
+
+class PointCtorsTest {
+	public static void run()
+	{
+		Point p1 = new Point(100.4, 67.4);
+		Point p2 = new Point(345.6);
+		Point p3 = new Point();
+		
+		p1.print();
+		p2.print();
+		p3.print();
+	}
+}
+
+````
+
+```java
+
+class Point {
+	public double x, y;
+	
+	public Point()
+	{		
+	}
+	
+	public Point(double a)
+	{
+		x = a;
+	}
+	
+	public Point(double a, double b)
+	{
+		x = a;
+		y = b;
+	}
+
+	public double euclideanDistance()
+	{
+		return euclideanDistance(0, 0);
+	}
+	
+	public double euclideanDistance(double a, double b)
+	{
+		return Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
+	}
+	
+	public double euclideanDistance(Point other)
+	{
+		return euclideanDistance(other.x, other.y);
+	}	
+	
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+	
+	public void offset(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+	
+	public void print()
+	{
+		System.out.printf("(%f, %f)%n", x, y);
+	}
+}
+```
+>Complex sınfının ctor'ları ve test kodları
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		ComplexCtorsTest.run();
+	}
+}
+
+class ComplexCtorsTest {
+	public static void run()
+	{
+		Complex z1 = new Complex(2.3, 7.8);
+		Complex z2 = new Complex(2.3);
+		Complex z3 = new Complex();
+		
+		z1.print();
+		z2.print();
+		z3.print();
+	}
+}
+````
+
+```java
+
+class Complex {
+	public double real;
+	public double imag;
+	
+	public static Complex add(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		Complex z = new Complex();
+		
+		z.real = a1 + a2;
+		z.imag = b1 + b2;
+		
+		return z;
+	}
+	
+	public static Complex subtract(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		return add(a1, b1, -a2, -b2);
+	}
 	
 	public static Complex multiply(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
 	{
@@ -12872,6 +13403,21 @@ class Complex {
 		return multiply(val, z);		
 	}
 	
+	public Complex()
+	{
+		
+	}
+	
+	public Complex(double a)
+	{
+		real = a;
+	}
+	
+	public Complex(double a, double b)
+	{
+		real = a;
+		imag = b;
+	}
 
 	public static double getNorm(double a, double b) //İleride bunu gizleyeceğiz
 	{
@@ -12966,20 +13512,7 @@ class Complex {
 }
 ```
 
-##### Sınıfın Constructor Elemanı
+##### Rassal (Random) Sayı Üretimi
 
->Çalışma zamanında bir nesnenin yaratılma adımları sırasıyla şunlar:
 >
->1. Bellekte yer ayrılır.
->
->2. Non-static olan (ancak final olmayan) veri elemanlarına default değerler verilir.
->
->3. Constructor (ctor) çağrılır.
 
-> **Bu 3 adım tamamlandığında nesne yaratılmış olur. Herhangi bir adımda bir problem oluştuğunda nesnenin yaratılması tamamlanMAmış olur.** Buna ilişkin detaylar konular içerisinde ele alınacaktır.
-
-
-**Anahtar Notlar:** final veri elemanları ileride ele alınacaktır.
-
->ctor aşağıdaki özelliklere sahip bir metottur:
->- 
