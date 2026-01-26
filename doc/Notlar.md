@@ -13284,7 +13284,7 @@ class PointCtorsTest {
 	}
 }
 
-````
+```
 
 ```java
 
@@ -13362,7 +13362,7 @@ class ComplexCtorsTest {
 		z3.print();
 	}
 }
-````
+```
 
 ```java
 
@@ -13512,7 +13512,385 @@ class Complex {
 }
 ```
 
-##### Rassal (Random) Sayı Üretimi
+###### 26 Ocak 2026
 
+##### Rassal Sayı Üretimi
+
+>Rassal (random) sayı üretimi bilgisayar dünyasında çok fazla kullanılmaktadır. Örneğin, bir simülasyon uygulamasında değerler rassal olarak üretilerek simülasyon gerçekleştirilebilir. Geçek hayattaki rassallık yazılımda gerçekleştirilemez. Bu anlamda bilgisayar dünyasında rassal sayılar deterministik olarak üretilir. Bu sebeple bilgisayar dünyasında üretilen rassal sayılara **pseudo random numbers** da denilmektedir. 
 >
+>Yazılımda rassal sayı üretiminin kalitesi söz konusudur. Rassal sayı üretimine ilişkin işlemler bir mantık çerçevesinde algoritmik olarak karmaşıklaştıkça genel olarak kalite artar ancak bu durumda yapılan işlemlere ilişkin bir maliyet de söz konusu olabilmektedir. Bu anlamda bilgisayar dünyasında rassal sayı üretiminin kelitesine ilişkin bilimsel çalışmalar halen devam etmektedir.
+>
+>Java'da rassal sayı üretimine ilişkin pek çok sınıf bulunmaktadır. Özellikle `Java 17`ile birlikte çeşitli rassal sayı üretme algoritmalarının kullanılabilmesine yönelik eklentiler de yapılmıştır. Java'da rassal sayı üretimine ilişkin en temel sınıf `java.util` paketi içerisindeki **Random** sınıfıdır. Bu sınıfın rassal sayı üretimi orta kalitededir. Çoğu zaman yeterli olmaktadır. Zaten yeterli olmadığında programcı diğer algoritmalara yönelir. Java 17'den itibaren `java.util.Random` sınıfına ilişkin rassal sayı üretimine **legacy random** da denilmektedir. Bu sınıf `Donald Knuth`'un `The Art of Computer Programming` kitaplar serisinin ikinci cildinde, `Seminumerical Algorithms` kategorisindeki algoritmayı kullanmaktadır (Section 3.2.1). Kursumuzda, rassal sayı üretimine ilişkin yalnızca Random sınıfı ele alınacaktır. Diğer sınıflar ve algoritmalar `Java ile Uygulama Geliştirme` kurslarında ele alınacaktır. 
+
+>Bilgisayar dünyasında rassal sayı üretimi genel olarak **tohum değeri (seed value)** kullanılarak yapılır. Aslında rassal sayı üretimi bu değer ile başlar ve her üretimde bir işleme sokularak güncellenir. Üretim işlemi bu şekilde devam eder. Yani tohum ilgili rassal sayı üretim algoritmasında kullanılır. Bu durumda tohum değerinin hep aynı verilmesi, aynı dizilimin elde edilmesine yol açar. Farklı dizilimler elde etmek için tohum değerinin farklı verilmesi gerekir. 
+>
+>Random sınıfının default ctor'u ile nesne yaratıldığında tohum değeri, o uygulana içerisinde daha önce yine default ctor kullanılarak yaratılmış olan nesnelere ilişkin tohum değerlerinden mümkün olduğunca farklı olma eğilimindedir. 
+
+**Anahtar Notlar:** Random sınıfındadoğrudan belirtilmese de farklı tohum değerleri genel olarak hep değişme eğilimde olan zaman ya da süre gibi değerler kullanılarak yapılır. Örneğin, her durumda işlemcinin ürettiği nano saniye mertebesindeki `tick` sayısı kullanılarak tohum değeri verilebilir. Şüphesiz bu Random sınıfının implementasyonuna bağlıdır, bir standardı yoktur. Bu tip içsel olarak nasıl yapıldığı standart olarak belirtilmeyen yani yazanlara bırakılan durumlara programlamada `implementation defined/dependent` denilmektedir.
+>
+>Random sınıfının `nextXXX` metotları ile rasaal sayı elde edilebilir. Bu metotlar dışında da çeşitli metotlar bulunur. Bazı metotlar konular içerisinde ayrıca ele alınacaktır.
+>
+>Random sınıfının parametresiz `nextInt` metodu int türü sınırları içerisinde rasaal olarak üretilmiş bir değere geri döner.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Random r = new java.util.Random();
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input count:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < n; ++i)
+			System.out.println(r.nextInt());		
+	}
+}
+```
+
+>Random sınıfının `bound` `nextInt` metodu `[0, bound)` aralığı içerisinde rassal olarak üretilmiş bir değere geri döner.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Random r = new java.util.Random();
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input count:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < n; ++i)
+			System.out.printf("%d ", r.nextInt(100)); //[0, 100)
+		
+		System.out.println();
+	}
+}
+
+```
+
+>Random sınıfına Java 17 ile birlikte `origin` ve `bound` parametreli `nextInt` metodu `dolaylı olarak eklenmiştir`. Bu metot `[origin, bound)` aralığı içerisinde rassal olarak üretilmiş bir değere geri döner.
+
+**Anahtar Notlar:** Burada `dolaylı olarak `dolaylı olarak eklenmiştir` cümleinin detayları ileride ele alınacaktır. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Random r = new java.util.Random();
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input count:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < n; ++i)
+			System.out.printf("%d ", r.nextInt(10, 21)); //[10, 21)
+		
+		System.out.println();
+	}
+}
+```
+
+>Java 17 öncesinde belirli bir aralıkta int türden rassal sayı üretmek için pek çok yöntem kullanılabilir. Bunlardan görece basit olan bir tanesi şu şekilde formülüze edilebilir: `[origin, bound)` aralığı içerisinde int türden rassal bir değer 
+
+```java
+r.nextInt(bound - origin) + origin
+```
+
+şeklinde üretilebilir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Random r = new java.util.Random();
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input count:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < n; ++i)
+			System.out.printf("%d ", r.nextInt(21 - 10) + 10); //[10, 21)
+		
+		System.out.println();
+	}
+}
+```
+
+>Random sınıfının parametresiz `nextLong` metodu long türü sınırları içerisinde rassal olarak üretilmiş bir değere geri döner. Java 17 ile birlikte bir ve iki parametreli `nextLong` metotları dolaylı olarak eklenmiştir. Bu metotlar sırasıyla `[0, bound)` ve `[origin, bound)` sınırları içerisinde rassal olarak üretilmiş bir değere geri dönerler.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Random r = new java.util.Random();
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input count:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < n; ++i)
+			System.out.printf("%d%n", r.nextLong());
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Random r = new java.util.Random();
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input count:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < n; ++i)
+			System.out.printf("%d%n", r.nextLong(5_000_000_000L));
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Random r = new java.util.Random();
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input count:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < n; ++i)
+			System.out.printf("%d%n", r.nextLong(-5_000_000_000L, 5_000_000_000L));
+	}
+}
+```
+
+>Random sınıfının parametresiz `nextDouble` metodu `[0, 1)` aralığında double türden rassal olarak üretilmiş bir değere geri döner. Java 17 ile birlikte bir ve iki parametreli `nextDouble` metotları dolaylı olarak eklenmiştir. Bu metotlar sırasıyla `[0, bound)` ve `[origin, bound)` sınırlar içerisinde rassal olarak üretilmiş bir değere geri dönerler.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Random r = new java.util.Random();
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input count:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < n; ++i)
+			System.out.printf("%f%n", r.nextDouble());
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Random r = new java.util.Random();
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input count:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < n; ++i)
+			System.out.printf("%f%n", r.nextDouble(3.456));
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Random r = new java.util.Random();
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input count:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < n; ++i)
+			System.out.printf("%f%n", r.nextDouble(3.455, 3.456));
+	}
+}
+```
+
+>Random sınıfının `nextBoolean` rassal üretilmiş boolean türden bir değere geri döner.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Random r = new java.util.Random();
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input count:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < n; ++i)
+			System.out.printf("%b%n", r.nextBoolean());
+	}
+}
+```
+
+>**Sınıf Çalışması:** Hilesiz bir paranın yazı gelmesi olasılığını yaklaşık olarak hesaplayan basit bir simülasyon programını yazınız
+
+>**Çözüm-1:** İleride daha iyisi yazılabilecektir
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		CoinTailSimulationApp.run();
+	}
+}
+
+
+class CoinTailSimulationApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input throw count:");
+		int n = kb.nextInt();
+		
+		CoinTailSimulation cts = new CoinTailSimulation(n);
+		
+	
+		cts.run();
+		
+		System.out.printf("Throw Count:%d%n", cts.n);
+		System.out.printf("Number of tails:%d%n", cts.nTails);
+		System.out.printf("p = %f%n", cts.p);
+	}
+}
+
+
+class CoinTailSimulation {
+	public double p;
+	public int n;
+	public int nTails;
+	
+	public CoinTailSimulation(int count)
+	{
+		n = count;
+	}
+	
+	public void run()
+	{
+		java.util.Random r = new java.util.Random();
+		
+		for (int i = 0; i < n; ++i)
+			nTails += r.nextInt(2);
+		
+		p = (double)nTails / n;
+	}
+}
+```
+
+>**Çözüm-2:** İleride daha iyisi yazılabilecektir
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		CoinTailSimulationApp.run();
+	}
+}
+
+
+class CoinTailSimulationApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input throw count:");
+		int n = kb.nextInt();
+		
+		CoinTailSimulation cts = new CoinTailSimulation(n);
+		
+	
+		cts.run();
+		
+		System.out.printf("Throw Count:%d%n", cts.n);
+		System.out.printf("Number of tails:%d%n", cts.nTails);
+		System.out.printf("p = %f%n", cts.p);
+	}
+}
+
+
+class CoinTailSimulation {
+	public double p;
+	public int n;
+	public int nTails;
+	
+	public CoinTailSimulation(int count)
+	{
+		n = count;
+	}
+	
+	public void run()
+	{
+		java.util.Random r = new java.util.Random();
+		
+		for (int i = 0; i < n; ++i)
+			if (r.nextBoolean())
+				++nTails;
+		
+		p = (double)nTails / n;
+	}
+}
+```
+
+>**Sınıf Çalışması:** Hilesiz iki zarın atılması oyununda çift (ikisinin de aynı) gelme olasılığını yaklaşık olarak hesaplayan basit simülasyon programını yazınız.
 
