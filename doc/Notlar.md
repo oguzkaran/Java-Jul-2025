@@ -13287,7 +13287,6 @@ class PointCtorsTest {
 ```
 
 ```java
-
 class Point {
 	public double x, y;
 	
@@ -13372,12 +13371,7 @@ class Complex {
 	
 	public static Complex add(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
 	{
-		Complex z = new Complex();
-		
-		z.real = a1 + a2;
-		z.imag = b1 + b2;
-		
-		return z;
+		return new Complex(a1 + a2, b1 + b2);
 	}
 	
 	public static Complex subtract(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
@@ -13387,12 +13381,7 @@ class Complex {
 	
 	public static Complex multiply(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
 	{
-		Complex z = new Complex();
-		
-		z.real = a1 * a2 - b1 * b2;
-		z.imag = a1 * b2 + a2 * b1;
-		
-		return z;		
+		return new Complex(a1 * a2 - b1 * b2, a1 * b2 + a2 * b1);		
 	}
 	
 	public static Complex divide(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
@@ -13458,8 +13447,7 @@ class Complex {
 	{
 		return add(val, 0, z.real, z.imag);
 	}
-	
-	
+
 	public Complex subtract(Complex other)
 	{
 		return subtract(real, imag, other.real, other.imag);
@@ -13781,7 +13769,7 @@ class App {
 
 >**Sınıf Çalışması:** Hilesiz bir paranın yazı gelmesi olasılığını yaklaşık olarak hesaplayan basit bir simülasyon programını yazınız
 
->**Çözüm-1:** İleride daha iyisi yazılabilecektir
+>**Çözüm-1:** İleride daha iyisi yazılabilecektir.
 
 ```java
 package csd;
@@ -13836,7 +13824,7 @@ class CoinTailSimulation {
 }
 ```
 
->**Çözüm-2:** İleride daha iyisi yazılabilecektir
+>**Çözüm-2:** İleride daha iyisi yazılabilecektir.
 
 ```java
 package csd;
@@ -13892,5 +13880,197 @@ class CoinTailSimulation {
 }
 ```
 
+###### 28 Ocak 2026
+
 >**Sınıf Çalışması:** Hilesiz iki zarın atılması oyununda çift (ikisinin de aynı) gelme olasılığını yaklaşık olarak hesaplayan basit simülasyon programını yazınız.
+
+
+>**Çözüm:** İleride daha iyisi yazılabilecektir.
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		SameDiceSimulationApp.run();
+	}
+}
+
+
+class SameDiceSimulationApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input throw count:");
+		int n = kb.nextInt();
+		
+		SameDiceSimulation sds = new SameDiceSimulation(n);
+		
+	
+		sds.run();
+		
+		System.out.printf("Throw Count:%d%n", sds.n);
+		System.out.printf("Number of tails:%d%n", sds.nSameDice);
+		System.out.printf("p = %f%n", sds.p);
+	}
+}
+
+
+class SameDiceSimulation {
+	public double p;
+	public int n;
+	public int nSameDice;
+	
+	public SameDiceSimulation(int count)
+	{
+		n = count;
+	}
+	
+	public static boolean areSame(java.util.Random r)
+	{
+		return r.nextInt(1, 7) == r.nextInt(1, 7);
+	}
+	
+	
+	public void run()
+	{
+		java.util.Random r = new java.util.Random();
+		
+		for (int i = 0; i < n; ++i)
+			if (areSame(r))
+				++nSameDice;
+		
+		p = (double)nSameDice / n;
+	}
+}
+```
+
+>Tohum değeri her üretimde bir algoritmaya göre güncellendiğinden aynı üretim, aynı tohum başlatılırsa, aynı dizilim elde edilir. Örneğin bir programda 10 tane `[1, 99]` aralığı içerisinde rassal olarak tamsayı üretiliyorsa program aynı tohum değeri için aynı sayıları aynı dizilimde (yani aynı sırada) üretir. Randam sınıfının tohum değeri alan parametreli ctor'u ile rassal sayı üretimine ilişkin tohum değeri verilebilir. Ayrıca Random sınıfının setSeed metodu ile de tohum değeri belirlenebilir. Random sınıfında tohum değeri long türden verilebilmektedir. Pek çok uygulama tohum değerinin her nesne için mümkün olduğunca farklı olması istense de bazı uygulamalarda tohum değerinin belirlenmesi gerekebilir. Örneğin, bir resim içerisine, resme gözle bakıldığında değişikliklerin algılanamayacağı biçimde bir yazı gizlemek için yazının bitleri rassal olarak belirlenen pixel'lere yazılabilir. Bu durumda resimde gizlenmiş olan yazının elde edilebilmesi için aynı pixel'lerin üretilmesi gerekir yani aynı tohum değeri ile yazı resimden elde edilebilir. Yazının gizlenme detaylarını bir tarafa bırakırsak böyle bir senaryoda Random sınıfı tohum değeri verilecek biçimde kullanılmalıdır. Aksi durumda aynı pixel'ler üretilemeyeceğinden gizlenen yazı resimden elde edilemez. 
+
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input seed value:");
+		long seed = kb.nextLong();
+		
+		java.util.Random r = new java.util.Random(seed);
+		
+		for (int i = 0; i < 10; ++i)
+			System.out.printf("%d ", r.nextInt(100));
+		
+		System.out.println();	
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		DemoRandomPointGeneratorApp.run();
+	}
+}
+
+
+class DemoRandomPointGeneratorApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		System.out.print("Input count and seed value:");		
+		int count = kb.nextInt();
+		long seed = kb.nextLong();
+		
+		r.setSeed(seed);
+		
+		while (count-- > 0) {
+			Point p = PointUtil.createRandomPoint(r, -100, 100);
+			
+			p.print();
+		}		
+	}
+}
+
+class PointUtil {
+	public static Point createRandomPoint(java.util.Random r, double origin, double bound)
+	{
+		return new Point(r.nextDouble(origin, bound), r.nextDouble(origin, bound));
+	}
+}
+
+class Point {
+	public double x, y;
+	
+	public Point()
+	{		
+	}
+	
+	public Point(double a)
+	{
+		x = a;
+	}
+	
+	public Point(double a, double b)
+	{
+		x = a;
+		y = b;
+	}
+
+	public double euclideanDistance()
+	{
+		return euclideanDistance(0, 0);
+	}
+	
+	public double euclideanDistance(double a, double b)
+	{
+		return Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
+	}
+	
+	public double euclideanDistance(Point other)
+	{
+		return euclideanDistance(other.x, other.y);
+	}	
+	
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+	
+	public void offset(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+	
+	public void print()
+	{
+		System.out.printf("(%f, %f)%n", x, y);
+	}
+}
+```
+
+>Random sınıfının diğer önemli bazı metotları konular içerisinde ele alınacaktır.
+
+##### Immutable Sınıflar
+
+>Bir nesnenin içerisi yani genel olarak non-static veri elemanları, nesne yaratıldıktan sonra sınıfı kullanan programcı tarafından değiştirilemiyor ise başka bir deyişle bir nesneye ilişkin non-static veri elemanları bir kez değer alabiliyor ise, bu tarz nesnelerin yaratıldığı sınıflara **immutable classes** denir. Pek çok immutable sınıfın non-static veri elemanları içsel olarak da bir kez değer alırlar. Bir sınıfın immutable olarak nasıl yazılabileceği ileride ele alınacaktır. Genel olarak bir sınıfın dokümantasyonunda sınıfın immutable olduğu belirtilir, belirtilmeyen sınıflar yine genel olarak immutable değildir ya da sınıfın elemanlarında immutable olup olmadığı anlaşılabilir.
+
+##### Yazılarlar İşlemler
+
+
 
