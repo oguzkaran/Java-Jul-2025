@@ -14070,7 +14070,184 @@ class Point {
 
 >Bir nesnenin içerisi yani genel olarak non-static veri elemanları, nesne yaratıldıktan sonra sınıfı kullanan programcı tarafından değiştirilemiyor ise başka bir deyişle bir nesneye ilişkin non-static veri elemanları bir kez değer alabiliyor ise, bu tarz nesnelerin yaratıldığı sınıflara **immutable classes** denir. Pek çok immutable sınıfın non-static veri elemanları içsel olarak da bir kez değer alırlar. Bir sınıfın immutable olarak nasıl yazılabileceği ileride ele alınacaktır. Genel olarak bir sınıfın dokümantasyonunda sınıfın immutable olduğu belirtilir, belirtilmeyen sınıflar yine genel olarak immutable değildir ya da sınıfın elemanlarında immutable olup olmadığı anlaşılabilir.
 
-##### Yazılarlar İşlemler
+###### 2 Şubat 2026
+
+##### Yazılarla İşlemler
+
+>Yazılarla işlemler programlamada çok fazla yapılmaktadır. İrili ufaklı pek çok program içerisinde bir şekilde yazılar kullanılmaktadır. Programlamada, karakterlerden oluşan bir topluluğa ya da genel olarak yazılara **string** terimi karşılık getirilmektedir. Java'da yazı işlemlerinde kullanılabilen en temel sınıf `java.lang.String` isimli sınıftır. JavaSE'de yazılarla işlem yapan başka sınıflar da vardır ancak bunların hemen hepsi String sınıfına yardımcı sınıflardır. 
+
+**Anahtar Notlar:** `java.lang` paketi içerisinde bulunan bir UDT ismi, herhangi bir bildirim yapmadan doğrudan kullanılabilir. Örneğin, `String, System` gibi sınıflar bu paket içerisinde bulunduklarından isimleri doğrudan kullanılabilmektedir. Ancak örneğin Random sınıfı `java.util` paketi içerisinde olduğundan isminin doğrudan kullanılabilmesi yani deleyici tarafından bulunabilmesi için ileride detaylı olarak ele alacağımız bazı bildirimlerin yapılmış olması gerekir. Aksi durumda paket ismi ile erişilmelidir.
+
+>Derleyici bir string literal gördüğünde ve bu string literal'ı ilk kez gördüğünde şu şekilde kod üretir: **String türden bir nesne yarat ve string literal içerisindeki karakterleri bu String nesnesi ile tutulabilecek duruma getir ve String nesnesinin adresini (referansını) ver.** `print` ve `println` metotlarının `String` parametreli overload'ları aldıkları `String` referansına ilişkin yazıyı ekrana basarlar. `printf` metodu `s` format karakteri ile (yani `%s` yer tutucusu kullanılarak) karşılık geldiği `String` referansına ilişkin yazıyı ekranam basar.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
 
 
+class App {
+	public static void main(String [] args) 
+	{		
+		String s = "zonguldak";
+		
+		System.out.println(s);
+		System.out.printf("City:%s%n", s);
+	}
+}
+```
 
+>`Scanner` sınıfının `nextLine` isimli metodu klavyeden `enter` girilene kadar alınan yazı için (enter hariç) bir `String` nesnesi yaratır ve onun referansına geri döner.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a text:");
+		String s = kb.nextLine();
+	
+		System.out.printf("Text:%s%n", s);
+	}
+}
+```
+
+>Bir `String` nesnesine ilişkin yazının her bir karakterinin ilki sıfır olmak üzere birer indeks numarası vardır. String sınıfının `charAt` isimli metodu parametresi ile aldığı indeks numarasındaki karaktere geri döner (yani geri dönüş değeri char türdendir). Metoda pozitif ya da negatif bakımdan sınırlar dışında bir indeks numarası verildiğinde exception oluşur. Programlamada yazının karakterlerinin sayısına yani kaç karakterden oluştuğu bilgisine yazının **uzunluğu (length)** denir. Yazının uzunluğu sınıfın `length` metodu ile elde edilebilir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a text:");
+		String s = kb.nextLine();
+	
+		System.out.printf("Length:%d%n", s.length());
+		
+		for (int i = 0; i < s.length(); ++i)
+			System.out.printf("%c ", s.charAt(i));
+		
+		System.out.println();
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a text:");
+		String s = kb.nextLine();
+	
+		System.out.printf("Length:%d%n", s.length());
+		
+		char ch = s.charAt(5);
+		
+		System.out.printf("ch = %c%n", ch);
+	}
+}
+```
+
+>String sınıfı `immutable` bir sınıftır. Yani, bir String nesnesine ilişkin yazı değiştirilemez. Sınıfın, yazıda değişiklik yapan metotları, değiştirilmiş yazıya ilişkin yeni bir String nesnesinin referansına geri dönerler. Örneğin `toLowerCase` metodu yazının tüm karakterlerini küçük harf yapmak (yani küçültmek) için kullanılır. Bu metot değiştirilmiş yazıya ilişkin yeni bir String nesnesinin referansına geri döner.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a text:");
+		String s = kb.nextLine();
+		String lower;
+		
+		lower = s.toLowerCase();
+		
+		System.out.printf("Text:%s%n", s);
+		System.out.printf("Lower Text:%s%n", lower);
+	}
+}
+```
+>String sınıfının `toUpperCase` metodu yazının tüm karakterlerini büyütür.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a text:");
+		String s = kb.nextLine();
+		String upper;
+		
+		upper = s.toUpperCase();
+		
+		System.out.printf("Text:%s%n", s);
+		System.out.printf("Upper Text:%s%n", upper);
+	}
+}
+```
+>Aşağıdaki demo örnekte girilen yazı `MANTIKSAL` olarak küçültülmüştür. Şüphesiz aslında teknik olarak s referansı ilgili nesneden kopartılıp yeni nesneyi gösterir duruma getirilmiştir.
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a text:");
+		String s = kb.nextLine();
+		
+		
+		s = s.toLowerCase();
+		
+		System.out.printf("Text:%s%n", s);
+	}
+}
+```
+
+**Anahtar Notlar:** toLowerCase ve toUpperCase metotlarının parametreli overload'ları bu bölümde ele alınmayacaktır.
+
+>Peki, bir String nesnesi ilgili yazıyı nasıl tutar? Öncelikle yazının karakterleri (yani kendisi) String nesnesinin içerisinde tutulamaz. Aynı türden nesnelerin uzunluklarının aynı olduğunu anımsanyınız. Aslında bir String nesnesi içerisinde yazıya ilişkin alanın adresi tutulur. Yaılara ilişkin alanların nerede yaratıldığı sistem sisteme değişiklik göstermektedir. Bu anlamda String sınıfı yazı işlemlerini daha aşağı seviyede (native) yapmaktadır. Bu durumda yazıya ilişkin alan içsel olarak sistemden sisteme farklı olabilecek şekilde (ve bölgede) yaratılır. Bir yazının tutuluşuna ilişkin 
+
+```java
+String s1 = "zongudak";
+String s2 = "ankara";
+```
+
+yazıları ve `s1, s2` yerel referans değişkenleri için belleğin temsili durumu aşağıdaki gibidir:
+
+![string-memory-internal](./media/string-memory-internal.png)
+
+>Burada `içsel bellek alanı` sistemden sisteme farklı olabilmektedir.
