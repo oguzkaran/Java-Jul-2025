@@ -14078,7 +14078,7 @@ class Point {
 
 **Anahtar Notlar:** `java.lang` paketi içerisinde bulunan bir UDT ismi, herhangi bir bildirim yapmadan doğrudan kullanılabilir. Örneğin, `String, System` gibi sınıflar bu paket içerisinde bulunduklarından isimleri doğrudan kullanılabilmektedir. Ancak örneğin Random sınıfı `java.util` paketi içerisinde olduğundan isminin doğrudan kullanılabilmesi yani deleyici tarafından bulunabilmesi için ileride detaylı olarak ele alacağımız bazı bildirimlerin yapılmış olması gerekir. Aksi durumda paket ismi ile erişilmelidir.
 
->Derleyici bir string literal gördüğünde ve bu string literal'ı ilk kez gördüğünde şu şekilde kod üretir: **String türden bir nesne yarat ve string literal içerisindeki karakterleri bu String nesnesi ile tutulabilecek duruma getir ve String nesnesinin adresini (referansını) ver.** `print` ve `println` metotlarının `String` parametreli overload'ları aldıkları `String` referansına ilişkin yazıyı ekrana basarlar. `printf` metodu `s` format karakteri ile (yani `%s` yer tutucusu kullanılarak) karşılık geldiği `String` referansına ilişkin yazıyı ekranam basar.
+>Derleyici bir string literal gördüğünde ve bu string literal'ı ilk kez gürüyorsa şu şekilde kod üretir: **String türden bir nesne yarat ve string literal içerisindeki karakterleri bu String nesnesi ile tutulabilecek duruma getir ve String nesnesinin adresini (referansını) ver.** `print` ve `println` metotlarının `String` parametreli overload'ları aldıkları `String` referansına ilişkin yazıyı ekrana basarlar. `printf` metodu `s` format karakteri ile (yani `%s` yer tutucusu kullanılarak) karşılık geldiği `String` referansına ilişkin yazıyı ekranam basar.
 
 >Aşağıdaki demo örneği inceleyiniz
 
@@ -14251,3 +14251,372 @@ yazıları ve `s1, s2` yerel referans değişkenleri için belleğin temsili dur
 ![string-memory-internal](./media/string-memory-internal.png)
 
 >Burada `içsel bellek alanı` sistemden sisteme farklı olabilmektedir.
+
+
+###### 4 Şubat 2026
+
+>Aynı türden referanslar `==` ve `!=` operatörleri ile karşılaştırma işlemine sokulabilir. Farklı türden referanslar bu operatörler ile işleme sokulduğunda error oluşur. Aynı türden referansların bu operatörler ile işleme sokulması aynı nesneyi gösterip göstermediğinin karşılaştırılmasıdır. Yani, bu operatörler ile karşılaştırma nesne içeriklerinin karşılaştırılması değil, adres karşılaştırmasıdır
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		Sample s1;
+		Sample s2; 
+		
+		s1 = new Sample(10);
+		s2 = s1; //new Sample(10);
+		
+		System.out.println(s1 == s2 ? "Aynı nesne" : "Farklı nesneler");
+		System.out.println(s1 != s2 ? "Farklı nesneler" : "Aynı nesne");
+	}
+}
+
+class Sample {
+	public int x;
+	
+	public Sample(int a)
+	{
+		x = a;
+	}
+	//...
+}
+```
+
+>Aşağıdaki demo örnekte iki yazının özdeşlik (yani karşılıklı tüm karakterlerinin aynı olması) karşılaştırması değil, referans karşılaştırması yapılmıştır. Bu durumda hangi yazılar girilirse girilsin `==` operatörü `false` değerini üretecektir
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input first text:");
+		String s1 = kb.nextLine();
+		
+		System.out.print("Input second text:");
+		String s2 = kb.nextLine();
+		
+		System.out.println(s1 == s2 ? "Same" : "Different");
+	}
+}
+```
+
+>İki yazının özdeğişlik karşılaştırması String sınıfının `equals` metodu ile yapılabilir. Bu metot `case-sensitive` karşılaştırma yapar.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input first text:");
+		String s1 = kb.nextLine();
+		
+		System.out.print("Input second text:");
+		String s2 = kb.nextLine();
+		
+		System.out.println(s1.equals(s2) ? "Same" : "Different");
+	}
+}
+
+```
+
+**Anahtar Notlar:** equals metodunun parametresi `java.lang.Object` türündendir. Bu tür ve bu türe `String` bir referansın nasıl argüman olarak verilebildiği, başka bir deyişle nasıl atanabildiği ileride ele alınacaktır.
+
+>İki yazının `case-insensitive` olarak özedeşlik karşılaştırması `equalsIgnoreCase` metodu ile yapılabilir.
+
+>>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input first text:");
+		String s1 = kb.nextLine();
+		
+		System.out.print("Input second text:");
+		String s2 = kb.nextLine();
+		
+		System.out.println(s1.equalsIgnoreCase(s2) ? "Same" : "Different");
+	}
+}
+
+```
+
+>Derleyici, özdeş string literall'lar için aynı adresin verileceği kodları üretir. Yani, özdeş string literal'lar için bir tane nesne yaratılmış olur.
+
+>Aşağıdaki demo örnekte `s1 == s2` karşılaştırması sonucunda true değeri üretilir
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		String s1 = "ankara";
+		String s2 = "ankara";
+		
+		System.out.println(s1 == s2 ? "Same object" : "Different objects");
+	}
+}
+
+```
+
+>String sınıfının `concat` metodu ile yazı birleştimesi (concatenation) yapılabilir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input first text:");
+			String s1 = kb.nextLine();
+			
+			if ("exit".equals(s1))
+				break;
+			
+			System.out.print("Input second text:");
+			String s2 = kb.nextLine();
+			
+			String s = s1.concat(s2);
+			
+			System.out.printf("Full text:%s%n", s);			
+		}
+		
+		System.out.println("C and System Programmers Association");
+	}
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input first text:");
+			String s1 = kb.nextLine();
+			
+			if ("exit".equals(s1))
+				break;
+			
+			System.out.print("Input second text:");
+			String s2 = kb.nextLine();
+			
+			String s = s1.concat(" ".concat(s2));
+			
+			System.out.printf("Full text:%s%n", s);			
+		}
+		
+		System.out.println("C and System Programmers Association");
+	}
+}
+
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input first text:");
+			String s1 = kb.nextLine();
+			
+			if ("exit".equals(s1))
+				break;
+			
+			System.out.print("Input second text:");
+			String s2 = kb.nextLine();
+			
+			String s = s1.concat(" ").concat(s2);
+			
+			System.out.printf("Full text:%s%n", s);			
+		}
+		
+		System.out.println("C and System Programmers Association");
+	}
+}
+
+```
+
+>`+` operatörünün operandları String türündense, bu durumda yazı birleştirmesi yapılır, birleştirilmiş yazıya ilişkin String referansı üretilir
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input first text:");
+			String s1 = kb.nextLine();
+			
+			if ("exit".equals(s1))
+				break;
+			
+			System.out.print("Input second text:");
+			String s2 = kb.nextLine();
+			
+			String s = s1 + " " + s2;
+			
+			System.out.printf("Full text:%s%n", s);			
+		}
+		
+		System.out.println("C and System Programmers Association");
+	}
+}
+
+```
+
+>`+` operatörünün bir operandı String türündense (diğeri farklı bir türdense), diğer operandın yazı karşıığı elde edilerek birleştirme işlemi yapılır. String türden olmayan operandının yazı karşılığının nasıl elde edildiği yani derleyicinin ürettiği kod ileride ele alınacaktır. Yazı karşılığı tür dönüştürme operatörü ile elde edilemez.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input station name:");
+			String name = kb.nextLine();
+			
+			if ("exit".equals(name))
+				break;
+			
+			System.out.print("Input degree:");
+			double degree = Double.parseDouble(kb.nextLine());
+			
+			String message;
+			
+			message = name + ": " + degree;
+			
+			System.out.println(message);			
+		}
+		
+		System.out.println("C and System Programmers Association");
+	}
+}
+
+```
+
+>**Soru:** Aşağıdaki kodda ekran çıktısı nedir:
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		System.out.println("Java" + 2 + 1); 
+		System.out.println(2 + 1 + "Java");
+	}
+}
+
+```
+
+**Ekran çıktısı:**
+
+```
+Java21
+3Java
+```
+
+>Uzunluğu sıfır olan yani hiç bir karakter içermeyen bir yazıya **boş string(empty string)** denir. Boş string oluşturmak için en kolay yol iki tane iki tırnağın yan yana getirilmesiyle oluşan string literal'ı yazmaktır
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		String s = "";
+		
+		System.out.printf("Length:%d%n", s.length());
+	}
+}
+
+```
+
+>Bir string'in boş olup olmadığı çeşitli biçimlerde anlaşılabilir. Örneğin, uzunluk bilgisine bakılabilir ya da örneğin `""` ile özdeşlik kontrolü (equals metodu ile) yapılabilir. Pratikte çok kullanıldığından String sınıfında yazının boş string olup olmadığını test eden `isEmpty` isimli bir metot bulunur. Bu durumda hem okunabilirlirlik/algılanabilirlik hem de kolay yazım açısından boş string kontrolü `isEmpty`ile yapılmalıdır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Input text:");
+			String s = kb.nextLine();
+			
+			if ("exit".equals(s))
+				break;
+			
+			if (!s.isEmpty())
+				System.out.printf("Text:[%s]%n", s);
+			else
+				System.out.println("You can not input empty string!...");
+		}
+		
+		System.out.println("C and System Programmers Association");
+	}
+}
+```
+
+
+
