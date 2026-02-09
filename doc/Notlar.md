@@ -14618,5 +14618,248 @@ class App {
 }
 ```
 
+###### 9 Şubat 2026
+
+>String sınıfının `substring` metotları yazının belli bir kısmını elde etmek için kullanılır. Bu metodun tek parametreli overload'u aldığı indeks numarasından itibaren yazının sonuna kadar olan yazıya geri döner, iki parametreli overload'u `[beginIndex, endIndex)` aralığındaki yazıya geri döner. 
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		String s = "ankara";
+		
+		System.out.println(s.substring(2)); //kara
+		System.out.println(s.substring(2, 5)); //kar
+	}
+}
+```
+
+>substring metodunun tek parametreli overloasd'una yazının uzunluğu indeks olarak verildiğinde boş string'e geri döner. Yazının sınırları dışında kalan tüm diğer indeks numaraları için exception oluşur. substring metodunun iki parametreli overload'una yazı sınırları içerisinde olması koşuşuyla beginIndex ve endIndex değerleri aynı verildiğinde boş string'e geri döner. Verilen indeks değeri yazı sınırları içerisinde değilse (uzunluğu eşit olabilir) exception oluşur.
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input a text:");
+		String s = kb.nextLine();
+		
+		System.out.printf("Text:%s%n", s);		
+		System.out.println(s.substring(s.length()).isEmpty() ? "Empty string" : "Non-empty string");
+		System.out.println(s.substring(s.length(), s.length()).isEmpty() ? "Empty string" : "Non-empty string");
+	}
+}
+
+```
+>**Sınıf Çalışması:** Klavyeden `exit` girilene kadar alınan yazıları aralarında `:` karakteri olacak şekilde birleştirilmiş yeni bir yazı elde eden programı aşağıdaki açıklamalara göre yazınız
+>
+>**Açıklamalar:** 
+>- Programda dizi kullanılmayacaktır. Zaten gerek de yoktur.
+>- Boş string yazıya dahil edilemeyecektir.
+>- `:` karakteri elde edilen yazıda yalnızca girilmiş olan yazıların arasında bulunacaktır, başında veya sonunda bulunmayacaktır.
+>**Not:** İleride daha iyisi yazılacaktır.
+
+>**Çözüm-1:**
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		JoinWithColonApp.run();
+	}
+}
+
+class JoinWithColonApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		String str = "";
+		
+		while (true) {
+			System.out.print("Input text:");
+			String s = kb.nextLine();
+			
+			if ("exit".equals(s))
+				break;
+			
+			if (s.isEmpty())
+				continue;
+			
+			if (!str.isEmpty())
+				str += ":";
+			
+			str += s;
+		}
+		
+		System.out.printf("[%s]%n", str);	
+	}
+}
+
+```
+
+>**Çözüm-2:** İlk çözüme göre daha efektif sayılabilir.
+
+```java
+package csd;
+
+
+class App {
+	public static void main(String [] args) 
+	{		
+		JoinWithColonApp.run();
+	}
+}
+
+class JoinWithColonApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		String str = "";
+		
+		while (true) {
+			System.out.print("Input text:");
+			String s = kb.nextLine();
+			
+			if ("exit".equals(s))
+				break;
+			
+			if (s.isEmpty())
+				continue;
+		
+			str += s + ':';
+		}
+		
+		if (!str.isEmpty())
+			str = str.substring(0, str.length() - 1);
+		
+		System.out.printf("[%s]%n", str);	
+	}
+}
+
+```
+>String sınıfının bir yazı içerisinde bir karakteri ya da bir yazıyı aramak için kullanılan `indexOf` metotları bulunur. Bu metotlar ilk bulduklarının indeks numarasına geri dönerler, bulamazlarsa -1 değerine geri dönerler. Bu metotlar ve özet açıklamaları şu şekildedir:
+>**1. indexOf(int ch):** Yazı içerisinde parametresi ile aldığı karakteri arar, ilk bulduğunun indeks numarasına geri döner.
+>
+>**2. indexOf(int ch, int fromIndex):** Yazı içerisinde parametresi ile aldığı karakteri, ikinci parametresi ile aldığı karakterden itibaren arar ve ilk bulduğunun indeks numarasına geri döner.1
+
+>**3. indexOf(String str):** Yazı içerisinde parametresi ile aldığı yazıyı arar, ilk bulduğunun ilk karakterinin indeks numarasına geri döner.
+>
+>**4. indexOf(String str, int fromIndex):** Yazı içerisinde parametresi ile aldığı yazıyı, ikinci parametresi ile aldığı karakterden itibaren arar ve ilk bulduğunun ilk karakterinin indeks numarasına geri döner.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+        String s = "Bugün hava çok güzel, çok çok güzel";
+        
+        System.out.printf("Indeks: %d%n", s.indexOf('ç'));
+        System.out.printf("Indeks: %d%n", s.indexOf('ç', 12));
+        System.out.printf("Indeks: %d%n", s.indexOf('ç', 27));
+        
+        System.out.printf("Indeks: %d%n", s.indexOf("çok"));
+        System.out.printf("Indeks: %d%n", s.indexOf("çok", 12));
+        System.out.printf("Indeks: %d%n", s.indexOf("çok", 27));
+    }
+}
+```
+
+>Sınıfın `lastIndexOf` metotları aramayı sondan itibaren yaparak, sondan ilk bulduklarına ilişkin indeks numarasına geri dönerler. Bulamadıkları durumda -1 değerine geri dönerler.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+        String s = "Bugün hava çok güzel, çok çok güzel";
+        
+        System.out.printf("Indeks: %d%n", s.lastIndexOf('ç'));
+        System.out.printf("Indeks: %d%n", s.lastIndexOf('ç', 12));
+        System.out.printf("Indeks: %d%n", s.lastIndexOf('ç', 27));
+        
+        System.out.printf("Indeks: %d%n", s.lastIndexOf("çok"));
+        System.out.printf("Indeks: %d%n", s.lastIndexOf("çok", 12));
+        System.out.printf("Indeks: %d%n", s.lastIndexOf("çok", 27));
+    }
+}
+
+```
+
+>**Sınıf Çalışması:** Parametresi ile ile aldığı yol ifadesine (path) ilişkin dosya ismini verelen getFileName metodunu FileUtil isimli sınıf içerisinde aşağıdaki açıklamalara göre yazınız.
+
+>**Açıklamalar:**
+>- Dosya yol ifadesi, işletim sistemine göre `\` ya da `/` ile ayrılan yazıların birleşimdir.
+>
+>- Metoda geçilen argümalar ve elde edilecek isimlere ilişkin bazı örnekler şunlardı:
+`C:\windows\test\default.json` yol ifadesinde `default.json` ismine geri dönecektir.
+
+`default.json` yol ifadesinde `default.json` ismine geri dönecektir.
+
+`/home/study/default.json` yol ifadesinde `default.json` ismine geri dönecektir.
+
+>**Not:** İleride daha iyisi yazılacaktır.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	FileUtilGetFilenameTest.run();
+    }
+}
+
+
+class FileUtilGetFilenameTest {
+	public static void run()
+	{
+		System.out.println(FileUtil.getFilename("C:\\windows\\test\\default.json"));
+		System.out.println(FileUtil.getFilename("default.json"));
+		System.out.println(FileUtil.getFilename("/home/study/default.json"));
+	}
+}
+
+
+class FileUtil {
+	public static String getFilename(String path)
+	{
+		int idx = path.lastIndexOf('/');
+		
+		if (idx != -1)
+			return path.substring(idx + 1);
+		
+		idx = path.lastIndexOf('\\');
+		
+		return path.substring(idx + 1);
+	}
+}
+```
+
+>**Sınıf Çalışması:** Yukarıdaki metodu `/home/study/default.json/` biçimindeki bir yol ifadesi için yine `default.json` ismine geri dönecek şekilde düzenleyiniz. Burada yine `\` da kullanılabilecektir.
+
+>**Sınıf Çalışması:** Parametresi ile aldığı iki yazıdan birinci içerisinde ikincisinden kaç tane olduğu bilgisine geri dönen (yoksa sıfır değerine geri dönecektir) `countString` isimli metodu `StringUtil` sınıfı içerisinde yazınız ve test ediniz. 
+>**Açıklamalar:**
+>
+>- Metot, örneğin `Bugün hava çok güzel, çok çok güzel` yazısından `çok` yazısı aranıyorsa 3 değerine geri dönecektir.
+>
+>- Metot case-sensitive olarak işlem yapacaktır.  
+
 
 
