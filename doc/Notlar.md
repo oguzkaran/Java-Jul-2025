@@ -212,6 +212,7 @@ System.out.println("Hello, world")
 **Anahtar Notlar:** Derleme işlemi genel olarak **atomlara ayırma (tokenizing)** ile başlar.
 
 **Anahtar Notlar:** Klavyeden basıldığında boşluk algısı yaratan karakterlere **whitespaces** denir. Klavyeden tuşlanabilen tipik `whitespaces` şunlardır: `SPACE, TAB(ULAR), ENTER`.
+
 ###### 11 Ağustos 2025
 
 >Java'da kod yazım kuralları şu şekilde özetlenebilir:
@@ -14852,7 +14853,7 @@ class FileUtil {
 }
 ```
 
->**Sınıf Çalışması:** Yukarıdaki metodu `/home/study/default.json/` biçimindeki bir yol ifadesi için yine `default.json` ismine geri dönecek şekilde düzenleyiniz. Burada yine `\` da kullanılabilecektir.
+###### 11 Şubat 2026
 
 >**Sınıf Çalışması:** Parametresi ile aldığı iki yazıdan birinci içerisinde ikincisinden kaç tane olduğu bilgisine geri dönen (yoksa sıfır değerine geri dönecektir) `countString` isimli metodu `StringUtil` sınıfı içerisinde yazınız ve test ediniz. 
 >**Açıklamalar:**
@@ -14860,6 +14861,287 @@ class FileUtil {
 >- Metot, örneğin `Bugün hava çok güzel, çok çok güzel` yazısından `çok` yazısı aranıyorsa 3 değerine geri dönecektir.
 >
 >- Metot case-sensitive olarak işlem yapacaktır.  
+>
+>**Not:** İleride daha iyisi yazılabilecektir.
+
+>**Çözüm-1:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilCountStringTest.run();
+    }
+}
+
+
+class StringUtilCountStringTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.countString("Bugün hava çok güzel, çok çok güzel", "çok") == 3);
+		System.out.println(StringUtil.countString("Bugün hava çok güzel, çok çok güzel", "Çok") == 0);
+		System.out.println(StringUtil.countString("aaa", "aa") == 2);
+	}
+}
+
+
+class StringUtil {
+	public static int countString(String s1, String s2)
+	{
+		int count = 0;
+		int idx = 0;
+		
+		while ((idx = s1.indexOf(s2, idx)) != -1) {
+			++count;
+			++idx;
+		}
+		
+		
+		return count;
+	}
+}
+```
+
+
+>**Çözüm-2:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilCountStringTest.run();
+    }
+}
+
+
+class StringUtilCountStringTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.countString("Bugün hava çok güzel, çok çok güzel", "çok") == 3);
+		System.out.println(StringUtil.countString("Bugün hava çok güzel, çok çok güzel", "Çok") == 0);
+		System.out.println(StringUtil.countString("aaa", "aa") == 2);
+	}
+}
+
+
+class StringUtil {
+	public static int countString(String s1, String s2)
+	{
+		int count = 0;
+		int idx = -1;
+		
+		while ((idx = s1.indexOf(s2, idx + 1)) != -1)
+			++count;
+		
+		return count;
+	}
+}
+```
+
+>**Çözüm-3:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilCountStringTest.run();
+    }
+}
+
+
+class StringUtilCountStringTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.countString("Bugün hava çok güzel, çok çok güzel", "çok") == 3);
+		System.out.println(StringUtil.countString("Bugün hava çok güzel, çok çok güzel", "Çok") == 0);
+		System.out.println(StringUtil.countString("aaa", "aa") == 2);
+	}
+}
+
+
+class StringUtil {
+	public static int countString(String s1, String s2)
+	{
+		int count = 0;
+		
+		for (int idx = 0; (idx = s1.indexOf(s2, idx)) != -1; ++count, ++idx)
+			;
+		
+		return count;
+	}
+}
+
+```
+>**Çözüm-4:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilCountStringTest.run();
+    }
+}
+
+
+class StringUtilCountStringTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.countString("Bugün hava çok güzel, çok çok güzel", "çok") == 3);
+		System.out.println(StringUtil.countString("Bugün hava çok güzel, çok çok güzel", "Çok") == 0);
+		System.out.println(StringUtil.countString("aaa", "aa") == 2);
+	}
+}
+
+
+class StringUtil {
+	public static int countString(String s1, String s2)
+	{
+		int count = 0;
+		
+		for (int idx = -1; (idx = s1.indexOf(s2, idx + 1)) != -1; ++count)
+			;
+		
+		return count;
+	}
+}
+```
+
+**Soru:**
+>**IntegerDecimalOccurence:** String pattern matching in decimal representations of ints.
+>
+>**Task description:**
+>Two integers A and B are given. We are interested in positions at which decimal representation of A occurs as a substring in the decimal representation of B (counting from 0) For example:
+>
+>- 53 occurs in 1953786 at position 2.
+>- 78 occurs in 1953786786 at positions 4 and 7
+>- 57 does not occur in 153786.
+>
+>Decimal representations are assumed to be big-endian and without leading zeros (the only exception being the number 0, whose decimal representation is "0")
+>
+>Write function
+
+```java
+class Solution { public int solution(int A, int B); }	
+```
+
+>that, given two integers A and B, returns the leftmost position at which A occurs in B the function should return -1 if A does not occur in B.
+>
+>For example, given A = 53 and B = 195378653, the function should return 2, as explained above.
+>Assume that:	
+>- A and B are integers within the range `[0..999,999,999]`
+>
+>In your solution, focus on correctness. The performance of your solution will not be the focus of the assessment.
+
+>**Solution:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	SolutionTest.run();
+    }
+}
+
+
+class SolutionTest {
+	public static void run()
+	{
+		Solution s = new Solution();
+		
+		System.out.printf("Index: %d%n", s.solution(53, 195378653));
+		System.out.printf("Index: %d%n", s.solution(54, 195378653));
+	}
+}
+
+class Solution {
+	public int solution(int A, int B)
+	{
+		return (B + "").indexOf(A + "");
+	}
+}
+```
+
+>Java'da aşağıdaki koşullardan birini sağlayan bir karakter `whitespace` karakterdir. Tersine whitespace bir karakter aşağıdaki koşullardan birini sağlar (if and only if):
+>  	
+>- Karakter "Unicode space" karakter ve "Non-breaking space" olmayan karakterlerdendir. Unicode space karakterler şunlardır:  Space Separator, Line Separator, Paragraph Separator. Bu karakterler UNICODE'da çeşitli kategorilerdir. Detaylar burada ele alınmayacaktır. Bu karakterlere `Character` sınıfının SPACE_SEPERATOR, LINE_SEPARATOR, PARAGRAPH_SEPARATOR isimli static veri elemanları ile elde edilebilir. non-breaking space karakterler şunlardır: `\u00A0`, `\u2007`, `\u202F`
+>- `\t` 		horizontal tabulation
+>- `\n` 		line feed (LF)
+>- `\u000B` 	vertical tabulation
+>- `\f` 		form tabulation
+>- `\r` 		carriage return (CR)
+>- `\u001C` 	file separator
+>- `\u001D` 	group separator
+>- `\u001E` 	record separator
+>- `\u001F` 	unit separator
+
+
+>`java.lang`paketi içerisinde `Character` isimli sınıfın bir karakter ile çeşitli işlemler yapabilen yararlı metotları bulunur. Bu sınıfın bu tarz metotları özellikle String sınıfına yardımcı olarak düşünülebilir. Bu metotların bir grubu `isXXX` biçiminde boolean türüne geri dönen metotlardır, bir grubu `toXXX` biçiminde genel olarak dönüştürme yapan metotlardır. Bu sınıfın elemanları oldukça fazladır. Bu metotlaran bazıları şunlardır:
+>
+- `isWhiteSpace:` Karakterin whitespace karakter olup olmadığını test eder.
+> 
+- `isDigit`: Karakterin bir rakam karakteri olup olmadığını test eder.
+>
+- `isLetter`: Karakterin alfabetik bir karakter olup olmadığını test eder. 
+>
+- `isUpperCase`: Karakterin büyük harf olup olmadığını test eder.
+>
+- `isLowerCase`: Karakterin küçük harf olup olmadığını test eder. 
+>
+- `toLowerCase`: Karakterin varsa küçük karşılığını döndürür, yoksa karakterin kendisine geri döner.
+>
+- `toUpperCase`: Karakterin varsa büyük karşılığını döndürür, yoksa karakterin kendisine geri döner.
+
+>Bu sınıfa ait bir metodun genel olarak hem int hem de char parametreli overload'ları bulunur. Bu durumda int parametreli overload'lar sıra numarası (code point) 65535 (`U + FFFF`)'den büyük olan karakterler ile de kullanılabilmektedir. Sıra numarası 65535 (`U + FFFF`)'den büyük olan karaktelere **supplementary characters** denilmektedir. 
+
+>**Sınıf Çalışması:** Parametresi ile aldığı yazıyı ilk karakteri büyük geri kalan karalterleri küçük olarak şekilde çeviren ve bu yazıya geri dönen `capitalize` isimli metodu `StringUtil` sınıfı içerisinde yazınız ve test ediniz.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilCapitalizeTest.run();
+    }
+}
+
+
+class StringUtilCapitalizeTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.capitalize("bugün Hava Çok Güzel").equals("Bugün hava çok güzel"));
+		System.out.println(StringUtil.capitalize("a").equals("A"));
+		System.out.println(StringUtil.capitalize("").isEmpty());		
+		System.out.println(StringUtil.capitalize(" bugün Hava Çok Güzel").equals(" bugün hava çok güzel"));
+		System.out.println(StringUtil.capitalize(":bugün Hava Çok Güzel").equals(":bugün hava çok güzel"));
+	}
+}
+
+class StringUtil {
+	public static String capitalize(String s)
+	{
+		return s.isEmpty() ? s : Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
+	}
+}
+```
 
 
 
+>**Sınıf Çalışması:** Parametresi ile aldığı bir yazının Türkçe pangram olup olmadığını test eden `isPangramTR` ve İngilizce pangram olup olmadığını test eden `isPangramEN` isimli metotları StringUtil sınıfı içerisinde aşağıdaki açıklamalara göre yazınız ve test ediniz.
+
+>**Açıklamalar:**
+>- İlgili dilin alfabesindeki tüm karakterler kullanılarak elde edilen ve içerisinde hiç özel isim geçmeyen anlamlı cümlelere pangram denir. Örneğin, İngilizce'de tipik olarak `The quick brown fox jumps over the lazy dog`, Türkçe'de tipik olarak `Pijamalı hasta yağız şoföre çabucak güvendi.` 
+>
+>- Metotlar cümlenin anlamlı olmasına ve özel isim içerip içermediğine bakmayacaktır dolayısıyla yalnızca alfabetik karakterlerle ilgilenecektir. 
