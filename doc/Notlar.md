@@ -15117,7 +15117,6 @@ class App {
     }
 }
 
-
 class StringUtilCapitalizeTest {
 	public static void run()
 	{
@@ -15137,11 +15136,275 @@ class StringUtil {
 }
 ```
 
-
+###### 16 Şubat 2026
 
 >**Sınıf Çalışması:** Parametresi ile aldığı bir yazının Türkçe pangram olup olmadığını test eden `isPangramTR` ve İngilizce pangram olup olmadığını test eden `isPangramEN` isimli metotları StringUtil sınıfı içerisinde aşağıdaki açıklamalara göre yazınız ve test ediniz.
 
 >**Açıklamalar:**
 >- İlgili dilin alfabesindeki tüm karakterler kullanılarak elde edilen ve içerisinde hiç özel isim geçmeyen anlamlı cümlelere pangram denir. Örneğin, İngilizce'de tipik olarak `The quick brown fox jumps over the lazy dog`, Türkçe'de tipik olarak `Pijamalı hasta yağız şoföre çabucak güvendi.` 
 >
->- Metotlar cümlenin anlamlı olmasına ve özel isim içerip içermediğine bakmayacaktır dolayısıyla yalnızca alfabetik karakterlerle ilgilenecektir. 
+>- Metotlar cümlenin anlamlı olmasına ve özel isim içerip içermediğine bakmayacaktır, dolayısıyla yalnızca alfabetik karakterlerle ilgilenecektir. 
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilIsPangramTest.run();
+    }
+}
+
+class StringUtilIsPangramTest {
+	public static void run()
+	{
+		StringUtilIsPangramTRTest.run();
+		StringUtilIsPangramENTest.run();
+	}
+}
+
+class StringUtilIsPangramTRTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.isPangramTR("Pijamalı hasta yağız şoföre çabucak güvendi"));
+		System.out.println(!StringUtil.isPangramTR("Pijamalı hasta yağız şföre çabucak güvendi"));
+	}
+}
+
+class StringUtilIsPangramENTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.isPangramEN("The quick brown fox jumps over the lazy dog"));
+		System.out.println(!StringUtil.isPangramEN("The quick brown fo jumps over the lazy dog"));
+	}
+}
+
+class StringUtil {
+	public static boolean isPangramTR(String s)
+	{
+		return isPangram(s.toLowerCase(), "abcçdefgğhıijklmnoöprsştuüvyz");
+	}
+	
+	public static boolean isPangramEN(String s)
+	{
+		return isPangram(s.toLowerCase(), "abcdefghijklmnopqrstuwxvyz");
+	}
+	
+	public static boolean isPangram(String s, String alphabet)
+	{
+		for (int i = 0; i < alphabet.length(); ++i)
+			if (s.indexOf(alphabet.charAt(i)) == -1)
+				return false;
+		
+		return true;
+	}
+}
+
+```
+
+>Yukarıdaki örnekte yalnızca `isPangramEN` sorulsaydı şu çözümler de mümkün olabilirdi:
+
+>**Çözüm-1:**
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilIsPangramENTest.run();
+    }
+}
+
+class StringUtilIsPangramENTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.isPangramEN("The quick brown fox jumps over the lazy dog"));
+		System.out.println(!StringUtil.isPangramEN("The quick brown fo jumps over the lazy dog"));
+	}
+}
+
+class StringUtil {
+	public static boolean isPangramEN(String s)
+	{
+		s = s.toLowerCase();
+		for (char c = 'a'; c <= 'z'; ++c)
+			if (s.indexOf(c) == -1)
+				return false;
+		
+		return true;
+	}
+}
+
+```
+
+>**Çözüm-2:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilIsPangramENTest.run();
+    }
+}
+
+class StringUtilIsPangramENTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.isPangramEN("The quick brown fox jumps over the lazy dog"));
+		System.out.println(!StringUtil.isPangramEN("The quick brown fo jumps over the lazy dog"));
+	}
+}
+
+class StringUtil {
+	public static boolean isPangramEN(String s)
+	{
+		s = s.toLowerCase();
+		for (int i = 0; i < 26; ++i)
+			if (s.indexOf('a'+ i) == -1)
+				return false;
+		
+		return true;
+	}
+}
+
+```
+
+>String sınıfının `trim` metodu yazının başındaki (leading) ve sonundaki (trailing) boşluk karakterlerini (whitespaces) siler.  Bu metot, `[\u0000, \u0020]` aralığındaki boşluk karakleri için çalışır. Diğer boşluk karakterlerini silmez. Java 11 ile birlikte tüm boşluk karakterleri için çalışan `strip` metodu String sınıfına eklenmiştir. Java 11 ile birlikte String sınıfına `stripLeading` ve `stripTrailing` isimli, sırasıyla yalnızca baştaki boşluk karakterini ve yalnızca sondaki boşluk karakterlerini silen metotlar eklenmiştir. Bu metotlar aradaki boşluk karakterlerine dokunmazlar. Java 11 öncesi için tüm boşluk karakterleri ile çalışan `strip` tarzı metotlar bulunmadığından programcılar gerekirse bunu kendisi yazmalıdır. Java 11+ için `trim` metodu işimizi görse de `strip` metodunun çağrılması iyi bir tekniktir. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	while (true) {
+    		System.out.print("Input text:");
+    		String s = kb.nextLine();
+    		
+    		System.out.printf("{%s}%n", s.trim());
+    		System.out.printf("{%s}%n", s.strip());
+    		System.out.printf("{%s}%n", s.stripLeading());
+    		System.out.printf("{%s}%n", s.stripTrailing());
+    		
+    		
+    		if ("quit".equals(s))
+    			break;
+    	}
+    }
+}
+```
+
+>**Sınıf Çalışması:** Aşağıda prototipleri verilen metotları açıklamalara göre yazınız
+
+```java
+public static String trim(String s);
+public static String trimLeading(String s);
+public static String trimTrailing(String s);
+```
+
+>**Açıklamalar:**
+>
+>- Metotlar Java 11 öncesi için yazılacaktır
+>
+>- Metotlar sırasıyla başındaki ve sonundaki, yalnızca başındaki ve yalnızxa sonundaki boşluk karakterlerini silecektir
+>
+>- Metotlar tüm boşluk karakterleri için çalışacaktır.
+>
+>- Metotlar `StringUtil` sınıfı içeriisnde yazılacaktır.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilTrimsTest.run();
+    }
+}
+
+class StringUtilTrimsTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	while (true) {
+    		System.out.print("Input text:");
+    		String s = kb.nextLine();
+    		
+    		System.out.printf("{%s}%n", StringUtil.trim(s));
+    		System.out.printf("{%s}%n", StringUtil.trimLeading(s));
+    		System.out.printf("{%s}%n", StringUtil.trimTrailing(s));
+    		
+    		
+    		if ("quit".equals(s))
+    			break;
+    	}
+	}
+}
+
+class StringUtil {
+	public static String trim(String s)
+	{
+		return trimLeading(trimTrailing(s));
+	}
+	
+	public static String trimLeading(String s)
+	{
+		int i = 0;
+		
+		
+		for (; i < s.length() && Character.isWhitespace(s.charAt(i)); ++i)
+			;
+			
+		return s.substring(i);
+	}
+	
+	public static String trimTrailing(String s)
+	{
+		int i = s.length() - 1;
+		
+		for (; i >= 0 && Character.isWhitespace(s.charAt(i)); --i)
+			;
+		
+		return s.substring(0, i + 1);
+	}
+}
+```
+
+>String sınıfının immutable özelliğinin maliyetli olması durumunda string işlemleri için String sınıfına yardımcı, `java.lang` paketi içerisinde bulunan `StringBuilder` sınıfı kullanılabilir. Bu sınıf immutable değildir. StringBuilder sınıfının yazı üzerinde değişiklkik yapabilen pek çok yararlı metodu bulunur. StringBuilder sınıfı String sınıfına bir alternatif olarak düşünülmemelidir. Bu sınıf yardımcı bir sınıftır ve String sınıfının immutable özelliğinin dezavantaj oluşturduğu durumlarda tercih edilmelidir. Örneğin bir yazının tersini döndüren reverse metodu aşağıdaki gibi kolay bir biçimde yazılabilir:
+
+```java
+public static String reverse(String s)
+{
+	String str = "";
+	
+	for (int i = s.length() - 1; i >= 0; --i)
+		str += s.charAt(i);
+	
+	return str;
+}
+```
+
+>Burada dikkat edilirse her adımda bir String nesnesi yaratılmakta ve yaratılmış olan nesne bir sonraki adımda ilgili referanstan kopartılıp kullanılamaz duruma gelmektedir. Bu durumda, yaklaşık olarak metoda verilen yazının uzunluğu kadar String nesnesi yaratıldığından göre maliyetli olma eğilimindedir. İşte StringBuilder sınıfı ile bu maliyet ortadan kaldırılabilir.
+
+**Anahtar Notlar:** StringBuilder sınıfının pek çok metodu, çağıran StringBuilder referansına geri döner. Bu şekildeki sınıflar ve metotları, ileride ele alacağımız `fluent pattern` kavramına uygun olarak yazılmışlardır.
+
+>StringBuilder sınıfının String parametreki ctor'u ile bir String'in karakterlerinden oluşan bir StringBuilder nesnesi yaratılabilir. Sınıfın toString metodu StringBuilder nesnesine ilişkin yazının karakterlerine ilişkin bir String referansına geri döner. StringBuilder sınıfının `reverse` metodu ile yazı ters-yüz edilebilir. Bu durumda yukarıda maliyetli olarak implemente edilmiş `reverse` metodu aşağıdaki gibi en az maliyetle yazılabilir:
+
+```java
+public static String reverse(String s)
+{
+	return new StringBuilder(s).reverse().toString();
+}
+```
+
