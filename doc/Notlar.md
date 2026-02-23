@@ -15408,3 +15408,384 @@ public static String reverse(String s)
 }
 ```
 
+###### 23 Şubat 2026
+
+>StringBuilder sınıfının `append` metotları yazıya ekleme yapmak için kullanılır. StringBuilder sınıfının default ctor'u ile length'i sıfır olan bir yazıya ilişkin bir StringBuilder nesnesi yaratılır, String parametreli ctor'u ile yazının karakterlerinden oluşan bir StringBuilder nesnesi yaratılmış olur. StringBuilder sınıfının da String sınıfındaki gibi substring metotları bulunmaktadır. String sınıfının toString metodu ile yazıya ilişkin String nesnesi referansı elde edilebilir. StringBuilder sınıfının `length` ve `isEmpty` metotları da bulundurulmuştur. StringBuilder sınıfının `charAt` metodu vardır ayrıca verilen bir indeksteki karakteri set eden `setCharAt` isimli bir metodu da vardır.
+
+
+>**Sınıf Çalışması:** Klavyeden `exit` girilene kadar alınan yazıları aralarında `:` karakteri olacak şekilde birleştirilmiş yeni bir yazı elde eden programı aşağıdaki açıklamalara göre yazınız
+>
+>**Açıklamalar:** 
+>- Programda dizi kullanılmayacaktır. Zaten gerek de yoktur.
+>- Boş string yazıya dahil edilemeyecektir.
+>- `:` karakteri elde edilen yazıda yalnızca girilmiş olan yazıların arasında bulunacaktır, başında veya sonunda bulunmayacaktır.
+>**Not:** İleride daha iyisi yazılacaktır.
+
+>**Çözüm:** 
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		JoinWithColonApp.run();
+	}
+}
+
+class JoinWithColonApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		StringBuilder sb = new StringBuilder();
+		
+		while (true) {
+			System.out.print("Input text:");
+			String s = kb.nextLine();
+			
+			if ("exit".equals(s))
+				break;
+			
+			if (s.isEmpty())
+				continue;
+			
+			sb.append(s).append(':');		
+			
+		}
+		
+		String str = sb.isEmpty() ? "" : sb.substring(0, sb.length() - 1);
+		
+		System.out.printf("[%s]%n", str);	
+	}
+}
+```
+
+
+>StringBuilder sınıfının burada ele alınmayan pek çok metodu vardır. Burada, `Java ile Uygulama Geliştirme I-II` ve `Android Programlama` kurslarında kullanıldıkça öğrenilecektir.
+
+>**Sınıf Çalışması:** Parametresi ile aldığı bir yazının büyük harflerini küçük, küçük harflerini büyük yapan `changeCase` isimli metodu `StringUtil` sınıfı içerisinde yazınız ve test ediniz. Metot alfabetik olmayan karakterleri aynı şekilde bırakacaktır.
+
+
+>**Test Kodu:**
+```java
+class StringUtilChangeCaseTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.changeCase("AnKaRa").equals("aNkArA"));
+		System.out.println(StringUtil.changeCase("AnKaRa 06").equals("aNkArA 06"));
+	}
+}
+```
+>**Yavaş/Kötü Çözüm:** Kesinlikle tavsiye edilmez. Durumu anlatmak için yazılmıştır
+
+```java
+class StringUtil {
+	public static String changeCase(String s)
+	{
+		String str = "";
+		
+		for (int i = 0; i < s.length(); ++i) {
+			char c = s.charAt(i);
+			
+			str += Character.isUpperCase(c) ? Character.toLowerCase(c) : Character.toUpperCase(c);
+		}
+		
+		
+		return str;
+	}
+}
+```
+
+>**Çözüm-1:**
+
+```java
+class StringUtil {
+	public static String changeCase(String s)
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		for (int i = 0; i < s.length(); ++i) {
+			char c = s.charAt(i);
+			
+			sb.append(Character.isUpperCase(c) ? Character.toLowerCase(c) : Character.toUpperCase(c));
+		}		
+		
+		return sb.toString();
+	}
+}
+```
+
+>**Çözüm-2:**
+
+```java
+class StringUtil {
+	public static String changeCase(String s)
+	{
+		StringBuilder sb = new StringBuilder(s);
+		
+		for (int i = 0; i < s.length(); ++i) {
+			char c = sb.charAt(i);
+			
+			sb.setCharAt(i, Character.isUpperCase(c) ? Character.toLowerCase(c) : Character.toUpperCase(c));
+		}		
+		
+		return sb.toString();
+	}
+}
+```
+
+>String sınıfına Java 11 ile birlikte `repeat`isimli bir metot eklenmiştir. Bu metot ilgili yazıyı parametresi ile aldığı değer kadar çoklar ve çoklanmış yazıya geri döner.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		System.out.println("ali".repeat(4));
+		System.out.println("ali veli".repeat(3));
+	}
+}
+
+```
+
+>**Sınıf Çalışması:** Aşağıda prototipleri verilen metotları açıklamalara göre `StringUtil` sınıfı içerisinde yazınız ve test ediniz.
+
+```java
+public static String padLeading(String s, int n, char ch);
+public static String padLeading(String s, int n);
+public static String padTrailing(String s, int n, char ch);
+public static String padTrailing(String s, int n);
+```
+
+>**Açıklamalar:**
+>- `padLeading` metodunun 3 parametreli overload'u aldığı yazıyı ikinci parametresi ile aldığı uzunluk kadar baştan üçüncü parametresi ile aldığı karakter ile besleyecektir. İkinci parametresi ile aldığı uzunluk bilgisi yazının uzunluğundann küçük veya eşit ise aynı yazıya geri dönecektir. Örneğin:
+
+```java
+padLeading("csd", 6, 'x');
+```
+
+çağrısı ile `xxxcsd` yazısı elde edilecektir, yada örneğin
+
+```java
+padLeading("csd", 3, 'x');
+```
+
+çağrısı ile `csd` yazısı elde edilecektir.
+>
+>- padLeading metodunun iki parametreli overload'u gerekirse yazıyı baştan space karakteri ile besleyecektir. 
+>
+>- padTrailing metotları `padLeading` metodunun yazıyı sondan besleyen versiyonları olarak yazılacaktır.
+>
+>- Metotları Java 11 öncesi ve Java 11+ için ayrıca yazınız.
+
+>**Test Kodları:**
+
+```java
+class StringUtilPadLeadingTrailingTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.padLeading("csd", 6, 'x').equals("xxxcsd"));
+		System.out.println(StringUtil.padLeading("csd", 3, 'x').equals("csd"));
+		System.out.println(StringUtil.padLeading("csd", 6).equals("   csd"));
+		System.out.println(StringUtil.padLeading("csd", 3).equals("csd"));
+		
+		System.out.println(StringUtil.padTrailing("csd", 6, 'x').equals("csdxxx"));
+		System.out.println(StringUtil.padTrailing("csd", 3, 'x').equals("csd"));
+		System.out.println(StringUtil.padTrailing("csd", 6).equals("csd   "));
+		System.out.println(StringUtil.padTrailing("csd", 3).equals("csd"));
+	}
+}
+```
+
+>**Çözüm:** Java 11 öncesi için
+
+```java
+class StringUtil {
+	public static String padLeading(String s, int n, char ch)
+	{
+		int len = s.length();
+		
+		return len < n ? repeat(ch, n - len) + s : s; 
+	}
+	
+	public static String padLeading(String s, int n)
+	{
+		return padLeading(s, n, ' ');
+	}
+	
+	public static String padTrailing(String s, int n, char ch)
+	{
+		int len = s.length();
+		
+		return len < n ? s + repeat(ch, n - len) : s;
+	}
+	
+	public static String padTrailing(String s, int n)
+	{
+		return padTrailing(s, n, ' ');
+	}
+	
+	public static String repeat(char ch, int n)
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		while (n-- > 0)
+			sb.append(ch);
+		
+		return sb.toString();
+		
+	}
+}
+```
+
+>**Çözüm:** Java 11+ için
+
+```java
+class StringUtil {
+	public static String padLeading(String s, int n, char ch)
+	{
+		int len = s.length();
+		
+		return len < n ? (ch + "").repeat(n - len) + s : s; 
+	}
+	
+	public static String padLeading(String s, int n)
+	{
+		return padLeading(s, n, ' ');
+	}
+	
+	public static String padTrailing(String s, int n, char ch)
+	{
+		int len = s.length();
+		
+		return len < n ? s + (ch + "").repeat(n - len) : s;
+	}
+	
+	public static String padTrailing(String s, int n)
+	{
+		return padTrailing(s, n, ' ');
+	}
+}
+```
+
+>String sınıfına Java 11 ile birlikte `isBlank` metodu eklenmiştir. Bu metot yazının tamamnının whitespace karakterlerden oluşup oluşmadığını test eder. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		System.out.println("      \t\n".isBlank()); //System.out.println("      \t\n".strip().isEmpty()); 
+		System.out.println("".isBlank());
+	}
+}
+```
+
+>Burada 
+
+```java
+"      \t\n".trim().isEmpty()
+```
+
+çağrısı `isBlank` ile aynı anlamda değildir. Anımsanacağı gibi trim metodu tüm whitespace karakterler için çalışmaz. `isBlank` metodu ise tüm whitespace karakterler için çalışır. Bu durumda Java 11 öncesi için `isBlank` metodunun bir implementasyonu şu şekilde olabilir:
+
+```java
+public static boolean isBlank(String s)
+{
+	for (int i = 0; i < s.length(); ++i)
+		if (!Character.isWhitespace(s.charAt(i)))
+			return false;
+	
+	return true;
+}
+```
+
+>Şüphesiz bu metot farklı şekilde de yazılabilir.
+
+>Aldığı parametrelere göre bir nesnenin referansına geri dönen metotlara **factory methods** denir. Bu metotlar genel olarak static metotlar biçiminde yazılır. Bu metotlar ile genel nesnenin yaratılma aşamaları programcıdan soyutlanmış olur. String sınıfının `valueOf` isimli factory metotları vardır. JavaSE'de bazı sınıfların factory metotları bulunur. Java 8 öncesinde bu tarz metotların isimleri genel olarak **valueOf** biçimindedir. Java 8+ ile birlikte bu tarz factory metotlar **of** biçiminde isimlendirilmektedir. String sınıfının temel türlerden parametreli overload'ları ilgili değerin yazı karşılığını elde etmek için kullanılır.
+
+>**Sınıf Çalışması:** Aşağıda prototipleri verilen metotları açıklamalara göre `StringUtil` sınıfı içerisinde yazınız ve test ediniz.
+
+```java
+public static String padLeading(String s, int n, char ch);
+public static String padLeading(String s, int n);
+public static String padTrailing(String s, int n, char ch);
+public static String padTrailing(String s, int n);
+```
+
+>**Açıklamalar:**
+>- `padLeading` metodunun 3 parametreli overload'u aldığı yazıyı ikinci parametresi ile aldığı uzunluk kadar baştan üçüncü parametresi ile aldığı karakter ile besleyecektir. İkinci parametresi ile aldığı uzunluk bilgisi yazının uzunluğundann küçük veya eşit ise aynı yazıya geri dönecektir. Örneğin:
+
+```java
+padLeading("csd", 6, 'x');
+```
+
+çağrısı ile `xxxcsd` yazısı elde edilecektir, yada örneğin
+
+```java
+padLeading("csd", 3, 'x');
+```
+
+çağrısı ile `csd` yazısı elde edilecektir.
+>
+>- padLeading metodunun iki parametreli overload'u gerekirse yazıyı baştan space karakteri ile besleyecektir. 
+>
+>- padTrailing metotları `padLeading` metodunun yazıyı sondan besleyen versiyonları olarak yazılacaktır.
+>
+
+>**Test Kodları:**
+
+```java
+class StringUtilPadLeadingTrailingTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.padLeading("csd", 6, 'x').equals("xxxcsd"));
+		System.out.println(StringUtil.padLeading("csd", 3, 'x').equals("csd"));
+		System.out.println(StringUtil.padLeading("csd", 6).equals("   csd"));
+		System.out.println(StringUtil.padLeading("csd", 3).equals("csd"));
+		
+		System.out.println(StringUtil.padTrailing("csd", 6, 'x').equals("csdxxx"));
+		System.out.println(StringUtil.padTrailing("csd", 3, 'x').equals("csd"));
+		System.out.println(StringUtil.padTrailing("csd", 6).equals("csd   "));
+		System.out.println(StringUtil.padTrailing("csd", 3).equals("csd"));
+	}
+}
+```
+>**Çözüm:**
+
+```java
+class StringUtil {
+	public static String padLeading(String s, int n, char ch)
+	{
+		int len = s.length();
+		
+		return len < n ? String.valueOf(ch).repeat(n - len) + s : s; 
+	}
+	
+	public static String padLeading(String s, int n)
+	{
+		return padLeading(s, n, ' ');
+	}
+	
+	public static String padTrailing(String s, int n, char ch)
+	{
+		int len = s.length();
+		
+		return len < n ? s + String.valueOf(ch).repeat(n - len) : s;
+	}
+	
+	public static String padTrailing(String s, int n)
+	{
+		return padTrailing(s, n, ' ');
+	}
+}
+```
+
+
+
