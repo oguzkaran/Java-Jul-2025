@@ -15787,5 +15787,784 @@ class StringUtil {
 }
 ```
 
+###### 25 Şubat 2026
+
+>String sınıfının `contains` metodu yazı içerisinde parametresi ile aldığı yazının olup olmadığını test etmek için kullanılır. 
+
+**Anahtar Notlar:** contains metodunun parametresi `CharSequence` türündendir. Bu tür ileride ele alınacaktır. CharSequence türüne String ya da StringBuilder türünden bir referans doğrudan atanabilir. 
 
 
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilIsPangramTest.run();
+    }
+}
+
+class StringUtilIsPangramTest {
+	public static void run()
+	{
+		StringUtilIsPangramTRTest.run();
+		StringUtilIsPangramENTest.run();
+	}
+}
+
+class StringUtilIsPangramTRTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.isPangramTR("Pijamalı hasta yağız şoföre çabucak güvendi"));
+		System.out.println(!StringUtil.isPangramTR("Pijamalı hasta yağız şföre çabucak güvendi"));
+	}
+}
+
+class StringUtilIsPangramENTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.isPangramEN("The quick brown fox jumps over the lazy dog"));
+		System.out.println(!StringUtil.isPangramEN("The quick brown fo jumps over the lazy dog"));
+	}
+}
+
+class StringUtil {
+	public static boolean isPangramTR(String s)
+	{
+		return isPangram(s.toLowerCase(), "abcçdefgğhıijklmnoöprsştuüvyz");
+	}
+	
+	public static boolean isPangramEN(String s)
+	{
+		return isPangram(s.toLowerCase(), "abcdefghijklmnopqrstuwxvyz");
+	}
+	
+	public static boolean isPangram(String s, String alphabet)
+	{
+		for (int i = 0; i < alphabet.length(); ++i)
+			if (!s.contains(String.valueOf(alphabet.charAt(i))))
+				return false;
+		
+		return true;
+	}
+}
+```
+
+>`Integer` sınıfının `parseInt`, `Long` sınıfının `parseLong`, `Short` sınıfının `parseShort`, `Byte` sınıfının `parseByte`, `Double` sınıfının `parseDouble`, `Float` sınıfının `parseFloat` ve `Boolean` sınıfının `parseBoolean` metotları bir yazıyı ilgili türe çevirmek için kullanılır. `parseBoolean` dışında kalan tüm `parseXXX` metotları yazıyı çeviremedikleri durumda exception oluşur. `parseBoolean` metodu yazıyı çeviremediği durumda `false` değerine geri döner yani exception oluşmaz. Aslında `parseBoolean` metodu case-insensitive olarak `true` yazısı dışında kalan tüm yazılar için `false` değerine geri döner. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	System.out.print("Input a number:");
+    	int a = Integer.parseInt(kb.nextLine());
+    	
+    	System.out.printf("a = %d%n", a);
+    }
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	System.out.print("Input a status:");
+    	boolean status = Boolean.parseBoolean(kb.nextLine());
+    	
+    	System.out.printf("Status:%s%n", status ? "Open" : "Closed");
+    }
+}
+```
+
+>`java.util.Scanner` sınıfının çalışma sistemi gereği, bazı sistemlerde `nextLine` metodu ve temel türlere ilişkin `nextXXX` aynı nesnenin referansı ile peş peşe kullanılmamalıdır. Bu aslında Scanner sınıfı açısından bir problem değildir, sınıfın içsel algoritması ile ilgilidir. Detayının şu aşamada önemi yoktur. Şu aşamada birlikte kullanmamaya odakalanılmalıdır. Programcı böylesş durumlarda nextLine ile birlikte `parseXXX` metotlarını kullanmalıdır.
+
+>Aşağıdaki demo örnek bazı sistemlerde istenildiği gibi çalışmayacaktır
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	while (true) {
+    		System.out.print("Input device name:");
+    		String deviceName = kb.nextLine();
+    		
+    		if ("quit".equals(deviceName))
+    			break;
+    		
+    		System.out.print("Input device number:");
+    		int deviceNumber = kb.nextInt();
+    		
+    		System.out.printf("%s, %d%n", deviceName, deviceNumber);
+    	}
+    }
+}
+
+```
+
+>Yukarıdaki örnek aşağıdaki gibi yapılabilir
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	while (true) {
+    		System.out.print("Input device name:");
+    		String deviceName = kb.nextLine();
+    		
+    		if ("quit".equals(deviceName))
+    			break;
+    		
+    		System.out.print("Input device number:");
+    		int deviceNumber = Integer.parseInt(kb.nextLine());
+    		
+    		System.out.printf("%s, %d%n", deviceName, deviceNumber);
+    	}
+    }
+}
+```
+
+>Demo örnek için farklı çözümler de söz konusudur. Diğerleri burada ele alınmayacaktır.
+
+>String sınfının `format` static metodu yazıyı formatlamak için kullanılır. Bu metodun parametrik yapısı ve kullanılan format karakterleri (format specifiers) `printf` ile aynıdır. format metodu formatlanmış yazıyı ekrana basmaz, yazıya ilişkin String referansına geri döner. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	java.util.Scanner kb = new java.util.Scanner(System.in);
+    	
+    	while (true) {
+    		System.out.print("Input device name:");
+    		String deviceName = kb.nextLine();
+    		
+    		if ("quit".equals(deviceName))
+    			break;
+    		
+    		System.out.print("Input device number:");
+    		int deviceNumber = Integer.parseInt(kb.nextLine());
+    		
+    		String text = String.format("%s, %d", deviceName, deviceNumber);
+    		
+    		//...
+    		
+    		System.out.println(text);
+    	}
+    }
+}
+```
+
+>Point sınfının toString metodu ve test kodu
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	PointToStringTest.run();
+    }
+}
+```
+
+```java
+class PointToStringTest {
+	public static void run()
+	{
+		Point p1 = new Point(20.4, -5);
+		Point p2 = new Point(45);
+		
+		System.out.println(p1.toString());
+		System.out.println(p2.toString());
+	}
+}
+
+```
+```java
+class Point {
+	public double x, y;
+	
+	public Point()
+	{		
+	}
+	
+	public Point(double a)
+	{
+		x = a;
+	}
+	
+	public Point(double a, double b)
+	{
+		x = a;
+		y = b;
+	}
+
+	public double euclideanDistance()
+	{
+		return euclideanDistance(0, 0);
+	}
+	
+	public double euclideanDistance(double a, double b)
+	{
+		return Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
+	}
+	
+	public double euclideanDistance(Point other)
+	{
+		return euclideanDistance(other.x, other.y);
+	}	
+	
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+	
+	public void offset(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+	
+	public String toString()
+	{
+		return String.format("(%f, %f)", x, y);
+	}
+}
+```
+>Complex sınfının toString ve test kodu
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	ComplexToStringTest.run();
+    }
+}
+
+```
+
+```java
+class ComplexToStringTest {
+	public static void run()
+	{
+		Complex z1 = new Complex(20.4, -5);
+		Complex z2 = new Complex(20.4);
+		
+		System.out.println(z1.toString());
+		System.out.println(z2.toString());
+	}
+}
+```
+
+```java
+class Complex {
+	public double real;
+	public double imag;
+	
+	public static Complex add(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		return new Complex(a1 + a2, b1 + b2);
+	}
+	
+	public static Complex subtract(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		return add(a1, b1, -a2, -b2);
+	}
+	
+	public static Complex multiply(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		return new Complex(a1 * a2 - b1 * b2, a1 * b2 + a2 * b1);		
+	}
+	
+	public static Complex divide(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		double val = 1 / getNorm(a2, -b2);
+		Complex z = multiply(a1, b1, a2, -b2);
+		
+		return multiply(val, z);		
+	}
+	
+	public Complex()
+	{
+		
+	}
+	
+	public Complex(double a)
+	{
+		real = a;
+	}
+	
+	public Complex(double a, double b)
+	{
+		real = a;
+		imag = b;
+	}
+
+	public static double getNorm(double a, double b) //İleride bunu gizleyeceğiz
+	{
+		return Math.sqrt(a * a + b * b);
+	}
+	
+	public double getLength()
+	{
+		return getNorm();
+	}
+	
+	public double getNorm()
+	{
+		return getNorm(real, imag);
+	}
+	
+	public Complex getConjugate()
+	{
+		Complex z = new Complex();
+		
+		z.real = real;
+		z.imag = -imag;
+		
+		return z;
+	}
+	
+	public Complex add(Complex other)
+	{
+		return add(real, imag, other.real, other.imag);
+	}
+	
+	public Complex add(double val)
+	{
+		return add(real, imag, val, 0);
+	}
+	
+	public static Complex add(double val, Complex z)
+	{
+		return add(val, 0, z.real, z.imag);
+	}
+
+	public Complex subtract(Complex other)
+	{
+		return subtract(real, imag, other.real, other.imag);
+	}
+	
+	public Complex subtract(double val)
+	{
+		return subtract(real, imag, val, 0);
+	}
+	
+	public static Complex subtract(double val, Complex z)
+	{
+		return subtract(val, 0, z.real, z.imag);
+	}
+	
+	public Complex multiply(Complex other)
+	{
+		return multiply(real, imag, other.real, other.imag);
+	}
+	
+	public Complex multiply(double val)
+	{
+		return multiply(real, imag, val, 0);
+	}
+	
+	public static Complex multiply(double val, Complex z)
+	{
+		return multiply(val, 0, z.real, z.imag);
+	}
+
+	public Complex divide(Complex other)
+	{
+		return divide(real, imag, other.real, other.imag);
+	}
+	
+	public Complex divide(double val)
+	{
+		return divide(real, imag, val, 0);
+	}
+	
+	public static Complex divide(double val, Complex z)
+	{
+		return divide(val, 0, z.real, z.imag);
+	}
+	
+	public String toString()
+	{
+		return String.format("(%f, %f)", real, imag);
+	}
+}
+```
+
+>Java 15 ile birlikte String sınıfına `formatted` isimli non-static bir metot eklenmiştir. Bu metot format metodunun non-static versiyonu olarak düşünülmelidir. Programcının, Java 15+ yani ticari olarak Java 17+ ile çalışması durumunda format metodu yerine formatted metodunun kullanılması önerilir. 
+
+
+>Point sınfının toString metodu ve test kodu
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	PointToStringTest.run();
+    }
+}
+```
+
+```java
+class PointToStringTest {
+	public static void run()
+	{
+		Point p1 = new Point(20.4, -5);
+		Point p2 = new Point(45);
+		
+		System.out.println(p1.toString());
+		System.out.println(p2.toString());
+	}
+}
+
+```
+```java
+class Point {
+	public double x, y;
+	
+	public Point()
+	{		
+	}
+	
+	public Point(double a)
+	{
+		x = a;
+	}
+	
+	public Point(double a, double b)
+	{
+		x = a;
+		y = b;
+	}
+
+	public double euclideanDistance()
+	{
+		return euclideanDistance(0, 0);
+	}
+	
+	public double euclideanDistance(double a, double b)
+	{
+		return Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
+	}
+	
+	public double euclideanDistance(Point other)
+	{
+		return euclideanDistance(other.x, other.y);
+	}	
+	
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+	
+	public void offset(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+	
+	public String toString()
+	{
+		return "(%f, %f)".formatted(x, y);
+	}
+}
+```
+>Complex sınfının toString ve test kodu
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	ComplexToStringTest.run();
+    }
+}
+
+```
+
+```java
+class ComplexToStringTest {
+	public static void run()
+	{
+		Complex z1 = new Complex(20.4, -5);
+		Complex z2 = new Complex(20.4);
+		
+		System.out.println(z1.toString());
+		System.out.println(z2.toString());
+	}
+}
+```
+
+```java
+class Complex {
+	public double real;
+	public double imag;
+	
+	public static Complex add(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		return new Complex(a1 + a2, b1 + b2);
+	}
+	
+	public static Complex subtract(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		return add(a1, b1, -a2, -b2);
+	}
+	
+	public static Complex multiply(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		return new Complex(a1 * a2 - b1 * b2, a1 * b2 + a2 * b1);		
+	}
+	
+	public static Complex divide(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	{
+		double val = 1 / getNorm(a2, -b2);
+		Complex z = multiply(a1, b1, a2, -b2);
+		
+		return multiply(val, z);		
+	}
+	
+	public Complex()
+	{
+		
+	}
+	
+	public Complex(double a)
+	{
+		real = a;
+	}
+	
+	public Complex(double a, double b)
+	{
+		real = a;
+		imag = b;
+	}
+
+	public static double getNorm(double a, double b) //İleride bunu gizleyeceğiz
+	{
+		return Math.sqrt(a * a + b * b);
+	}
+	
+	public double getLength()
+	{
+		return getNorm();
+	}
+	
+	public double getNorm()
+	{
+		return getNorm(real, imag);
+	}
+	
+	public Complex getConjugate()
+	{
+		Complex z = new Complex();
+		
+		z.real = real;
+		z.imag = -imag;
+		
+		return z;
+	}
+	
+	public Complex add(Complex other)
+	{
+		return add(real, imag, other.real, other.imag);
+	}
+	
+	public Complex add(double val)
+	{
+		return add(real, imag, val, 0);
+	}
+	
+	public static Complex add(double val, Complex z)
+	{
+		return add(val, 0, z.real, z.imag);
+	}
+
+	public Complex subtract(Complex other)
+	{
+		return subtract(real, imag, other.real, other.imag);
+	}
+	
+	public Complex subtract(double val)
+	{
+		return subtract(real, imag, val, 0);
+	}
+	
+	public static Complex subtract(double val, Complex z)
+	{
+		return subtract(val, 0, z.real, z.imag);
+	}
+	
+	public Complex multiply(Complex other)
+	{
+		return multiply(real, imag, other.real, other.imag);
+	}
+	
+	public Complex multiply(double val)
+	{
+		return multiply(real, imag, val, 0);
+	}
+	
+	public static Complex multiply(double val, Complex z)
+	{
+		return multiply(val, 0, z.real, z.imag);
+	}
+
+	public Complex divide(Complex other)
+	{
+		return divide(real, imag, other.real, other.imag);
+	}
+	
+	public Complex divide(double val)
+	{
+		return divide(real, imag, val, 0);
+	}
+	
+	public static Complex divide(double val, Complex z)
+	{
+		return divide(val, 0, z.real, z.imag);
+	}
+	
+	public String toString()
+	{
+		return "(%f, %f)".formatted(real, imag);
+	}
+}
+```
+
+>String sınfının replace metotları String içerisindeki bir karakterin ya da bir yazının hepsini başka bir karakter ya da yazı iler değiştirir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	String s = "Bugün hava çok güzel, çok çok güzel";
+    	String str;
+    	
+    	str = s.replace('ç', 'x');
+    	
+    	System.out.println(str);
+    	
+    	str = s.replace("güzel", "kötü");
+    	
+    	System.out.println(str);
+    }
+}
+```
+
+>**Soru:** Aşağıda prototipi verilen metodu açıklamalara göre yazınız
+
+```java
+public static String repeat(int n, char c);
+```
+>
+>**Açıklamalar:**
+>- Metot parametresi ile aldığı n değeri kadar çoklanmış ch karakterlerinden oluşan yazıya geri dönecektir. 
+>
+>- Metot Java 11 öncesi için yazılacaktır yani String sınıfının repeat metodu kullanılmayacaktır.
+>
+>- Metot döngü kullanmadan yazılacaktır.
+
+>**Çözüm-1:**
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilRepeatTest.run();
+    }
+}
+
+class StringUtilRepeatTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.repeat(4, 'x'));
+		System.out.println(StringUtil.repeat(5, 'c'));
+	}
+}
+
+class StringUtil {
+	public static String repeat(int n, char ch)
+	{
+		return String.format("%0" + n + "d", 0).replace('0', ch);
+	}
+}
+```
+
+>**Çözüm-2:**
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilRepeatTest.run();
+    }
+}
+
+class StringUtilRepeatTest {
+	public static void run()
+	{
+		System.out.println(StringUtil.repeat(4, 'x'));
+		System.out.println(StringUtil.repeat(5, 'c'));
+	}
+}
+
+class StringUtil {
+	public static String repeat(int n, char ch)
+	{
+		return String.format("%" + n + "c", ' ').replace(' ', ch);
+	}
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı bir yazının palindrom olmadığına geri dönen `isPalindrome` isimli metodu `StringUtil` sınıfı içerisinde yazınız ve test ediniz.
+
+>**Açıklamalar:** 
+>
+>- Yalnızca alfabetik karakterlerinin tersten okunuşu (yazılışı da) aynı ise yazı bir palndromdur. Örneğin, `Ey Edip Adana'da pide ye.`, `Anastas mum satsana`, `Ali Papila`.
+>
+>- Palindroöm case-insensitive olarak belirlenecektir.
+>
+>- Çözümünüzün görece hızlı olması beklenmektir. Çözümde çağrılan metotlar da birlikte tek bir döngü olması gerektir. 
