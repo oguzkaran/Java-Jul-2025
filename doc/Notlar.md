@@ -16559,12 +16559,301 @@ class StringUtil {
 }
 ```
 
+###### 2 Mart 2026
+
+
 >**Sınıf Çalışması:** Parametresi ile aldığı bir yazının palindrom olmadığına geri dönen `isPalindrome` isimli metodu `StringUtil` sınıfı içerisinde yazınız ve test ediniz.
 
 >**Açıklamalar:** 
 >
 >- Yalnızca alfabetik karakterlerinin tersten okunuşu (yazılışı da) aynı ise yazı bir palndromdur. Örneğin, `Ey Edip Adana'da pide ye.`, `Anastas mum satsana`, `Ali Papila`.
 >
->- Palindroöm case-insensitive olarak belirlenecektir.
+>- Palindrom case-insensitive olarak belirlenecektir.
 >
->- Çözümünüzün görece hızlı olması beklenmektir. Çözümde çağrılan metotlar da birlikte tek bir döngü olması gerektir. 
+>- Çözümünüzün görece hızlı olması beklenmektedir. Çözümde çağrılan metotlar da dahil tek bir döngü olması gerektir. 
+>
+>**Not** İleride daha iyisi yazılacaktır.
+>
+>**Not:** Bu problemin çok daha efektif çözümleri vardır. Java ile Uygulama Geliştirme kurslarında ele alınacaktır.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	StringUtilIsPalindromeTest.run();
+    }
+}
+
+class StringUtilIsPalindromeTest {
+    public static void run()
+    {
+        System.err.println(StringUtil.isPalindrome("Ey Edip Adana'da pide ye."));
+        System.err.println(StringUtil.isPalindrome("Anastas mum satsana!"));
+        System.err.println(StringUtil.isPalindrome("Ali Papila"));
+        System.err.println(!StringUtil.isPalindrome("Anastas mum satsan!"));
+        System.err.println(!StringUtil.isPalindrome("li papila"));
+    }
+}
+
+class StringUtil {
+    public static boolean isPalindrome(String s)
+    {
+        int left = 0;
+        int right = s.length() - 1;
+
+        while (left < right) {
+            char cLeft = s.charAt(left);
+            
+            if (!Character.isLetter(cLeft)) {
+                ++left;
+                continue;
+            }
+            
+            char cRight = s.charAt(right);
+
+            if (!Character.isLetter(cRight)) {
+                --right;
+                continue;
+            }
+
+            if (Character.toLowerCase(cLeft) != Character.toLowerCase(cRight))
+                return false;
+            
+            ++left;
+            --right;
+        }
+
+        return true;
+    }
+}
+```
+
+>String sınıfının `compareTo` metodu aşağıdaki kurallara göre karşılaştırma işlemi yapar:
+
+```java
+result = s1.compareTo(S2);
+```
+
+>çağrısı için şu şekilde çalışır.
+
+>- `result > 0 <=> s1 yazısı, s2 yazısından sonra gelir.`
+>
+>- `result < 0 <=> s1 yazısı, s2 yazısından önce gelir.`
+>
+>- `result = 0 <=> s1 yazısı yazısı s2 yazısı ile özdeştir.`
+>
+> Buradaki karşılaştırma detaylar göz ardı edilirse `lexicographically` olarak karakter tablosundaki sıraya göre yapılır. Bu metot case-sensitive olarak karşılaştırma yapar.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+    	System.out.println("oguz".compareTo("ozan"));
+        System.out.println("ozan".compareTo("oguz"));
+        System.out.println("Ozan".compareTo("oguz"));
+        System.out.println("oğuz".compareTo("ozan"));
+    }
+}
+
+```
+
+>String sınıfında case-insensitive karşılaştırma yapan `cpmpareToIgnoreCase` metodu bulunur
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {    
+        System.out.println("ozan".compareToIgnoreCase("oguz"));
+        System.out.println("Ozan".compareToIgnoreCase("oguz"));
+    }
+}
+
+```
+>String sınıfının `startsWith` ve `endsWith` metotları sırasıyla yazı, parametresi ile aldığı yazı ile başlıyorsa ve bitiyorsa true değerine, aksi durumda false değerine geri dönerler.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {    
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+
+        System.out.print("Input url:");
+        String url = kb.nextLine();
+
+        if (!url.startsWith("https://"))
+            url = "https://" + url;
+
+        System.out.println(url);
+    }
+}
+
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {    
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+
+        System.out.print("Input email:");
+        String email = kb.nextLine();
+        int atIndex = email.indexOf('@');
+
+        if (atIndex != -1 && atIndex != email.length() - 1) {
+            int doIndex = email.indexOf('.', atIndex + 1);
+
+            if (doIndex == -1)
+                email += ".com";
+
+            System.out.println(email);
+        } 
+        else {
+            System.out.println("Invalid email address!...");
+        }        
+    }
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı bir yazının içerisindeki sayısal karakterlerden oluşan yazıya geri dönen `digits` isimli metodu `StringUtil` sınıfı içerisinde içerisinde yazınız ve test ediniz.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {    
+        StringUtilDigitsTest.run();
+    }
+}
+
+class StringUtilDigitsTest {
+    public static void run() 
+    {
+        System.out.println(StringUtil.digits("abc123def._456").equals("123456"));
+        System.out.println(StringUtil.digits("abcxyz.?&").isEmpty());
+    }
+}
+
+class StringUtil {
+    public static String digits(String s)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+
+            if (Character.isDigit(c))
+                sb.append(c);
+        }
+
+        return sb.toString();
+    }
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı bir yazının içerisindeki alfabetik karakterlerden oluşan yazıya geri dönen `letters` isimli metodu `StringUtil` sınıfı içerisinde içerisinde yazınız ve test ediniz.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {    
+        StringUtilLettersTest.run();
+    }
+}
+
+class StringUtilLettersTest {
+    public static void run() 
+    {
+        System.out.println(StringUtil.letters("a1234.?_bcd").equals("abcd"));
+        System.out.println(StringUtil.letters("12345.?&67").isEmpty());
+    }
+}
+
+class StringUtil {
+    public static String letters(String s)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+
+            if (Character.isLetter(c))
+                sb.append(c);
+        }
+
+        return sb.toString();
+    }
+}
+
+```
+>**Sınıf Çalışması:** Parametresi ile aldığı bir yazının içerisindeki tüm boşluk (whitespace) kadakterleri silen `removeWhitespaces` metodunu `StringUtil` sınıfı içerisinde yazınız ve test ediniz.
+
+>**Çözüm:**
+
+```java
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {    
+        StringUtilRemoveWhitespacesTest.run();
+    }
+}
+
+class StringUtilRemoveWhitespacesTest {
+    public static void run() 
+    {
+        System.out.println(StringUtil.removeWhitespaces("Bugün hava çok güzel.  ").equals("Bugünhavaçokgüzel."));
+        System.out.println(StringUtil.removeWhitespaces("\t     ").isEmpty());
+    }
+}
+
+class StringUtil {
+    public static String removeWhitespaces(String s)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+
+            if (!Character.isWhitespace(c))
+                sb.append(c);
+        }
+
+        return sb.toString();
+    }
+}
+```
+
+**Anahtar Notlar:** String sınıfının diğer metotları konular içerisinde ele alınacaktır.
+
+**Anahtar Notlar:** Java 13 ile birlikte (yani pratikte Java 17 ile kullanılabilen) `Text Block` konusu ileride ayrı bir bölüm olarak ele alınacaktır.
+
+
+##### Paketler
