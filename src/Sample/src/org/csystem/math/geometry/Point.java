@@ -1,5 +1,10 @@
 package org.csystem.math.geometry;
 
+/**
+ * Point class that represents a point in Cartesian Plane
+ * @author Java-Jul-2025 Group 
+ */
+
 public class Point {
 	public double x, y;
 	

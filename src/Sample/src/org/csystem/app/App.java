@@ -1,12 +1,23 @@
 package org.csystem.app;
 
-class App {
-    public static void main(String [] args) 
+class App { 
+    public static void main(String [] args)
     {
-       org.csystem.math.geometry.Point p; 
+        Sample s = new Sample();
 
-       p = new org.csystem.math.geometry.Point(45, 9);
+        s.foo(30);
 
-       System.out.println(p.toString());
+        System.out.printf("s.x = %d%n", s.x);
+    }
+}
+
+class Sample {
+    public int x;
+
+    //...
+
+    public void foo(int x) 
+    {
+        x = 10;   
     }
 }

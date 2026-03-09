@@ -1,5 +1,9 @@
 package org.csystem.math.geometry;
 
+/**
+ * Complex class that represents a complex number
+ * @author Java-Jul-2025 Group 
+ */
 public class Complex {
 	public double real;
 	public double imag;

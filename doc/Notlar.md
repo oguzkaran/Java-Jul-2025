@@ -16922,6 +16922,8 @@ package csd.util;
 >
 >- Hiç bir paket altında bildirilmeyen bir UDT **isimsiz paket (unnamed package)** içerisinde bildirilmiş olıur. Pratikte bir uygulama içerisinde isimsiz paket altında bir UDT bildirimi yapılmaz. Bunun nedeni ileride anlaşılacaktır.
 
+###### 9 Mart 2026
+
 >Aşağıdaki sınıfları inceleyiniz
 
 ```java
@@ -17116,4 +17118,457 @@ public class Complex {
 }
 ```
 
+```java
+package org.csystem.util.numeric;
+
+public class NumberUtil {
+    public static int getDigitsPowSum(int a) 
+    {
+        int n = countDigits(a);
+        int total = 0;
+        while (a != 0) {
+            total += Math.pow(a % 10, n);
+            a /= 10;
+        }
+        return total;
+    }
+
+    public static int countDigits(int a)
+    {
+        return countDigits((long)a);
+    }
+
+    public static int countDigits(long a) 
+    {
+        return a != 0 ? (int) Math.log10(Math.abs(a)) + 1 : 1;
+    }
+
+    public static int factorial(int n) 
+    {
+        int result = 1;
+
+        for (; n >= 1; --n)
+            result *= n;
+
+        return result;
+    }
+
+    public static int fibonacciNumber(int n) 
+    {
+        if (n <= 2)
+            return n - 1;
+
+        int prev1 = 1, prev2, result = 1;
+
+        for (int i = 3; i < n; ++i) {
+            prev2 = prev1;
+            prev1 = result;
+            result = prev1 + prev2;
+        }
+
+        return result;
+    }
+    
+
+    public static boolean isArmstrong(int a) 
+    {
+        return a >= 0 && getDigitsPowSum(a) == a;
+    }
+
+    public static boolean isEven(int a) 
+    {
+        return a % 2 == 0;
+    }
+
+    public static boolean isOdd(int a) 
+    {
+        return !isEven(a);
+    }
+
+    public static boolean isPalindrome(int a) 
+    {
+        return a == reverse(a);
+    }
+
+    public static boolean isPrime(long a) 
+    {
+        if (a <= 1)
+            return false;
+
+        if (a % 2 == 0)
+            return a == 2;
+
+        if (a % 3 == 0)
+            return a == 3;
+
+        if (a % 5 == 0)
+            return a == 5;
+
+        if (a % 7 == 0)
+            return a == 7;
+
+        for (long i = 11; i * i <= a; i += 2)
+            if (a % i == 0)
+                return false;
+
+        return true;
+    }
+
+    public static int nextFibonacciNumber(int a) 
+    {
+        if (a < 0)
+            return 0;
+
+        int prev1 = 1, prev2 = 0, next;
+
+        while (true) {
+            next = prev1 + prev2;
+            if (next > a)
+                return next;
+
+            prev2 = prev1;
+            prev1 = next;
+        }
+    }
+
+    public static long nextPrime(int a) 
+    {
+        long i;
+
+        for (i = a + 1; !isPrime(i); ++i)
+            ;
+
+        return i;
+    }
+
+    public static long nthPrime(int n) 
+    {
+        long result = 2;
+        int count = 0;
+
+        for (long i = 2; count < n; ++i)
+            if (isPrime(i)) {
+                ++count;
+                result = i;
+            }
+
+        return result;
+    }
+
+    public static int reverse(int a) 
+    {
+        int result = 0;
+
+        while (a != 0) {
+            result = result * 10 + a % 10;
+            a /= 10;
+        }
+
+        return result;
+    }
+
+    public static int square(int a) 
+    {
+        return a * a;
+    }
+
+    public static int sumDigits(int a) 
+    {
+        return sumDigits((long)a);
+    }
+
+    public static int sumDigits(long a) 
+    {
+        int total = 0;
+
+        while (a != 0) {
+            total += a % 10;
+            a /= 10;
+        }
+
+        return Math.abs(total);
+    }
+}
+```
+
+```java
+package org.csystem.util.string;
+
+public class StringUtil {
+    public static String capitalize(String s)
+    {
+        return s.isEmpty() ? s : Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
+    }
+
+    public static String changeCase(String s) 
+    {
+        StringBuilder sb = new StringBuilder(s);
+
+        for (int i = 0; i < s.length(); ++i) {
+            char c = sb.charAt(i);
+
+            sb.setCharAt(i, Character.isUpperCase(c) ? Character.toLowerCase(c) : Character.toUpperCase(c));
+        }
+
+        return sb.toString();
+    }
+
+    public static int countString(String s1, String s2) 
+    {
+        int count = 0;
+
+        for (int idx = -1; (idx = s1.indexOf(s2, idx + 1)) != -1; ++count)
+            ;
+
+        return count;
+    }
+
+    public static String digits(String s) 
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+
+            if (Character.isDigit(c))
+                sb.append(c);
+        }
+
+        return sb.toString();
+    }
+
+    public static boolean isPalindrome(String s) 
+    {
+        int left = 0;
+        int right = s.length() - 1;
+
+        while (left < right) {
+            char cLeft = s.charAt(left);
+
+            if (!Character.isLetter(cLeft)) {
+                ++left;
+                continue;
+            }
+            char cRight = s.charAt(right);
+
+            if (!Character.isLetter(cRight)) {
+                --right;
+                continue;
+            }
+            if (Character.toLowerCase(cLeft) != Character.toLowerCase(cRight))
+                return false;
+
+            ++left;
+            --right;
+        }
+
+        return true;
+    }
+
+    public static boolean isPangram(String s, String alphabet)
+    {
+        for (int i = 0; i < alphabet.length(); ++i)
+            if (!s.contains(String.valueOf(alphabet.charAt(i))))
+                return false;
+
+        return true;
+    }
+
+    public static boolean isPangramEN(String s) {
+        return isPangram(s.toLowerCase(), "abcdefghijklmnopqrstuwxvyz");
+    }
+
+    public static boolean isPangramTR(String s) 
+    {
+        return isPangram(s.toLowerCase(), "abcçdefgğhıijklmnoöprsştuüvyz");
+    }
+
+    public static String letters(String s) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+
+            if (Character.isLetter(c))
+                sb.append(c);
+        }
+
+        return sb.toString();
+    }
+
+    public static String padLeading(String s, int n) 
+    {
+        return padLeading(s, n, ' ');
+    }
+
+    public static String padLeading(String s, int n, char ch) 
+    {
+        int len = s.length();
+
+        return len < n ? String.valueOf(ch).repeat(n - len) + s : s;
+    }
+
+    public static String padTrailing(String s, int n) 
+    {
+        return padTrailing(s, n, ' ');
+    }
+
+    public static String padTrailing(String s, int n, char ch) 
+    {
+        int len = s.length();
+
+        return len < n ? s + String.valueOf(ch).repeat(n - len) : s;
+    }
+
+    public static String removeWhitespaces(String s) 
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+
+            if (!Character.isWhitespace(c))
+                sb.append(c);
+        }
+        return sb.toString();
+    }
+}
+```
+
+##### İsim Arama
+
+>Derleyici kod içerisinde bir ismin kullanıldığını gördüğünde, bildirimini arar. Buna **isim arama (name lookup)** denir. Derleyici bir ismi bildirim noktasında aramaz. Derleyici ismi bulduktan sonra, o ismin geçerli olarak kullanılıp kullanılmadığına bakar. Eğer derleyici kullanılan bir ismi bulamazsa veya bulunan bir ismin kullanımı geçersizse error oluşur. Bu error'lar farklıdır. Yani aslında derleyici kullanılan bir ismi önce arar, bulursa erişim (geçerli kullanılıp kullanılmadığı) kontrolü yapar.
+
+>Aşağıdaki demo örnekte `*` ve `**` ile belirtilen yerlerde a ve b isimleri aranmaz. `***` ve `*****` ile belirtilen hatalar isimlerin bulunup geçersiz kullanılmasından dolayı oluşurke, `****` ile belirtilen yerde isim bulunamamasından dolayı hata oluşur
+
+```java
+package org.csystem.app;
+
+class App {
+    public static void main(String [] args) 
+    {
+       int a; //*
+       boolean b = true; //**
+
+       ++a; //error:***
+       ++x; //error:****
+       ++b; //error:*****
+    }
+}
+```
+
+>Kod içerisinde bir isim iki şekilde kullanılabilir: **nitelikli (qualified), niteliksiz (unqualified).**
+
+>Bir isim nokta operatörünün sağında kalıyorsa nitelikli, kalmıyorsa niteliksiz kullanılmış olur. Bu durumda niteliksiz kullanım ya nokta operatörünün solunda kalmak (sağında kalmamak) ya da doğrudan kullanmak (nokta operatörü olmadan) biçimindedir.
+
+>Nitelikli kullanılan bir isim `nitelikli isim arama kurallarına göre,` niteliksiz kullanılan bir isim `nitelikli isim arama kurallarına göre` aranır. Bu bölümde önce genel sonra da özel kurallar ele alınacaktır.
+
+**Anahtar Notlar:** Buradaki **qualified** ve **unqualified** terimleri algısal olarak olumlu ya da olumsuz birer anlam ifade etmemektedir. Tamamen kullanım biçimlerine ilişkin terimlerdir. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;
+
+class App { // App aranmaz
+    public static void main(String [] args) //main aranmaz, String niteliksiz aranır, args aranmaz
+    {
+        Sample s; //Sample niteliksiz aranır. s aranmaz
+
+        s = new Sample(10); //s niteliksiz aranır, Sample niteliksiz aranır
+
+        s.foo(20); //s niteliksiz, foo nitelikli aranır
+
+        System.out.printf("s.x = %d%n", s.x); //System niteliksiz, out ve printf nitelikli aranır, s niteliksiz, x nitelikli aranır
+    }
+}
+
+class Sample { //Sample aranmaz
+    public int x; //x aranmaz
+
+    public Sample(int a) //Sample aranmaz, a aranmaz
+    {
+        x = a; //x ve a niteliksiz aranır
+    }
+    public void foo(int a) //foo ve a aranmaz
+    {
+        System.out.printf("a = %d%n", a); //System niteliksiz, out ve printf nitelikli aranır, a niteliksiz aranır
+        x = a; //x ve a niteliksiz aranır
+        System.out.printf("x = %d%n", x);//System niteliksiz, out ve printf nitelikli aranır, f niteliksiz aranır
+    }
+}
+
+```
+
+###### Niteliksiz İsim Arama Genel Kuralları
+
+>Niteliksiz isim arama genel kuralları sırasıyla şunlardır: (else-if biçiminde değerlendiriniz yani bukunursa bir sonraki adıma geçilmez.)
+
+>1. İsim metot içerisinde kullanılmışsa, kullanılan noktadan sola ve yukarıya doğru metot içerisinden aranır. Bu aramaya parametre değişkenleri de dahildir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+class Sample {
+    //...
+    public void foo(int a) 
+    {
+        int x;
+
+        x = a;
+    }
+}
+```
+
+>2. İsim, sınıf içerisinde, tüm metotların ve ctor'ların dışında her yerde aranır. Bulunamazsa taban sınıflara (super class) da bulununcaya ya da bulunamayıncaya kadar bakılır. Taban sınıf kavramı türetme (inheritance) konusunda ele alınacaktır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+lass Sample {
+    //...
+    
+    public void foo(int a) 
+    {
+        y = a;
+        bar();
+    }
+
+    public int y;
+
+    public void bar()
+    {
+        //...
+    }
+}
+```
+>Yukarıdaki iki maddenin sonucu olarak, bir metodun parametre değişkeni veya bir yerel değişkeni ile ait olduğu sınıfın aynı isimde bir veri elemanı olabilir. Bu durumda ilgili metot içerisinde veri elemanı ismi gölgelenmiş/maskelenmiş (shadowing/masking) olur. Bu durumda veri elemanına ilgili metot içerisinde nasıl erişilebileceği ileride ele alınacaktır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;
+
+class App { 
+    public static void main(String [] args)
+    {
+        Sample s = new Sample();
+
+        s.foo(30);
+
+        System.out.printf("s.x = %d%n", s.x);
+    }
+}
+
+class Sample {
+    public int x;
+
+    //...
+
+    public void foo(int x) 
+    {
+        x = 10;   
+    }
+}
+```
 
