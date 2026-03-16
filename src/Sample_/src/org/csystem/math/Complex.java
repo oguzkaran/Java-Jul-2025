@@ -1,4 +1,4 @@
-package org.csystem.math;
+package org.csystem.math.geometry;
 
 /**
  * Complex class that represents a complex number
