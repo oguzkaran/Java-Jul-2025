@@ -9,7 +9,7 @@ public class Point {
 	public double x, y;
 	
 	public Point()
-	{		
+	{
 	}
 	
 	public Point(double a)

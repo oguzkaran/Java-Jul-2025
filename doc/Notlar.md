@@ -16920,7 +16920,7 @@ package csd.util;
 >
 >- `java.lang` paketi içersisindeki UDT'ler her yerden görülebilirdir. Yani bu paket içerisindeki bir UDT ismi herhangi bir bildirim yapmadan ya da paket ismi yazmadan doğrudan kullanılabilir. Örneğin, `String, Integer, System, Character, Double` sınıfları `java.lang` paketi içerisinde bildirilmişlerdir.
 >
->- Hiç bir paket altında bildirilmeyen bir UDT **isimsiz paket (unnamed package)** içerisinde bildirilmiş olıur. Pratikte bir uygulama içerisinde isimsiz paket altında bir UDT bildirimi yapılmaz. Bunun nedeni ileride anlaşılacaktır.
+>- Hiç bir paket altında bildirilmeyen bir UDT **isimsiz paket (unnamed package)** içerisinde bildirilmiş olur. Pratikte bir uygulama içerisinde isimsiz paket altında bir UDT bildirimi yapılmaz. Bunun nedeni ileride anlaşılacaktır.
 
 ###### 9 Mart 2026
 
@@ -16981,7 +16981,7 @@ public class Point {
 ```
 
 ```java
-package org.csystem.math.geometry;
+package org.csystem.math;
 
 public class Complex {
 	public double real;
@@ -17500,9 +17500,11 @@ class Sample { //Sample aranmaz
 
 ```
 
+###### 16 Mart 2026
+
 ###### Niteliksiz İsim Arama Genel Kuralları
 
->Niteliksiz isim arama genel kuralları sırasıyla şunlardır: (else-if biçiminde değerlendiriniz yani bukunursa bir sonraki adıma geçilmez.)
+>Niteliksiz isim arama genel kuralları sırasıyla şunlardır: (else-if biçiminde değerlendiriniz yani bulunursa bir sonraki adıma geçilmez.)
 
 >1. İsim metot içerisinde kullanılmışsa, kullanılan noktadan sola ve yukarıya doğru metot içerisinden aranır. Bu aramaya parametre değişkenleri de dahildir.
 
@@ -17525,7 +17527,7 @@ class Sample {
 >Aşağıdaki demo örneği inceleyiniz
 
 ```java
-lass Sample {
+class Sample {
     //...
     
     public void foo(int a) 
@@ -17542,7 +17544,7 @@ lass Sample {
     }
 }
 ```
->Yukarıdaki iki maddenin sonucu olarak, bir metodun parametre değişkeni veya bir yerel değişkeni ile ait olduğu sınıfın aynı isimde bir veri elemanı olabilir. Bu durumda ilgili metot içerisinde veri elemanı ismi gölgelenmiş/maskelenmiş (shadowing/masking) olur. Bu durumda veri elemanına ilgili metot içerisinde nasıl erişilebileceği ileride ele alınacaktır.
+>Yukarıdaki iki maddenin sonucu olarak, bir metodun parametre değişkeni veya bir yerel değişkeni ile ait olduğu sınıfın aynı isimde bir veri elemanı olabilir. Bu durumda ilgili metot içerisinde veri elemanı ismi `gölgelenmiş/maskelenmiş (shadowing/masking)` olur. Bu durumda veri elemanına ilgili metot içerisinde nasıl erişilebileceği ileride ele alınacaktır.
 
 >Aşağıdaki demo örneği inceleyiniz
 
@@ -17556,7 +17558,7 @@ class App {
 
         s.foo(30);
 
-        System.out.printf("s.x = %d%n", s.x);
+        System.out.printf("s.x = %d%n", s.x); //s.x = 0
     }
 }
 
@@ -17567,8 +17569,241 @@ class Sample {
 
     public void foo(int x) 
     {
-        x = 10;   
+        x = 10;
     }
 }
 ```
+
+>3. İsim, kullanılan metodun ait olduğu UDT'nin ait olduğu paket içerisinde aranır. Burada bulunamazsa alt ve/veya üst paketlere bakılmaz.
+>
+>Aşağıdaki demo örneği inceleyiniz
+
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Sample s;  
+  
+        //...  
+    }  
+}  
+  
+class Sample {  
+    public int x;  
+  
+    //...  
+  
+    public void foo(int x)  
+    {  
+        x = 10;  
+    }  
+}
+```
+
+>Aşağıdaki demo örnekte Sample ismi üst paketlerde aranmaz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Sample s; //error  
+  
+        //...    }  
+}
+```
+
+```java
+package org.csystem;  
+  
+public class Sample {  
+    public int x;  
+  
+    //...  
+  
+    public void foo(int x)  
+    {  
+        x = 10;  
+    }  
+}
+```
+
+>Aşağıdaki demo örnekte Sample ismi alt paketlerde aranmaz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Sample s; //error  
+  
+        //...    }  
+}
+```
+
+```java
+package org.csystem.app.sample;  
+  
+public class Sample {  
+    public int x;  
+  
+    //...  
+  
+    public void foo(int x)  
+    {  
+        x = 10;  
+    }  
+}
+```
+
+>4. İsim, `import on demand declaration` olarak belirtilen paketlerin hepsinde aranır. Buna ilişkin detaylar ileride ele alınacaktır.
+
+>Yukarıdaki 4 adımın sonunda ilgili isim bulunamazsa, `bulunamamasından` dolayı error oluşur. 
+
+>Paket isimleri niteliksiz isim aramaya dahil değildir. Yani, bir paket içerisinde niteliksiz isim arama yapılırken paket isimleri dikkate alınmaz. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        sample.Sample s; //error  
+    }  
+}
+```
+
+```java
+package org.csystem.app.sample;  
+  
+public class Sample {  
+    public int x;  
+  
+    //...  
+  
+    public void foo(int x)  
+    {  
+        x = 10;  
+    }  
+}
+```
+
+>Aşağıdaki demo örnekte `sample` paketi herhangi bir paketin alt paketi olmadığında niteliksiz olarak kullanılmıştır yani bulunmuştur
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        sample.Sample s;  
+    }  
+}
+```
+
+
+```java
+package sample;  
+  
+public class Sample {  
+    public int x;  
+  
+    //...  
+  
+    public void foo(int x)  
+    {  
+        x = 10;  
+    }  
+}
+```
+
+###### Nitelikli İsim Arama Genel Kuralları
+
+>Nitelikli isim arama genel kuralları sırasıyla şunlardır: (else-if biçiminde değerlendiriniz yani bulunursa bir sonraki adıma geçilmez.)
+
+>1. Aranan ismin solunda bir UDT ismi varsa, isim o UDT içerisinde aranır, bulunamazsa taban sınıflara bulununcaya ya da bulamayıncaya kadar bakılır.
+
+>Aşağıdaki demo örneği inceleyiniz
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Sample.foo(20);  
+  
+        System.out.printf("Sample.x = %d%n", Sample.x);  
+    }  
+}  
+  
+class Sample {  
+    public static int x;  
+    //...  
+  
+    public static void foo(int a)  
+    {  
+        x = a;  
+    }  
+}
+```
+
+>2. Aranan ismin solunda bir referans değişken ismi varsa, isim referansın türüne ilişkin UDT içerisinde aranır, bulunamazsa taban sınıflara bulununcaya ya da bulamayıncaya kadar bakılır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Sample s  = new Sample();  
+  
+        s.foo(20);  
+  
+        System.out.printf("s.x = %d%n", s.x);  
+    }  
+}  
+  
+class Sample {  
+    public int x;  
+    //...  
+  
+    public void foo(int a)  
+    {  
+        x = a;  
+    }  
+}
+```
+
+>3. Aranan ismin solunda bir paket ismi varsa, isim o paket içerisinde aranır, bulunamazsa alt ya da üst paketlere bakılmaz.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        org.csystem.math.geometry.Point p;  
+          
+        //...  
+    }  
+}
+```
+
+>Yukarıda ele alınan nitelikli ve niteliksiz isim arama genel kurallarına göre isimsiz paket altından bildirilen bir UDT'ye başka bir paketten erişilemez. Bu durumda isimsiz paket içerisinde bildirilen bir UDT yalnızca isimsiz paket altında bildirilen başka bir UDT tarafından erişilebilirdir, bu sebeple pratikte isimsiz paket içerisinde bir UDT bildirimi yapılmaz ve dolayısıyla tavsiye edilmez.
+
+###### import Bildirimleri
+
+
+
 
