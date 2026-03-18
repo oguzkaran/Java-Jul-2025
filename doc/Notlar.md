@@ -17802,8 +17802,184 @@ class App {
 
 >Yukarıda ele alınan nitelikli ve niteliksiz isim arama genel kurallarına göre isimsiz paket altından bildirilen bir UDT'ye başka bir paketten erişilemez. Bu durumda isimsiz paket içerisinde bildirilen bir UDT yalnızca isimsiz paket altında bildirilen başka bir UDT tarafından erişilebilirdir, bu sebeple pratikte isimsiz paket içerisinde bir UDT bildirimi yapılmaz ve dolayısıyla tavsiye edilmez.
 
+###### 18 Mart 2026
 ###### import Bildirimleri
 
+>import bildirimleri niteliklendirmeyi azaltmak ve dolayısıyla kodun daha yalın olarak yazılabilmesini sağlamak için düşünülmüştür. import bildirimlerinin UDT ismi bakımından genel olarak iki kullanımı söz konusudur: **import on demand declaration, import single name declaration.**
 
+>import bildirimlerine ilişkin ortak özellikler şunlardır:
+>- import bildirimleri bir derleme biriminde paket bildiriminden sonra, tüm diğer bildirimlerden önce bulunmalıdır. Aksi durumda error oluşur.
+>- Bir derleme biriminde birden fazla import bildirimi olabilir. Bu bildirimlerin sırasının önemi yoktur.
+>- import bildirimleri niteliksiz kullanılan isimler için (yani niteliksizi kullanılan isimlerin aranması için) geçerlidir. Nitelikli isimlerin aranmasında etkisi yoktur.
+>- Bir import bildirimi yalnızca bildirildiği derleme biriminde geçerlidir.
 
+**Anahtar Notlar:** import bildirimi bir kütüphaneyi projeye dahil etmek **DEĞİLDİR.** Bir kütüphaneyi projeye dahil etmek için çeşitli yöntemler kullanılmaktadır. Bu yöntemler `Java ile Uygulama Geliştirme I` kursunda ele alınacaktır.
 
+**import on demand declaration:** Bu bildirimin genel biçimi şu şekildedir:
+
+```java
+import <paket ismi>[.<alt paket listesi>].*;
+```
+
+>Niteliksiz isim arama genel kurallarına göre isim paket içerisinde bulunamazsa bu şekilde bildirilmiş olan **tüm paketlerde aranır.** Burada da yin alt veya üst paketlere bakılmaz. Bu bildirimi ile adeta bir paket, isim arama anlamında derleme birimine ilişkin pakete dahil (inject) edilmiş olur. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+import java.util.*;  
+import org.csystem.math.*;  
+import org.csystem.math.geometry.*;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Scanner kb = new Scanner(System.in);  
+        Random r = new Random();  
+  
+        System.out.print("How many complex numbers do you want to generate?");  
+        int n = kb.nextInt();  
+  
+        for (int i = 0; i < n; ++i) {  
+            Complex z = new Complex(r.nextDouble(-10, 11), r.nextDouble(10, 11));  
+            Point p = new Point(r.nextDouble(-100, 101), r.nextDouble(-100, 101));  
+  
+            System.out.println("-----------------------------------------");  
+            System.out.printf("Complex number: %s\n", z.toString());  
+            System.out.printf("Point:%s%n", p.toString());  
+            System.out.println("-----------------------------------------");  
+        }  
+    }  
+}
+```
+
+>Aramam import on demand declaration'a ilişkin tüm paketlerde yapıldığından birden fazla pakette aynı ismin bulunması durumunda error oluşur (ambiguity error).
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+import com.bekeozturk.math.*;  
+import com.ozberkdirik.math.*;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Fraction f; //error: Fraction is ambiguous  
+    }  
+}
+```
+
+```java
+package com.bekeozturk.math;  
+  
+public class Fraction {  
+    //...  
+}
+```
+
+```java
+package com.ozberkdirik.math;  
+  
+public class Fraction {  
+    //...  
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+import com.bekeozturk.math.*;  
+import com.ozberkdirik.math.*;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Fraction f;
+        
+        //...
+    }  
+}
+```
+
+```java
+package com.bekeozturk.math;  
+  
+public class Fraction {  
+    //...  
+}
+```
+
+```java
+package com.ozberkdirik.math;  
+  
+class Fraction {  
+    //...  
+}
+```
+
+>Aşağıdaki metotları ve test kodlarını inceleyiniz
+
+```java
+package org.csystem.string;
+
+import java.util.*;
+
+public class StringUtil {
+	//...
+	public static String randomText(Random random, int count, String source)  
+	{  
+	    StringBuilder sb = new StringBuilder();  
+	  
+	    for (int i = 0; i < count; ++i)  
+	        sb.append(source.charAt(random.nextInt(source.length())));  
+	  
+	    return sb.toString();  
+	}  
+	  
+	public static String randomTextTR(Random random, int count)  
+	{  
+	    return randomText(random, count, "abcçdefgğhıijklmnoöprsştuüvyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ");  
+	}  
+	  
+	public static String randomTextEN(Random random, int count)  
+	{  
+	  
+	    return randomText(random, count, "abcdefghijklmnopqrstuwxvyzABCDEFGHIKLMNOPQRSTUWXYZ");  
+	}
+	//...
+}
+```
+
+```java
+package org.csystem.util.string.test;  
+  
+import org.csystem.util.string.StringUtil;  
+  
+import java.util.*;  
+  
+public class StringUtilRandomTextTRENTest {  
+    public static void run()  
+    {  
+        Scanner kb = new Scanner(System.in);  
+        Random r = new Random();  
+  
+        System.out.print("Input count:");  
+        int count = kb.nextInt();  
+  
+        System.out.println(StringUtil.randomTextTR(r, count));  
+        System.out.println(StringUtil.randomTextEN(r, count));  
+    }  
+  
+    public static void main(String[] args)  
+    {  
+        run();  
+    }  
+}
+```
+
+**import single name declaration:** 

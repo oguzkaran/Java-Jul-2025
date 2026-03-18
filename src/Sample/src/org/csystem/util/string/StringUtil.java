@@ -1,5 +1,7 @@
 package org.csystem.util.string;
 
+import java.util.*;
+
 /**
  * Utility class for string operations
  * @author Java-Jul-2025 Group 
@@ -141,5 +143,26 @@ public class StringUtil {
                 sb.append(c);
         }
         return sb.toString();
+    }
+
+    public static String randomText(Random random, int count, String source)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < count; ++i)
+            sb.append(source.charAt(random.nextInt(source.length())));
+
+        return sb.toString();
+    }
+
+    public static String randomTextTR(Random random, int count)
+    {
+        return randomText(random, count, "abcçdefgğhıijklmnoöprsştuüvyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ");
+    }
+
+    public static String randomTextEN(Random random, int count)
+    {
+
+        return randomText(random, count, "abcdefghijklmnopqrstuwxvyzABCDEFGHIKLMNOPQRSTUWXYZ");
     }
 }
