@@ -10,7 +10,7 @@ public class NumberUtil {
         int n = countDigits(a);
         int total = 0;
         while (a != 0) {
-            total += Math.pow(a % 10, n);
+            total += (int)Math.pow(a % 10, n);
             a /= 10;
         }
         return total;
@@ -23,7 +23,7 @@ public class NumberUtil {
 
     public static int countDigits(long a) 
     {
-        return a != 0 ? (int) Math.log10(Math.abs(a)) + 1 : 1;
+        return a != 0 ? (int)Math.log10(Math.abs(a)) + 1 : 1;
     }
 
     public static int factorial(int n) 

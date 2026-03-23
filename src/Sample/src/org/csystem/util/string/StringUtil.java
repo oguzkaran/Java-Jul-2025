@@ -1,6 +1,6 @@
 package org.csystem.util.string;
 
-import java.util.*;
+import java.util.Random;
 
 /**
  * Utility class for string operations

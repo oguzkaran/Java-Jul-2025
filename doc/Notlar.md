@@ -17838,7 +17838,7 @@ class App {
         Scanner kb = new Scanner(System.in);  
         Random r = new Random();  
   
-        System.out.print("How many complex numbers do you want to generate?");  
+        System.out.print("How many complex numbers and points do you want to generate?");  
         int n = kb.nextInt();  
   
         for (int i = 0; i < n; ++i) {  
@@ -17854,7 +17854,7 @@ class App {
 }
 ```
 
->Aramam import on demand declaration'a ilişkin tüm paketlerde yapıldığından birden fazla pakette aynı ismin bulunması durumunda error oluşur (ambiguity error).
+>Arama import on demand declaration'a ilişkin tüm paketlerde yapıldığından birden fazla pakette aynı ismin bulunması durumunda error oluşur (ambiguity error).
 
 >Aşağıdaki demo örneği inceleyiniz
 
@@ -17958,7 +17958,7 @@ public class StringUtil {
 ```java
 package org.csystem.util.string.test;  
   
-import org.csystem.util.string.StringUtil;  
+import org.csystem.util.string.*;  
   
 import java.util.*;  
   
@@ -17982,4 +17982,541 @@ public class StringUtilRandomTextTRENTest {
 }
 ```
 
-**import single name declaration:** 
+###### 23 Mart 2026
+
+>**import single name declaration:** Bu bildirimin UDT isimleri için (import single type declaration) genel biçimi şu şekildedir.
+
+```java
+import <paket ismi>[.<alt paket listesi>].<UDT ismi>;
+```
+
+>Bu bildirimle belirtilen UDT ismi derleme birimi boyunca her yerde niteliksiz olarak kullanılabilir (visible) ya da başka bir deyişle buradaki bildirim, ilgili ismin derleme birimi boyunca kullanılabileceğini yani bu isim için niteliksiz isim arama genel kurallarının uygulanmayacağını belirtir. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+import java.util.Scanner;  
+import java.util.Random;  
+import org.csystem.math.Complex;  
+import org.csystem.math.geometry.Point;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Scanner kb = new Scanner(System.in);  
+        Random r = new Random();  
+  
+        System.out.print("How many complex numbers and points do you want to generate?");  
+        int n = kb.nextInt();  
+  
+        for (int i = 0; i < n; ++i) {  
+            Complex z = new Complex(r.nextDouble(-10, 11), r.nextDouble(10, 11));  
+            Point p = new Point(r.nextDouble(-100, 101), r.nextDouble(-100, 101));  
+  
+            System.out.println("-----------------------------------------");  
+            System.out.printf("Complex number: %s\n", z.toString());  
+            System.out.printf("Point:%s%n", p.toString());  
+            System.out.println("-----------------------------------------");  
+        }  
+    }  
+}
+```
+
+>Aşağıdaki metotları ve test kodlarını inceleyiniz
+
+```java
+package org.csystem.string;
+
+import java.util.Random;
+
+public class StringUtil {
+	//...
+	public static String randomText(Random random, int count, String source)  
+	{  
+	    StringBuilder sb = new StringBuilder();  
+	  
+	    for (int i = 0; i < count; ++i)  
+	        sb.append(source.charAt(random.nextInt(source.length())));  
+	  
+	    return sb.toString();  
+	}  
+	  
+	public static String randomTextTR(Random random, int count)  
+	{  
+	    return randomText(random, count, "abcçdefgğhıijklmnoöprsştuüvyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ");  
+	}  
+	  
+	public static String randomTextEN(Random random, int count)  
+	{  
+	  
+	    return randomText(random, count, "abcdefghijklmnopqrstuwxvyzABCDEFGHIKLMNOPQRSTUWXYZ");  
+	}
+	//...
+}
+```
+
+```java
+package org.csystem.util.string.test;  
+  
+import org.csystem.util.string.StringUtil;  
+import java.util.Random;  
+import java.util.Scanner;
+  
+public class StringUtilRandomTextTRENTest {  
+    public static void run()  
+    {  
+        Scanner kb = new Scanner(System.in);  
+        Random r = new Random();  
+  
+        System.out.print("Input count:");  
+        int count = kb.nextInt();  
+  
+        System.out.println(StringUtil.randomTextTR(r, count));  
+        System.out.println(StringUtil.randomTextEN(r, count));  
+    }  
+  
+    public static void main(String[] args)  
+    {  
+        run();  
+    }  
+}
+```
+
+>import single name declaration'da aynı ismin birden fazka paketten bildirimi error oluşturur. Çünkü bu bildirim ile bir isim artık niteliksiz kullanılabilmektedir. Bu durumda aynı ismin birden fazla bildirimi error oluşturur. 
+
+```java
+package org.csystem.app;  
+  
+import com.bekeozturk.math.Fraction;  
+import com.ozberkdirik.math.Fraction; //error  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        
+    }  
+}
+```
+
+```java
+package com.bekeozturk.math;  
+  
+public class Fraction {  
+    //...  
+}
+```
+
+```java
+package com.ozberkdirik.math;  
+  
+public class Fraction {  
+    //...  
+}
+```
+
+>Programcı mümkün olduğunca import single name declaration tercih etmelidir. Aslında bu bildirim ile artık ismin kullanımında iki anlamlılık (ambiguity) oluşmayacağından kullanılması tavsiye edilir. 
+
+>Aşağıdaki demo örnekte `Fraction` ismi için niteliksiz isim arama genel kuralları uygulanacağından `org.csystem.app` paketi içerisindeki `Fraction` bulunacaktır
+
+```java
+package org.csystem.app;  
+  
+import com.bekeozturk.math.*;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Fraction.foo();  
+    }  
+}
+```
+
+```java
+package com.bekeozturk.math;  
+  
+public class Fraction {  
+    //...  
+  
+    public static void foo()  
+    {  
+        System.out.println("com.bekeozturk.math.Fraction foo");  
+    }  
+}
+```
+
+```java
+package org.csystem.app;  
+  
+public class Fraction {  
+    //...  
+    public static void foo()  
+    {  
+        System.out.println("org.csystem.app.Fraction foo");  
+    }  
+}
+```
+
+>Aşağıdaki demo örnekte `Fraction` ismi için niteliksiz isim arama genel kuralları uygulanmayacağından `com.berkeozturk.math` paketi içerisindeki `Fraction` bulunmuş olacaktır
+
+```java
+package org.csystem.app;  
+  
+import com.bekeozturk.math.Fraction;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Fraction.foo();  
+    }  
+}
+```
+
+```java
+package com.bekeozturk.math;  
+  
+public class Fraction {  
+    //...  
+  
+    public static void foo()  
+    {  
+        System.out.println("com.bekeozturk.math.Fraction foo");  
+    }  
+}
+```
+
+```java
+package org.csystem.app;  
+  
+public class Fraction {  
+    //...  
+    public static void foo()  
+    {  
+        System.out.println("org.csystem.app.Fraction foo");  
+    }  
+}
+```
+
+>Aşağıdaki demo örnekte `com.berkeozturk.math.Fraction` sınıfı public olmadığından import bildirimi noktasında error oluşur. Aslında burada isim bulunmuştur ancak geçerli olarak kullanılmamıştır
+
+```java
+package org.csystem.app;  
+  
+import com.bekeozturk.math.Fraction; //error  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+  
+    }  
+}
+```
+
+```java
+package com.bekeozturk.math;  
+  
+class Fraction {  
+    //...  
+  
+    public static void foo()  
+    {  
+        System.out.println("com.bekeozturk.math.Fraction foo");  
+    }  
+}
+```
+
+```java
+package org.csystem.app;  
+  
+public class Fraction {  
+    //...  
+    public static void foo()  
+    {  
+        System.out.println("org.csystem.app.Fraction foo");  
+    }  
+}
+```
+
+>Aşağıdaki demo örnekte `org.csystem.app.Fraction` sınıfı friendly bir sınıf olduğundan error oluşmaz
+
+```java
+package org.csystem.app;  
+  
+import com.bekeozturk.math.*;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Fraction.foo();  
+    }  
+}
+```
+
+```java
+package com.bekeozturk.math;  
+  
+public class Fraction {  
+    //...  
+  
+    public static void foo()  
+    {  
+        System.out.println("com.bekeozturk.math.Fraction foo");  
+    }  
+}
+```
+
+```java
+package org.csystem.app;  
+  
+class Fraction {  
+    //...  
+    public static void foo()  
+    {  
+        System.out.println("org.csystem.app.Fraction foo");  
+    }  
+}
+```
+
+>Aşağıdaki demo örnekte Fraction sınıfı aynı derleme biriminde de olduğundan, farklı paketteki diğer `Fraction` sınıfı import single name declaration olarak yazılamaz Burada hatanın hangisinde olduğunun önemsizdir. Bu da özel durumlardan biridir
+
+```java
+package org.csystem.app;  
+  
+import com.bekeozturk.math.Fraction;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Fraction.foo();  
+    }  
+}  
+  
+class Fraction { //error  
+    //...    public static void foo()  
+    {  
+        System.out.println("org.csystem.app.Fraction foo");  
+    }  
+}
+```
+
+```java
+package com.bekeozturk.math;  
+  
+public class Fraction {  
+    //...  
+  
+    public static void foo()  
+    {  
+        System.out.println("com.bekeozturk.math.Fraction foo");  
+    }  
+}
+```
+
+###### import static Bildirimleri
+
+>import static bildirimleri static elemanların kullanımındaki niteliklendirmeyi azaltmak düşünülmüştür. import static bildirimleri `Java 5` ile dile eklenmiştir. Bu bildirimler iki biçime ayrılır: **import static on demand declaration, import static single member (name) declaration.**
+>
+>import bildirimleri için yazılan ortak özellikler bu bildirimler için de geçerlidir. 
+
+>**import static on demand declaration**: Bu bildirimin genel biçimi şu şekildedir:
+
+```java
+import static <paket ismi>[.<alt paket listesi].<UDT ismi>.*;
+```
+
+>Bu bildirim ile niteliksiz kullanılan bir isim, niteliksiz isim arama genel kurallarına göre ilgili pakette de bulunamazsa import static on demand olarak belirtilmiş UDT içerisinde de aranır. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+import java.util.Random;  
+import java.util.Scanner;  
+  
+import static java.lang.Math.*;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Scanner kb = new Scanner(System.in);  
+        Random r = new Random();  
+  
+        System.out.print("Input count:");  
+        int count = kb.nextInt();  
+  
+        while (count-- > 0) {  
+            double val = r.nextDouble(100.7);  
+  
+            System.out.printf("%f -> sqrt(%f)%n", val, sqrt(val));  
+        }  
+  
+        System.out.printf("PI:%f%n", PI);  
+    }  
+}
+```
+
+>Point sınıfı
+
+```java
+package org.csystem.math.geometry;  
+  
+import static java.lang.Math.*;  
+  
+  public class Point {  
+    public double x, y;  
+      
+    public Point()  
+    {  
+    }  
+      
+    public Point(double a)  
+    {  
+       x = a;  
+    }  
+      
+    public Point(double a, double b)  
+    {  
+       x = a;  
+       y = b;  
+    }  
+  
+    public double euclideanDistance()  
+    {  
+       return euclideanDistance(0, 0);  
+    }  
+      
+    public double euclideanDistance(double a, double b)  
+    {  
+       return sqrt(pow(x - a, 2) + pow(y - b, 2));  
+    }  
+      
+    public double euclideanDistance(Point other)  
+    {  
+       return euclideanDistance(other.x, other.y);  
+    }    
+      
+    public void offset(double dxy)  
+    {  
+       offset(dxy, dxy);  
+    }  
+      
+    public void offset(double dx, double dy)  
+    {  
+       x += dx;  
+       y += dy;  
+    }  
+      
+    public String toString()  
+    {  
+       return String.format("(%f, %f)", x, y);  
+    }  
+}
+```
+
+>**import static single member (name) declaration:** Bu bildirimin genel biçimi şu şekildedir:
+
+```java
+import static <paket ismi>[.<alt paket listesi].<UDT ismi>.<static eleman>;
+```
+
+>Bu bildirim ile ilgili static eleman tüm derleme birimi boyunca niteliksiz olarak kullanılabilir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+import java.util.Random;  
+import java.util.Scanner;  
+  
+import static java.lang.Math.PI;  
+import static java.lang.Math.sqrt;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Scanner kb = new Scanner(System.in);  
+        Random r = new Random();  
+  
+        System.out.print("Input count:");  
+        int count = kb.nextInt();  
+  
+        while (count-- > 0) {  
+            double val = r.nextDouble(100.7);  
+  
+            System.out.printf("%f -> sqrt(%f)%n", val, sqrt(val));  
+        }  
+  
+        System.out.printf("PI:%f%n", PI);  
+    }  
+}
+```
+
+>Point sınıfı
+
+```java
+package org.csystem.math.geometry;  
+  
+import static java.lang.Math.pow;  
+import static java.lang.Math.sqrt;  
+
+public class Point {  
+    public double x, y;  
+      
+    public Point()  
+    {  
+    }  
+      
+    public Point(double a)  
+    {  
+       x = a;  
+    }  
+      
+    public Point(double a, double b)  
+    {  
+       x = a;  
+       y = b;  
+    }  
+  
+    public double euclideanDistance()  
+    {  
+       return euclideanDistance(0, 0);  
+    }  
+      
+    public double euclideanDistance(double a, double b)  
+    {  
+       return sqrt(pow(x - a, 2) + pow(y - b, 2));  
+    }  
+      
+    public double euclideanDistance(Point other)  
+    {  
+       return euclideanDistance(other.x, other.y);  
+    }    
+      
+    public void offset(double dxy)  
+    {  
+       offset(dxy, dxy);  
+    }  
+      
+    public void offset(double dx, double dy)  
+    {  
+       x += dx;  
+       y += dy;  
+    }  
+      
+    public String toString()  
+    {  
+       return String.format("(%f, %f)", x, y);  
+    }  
+}
+```
+
+**Anahtar Notlar:** Paketler ve isim arma konularına ilişkin bazı ele alınmayan kurallar ya konular içerisinde ele alınacaktır ya da pratikte kullanılmadığından ele alınmayacaktır.
+##### Diziler
+
+>Elemanları **aynı türden** olan ve bellekte **peş peşe** olacak şekilde yaratılan veri yapısına **dizi (array)** denir. Diziler programlamada en temel veri yapılarıdır. Hatta önemli bazı veri yapıları duruma göre dizi kullanılarak implemente edilirler. 
+>
+>Diziler Java'da sınıfsal olarak temsil edilmişlerdir. Dolayısıyla, Java'da diziler heap'de yaratılırlar. Java'da stack'de dizi yaratılamaz. 
+

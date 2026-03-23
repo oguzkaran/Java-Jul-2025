@@ -1,10 +1,12 @@
 package org.csystem.math.geometry;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 /**
  * Point class that represents a point in Cartesian Plane
  * @author Java-Jul-2025 Group 
  */
-
 public class Point {
 	public double x, y;
 	
@@ -30,7 +32,7 @@ public class Point {
 	
 	public double euclideanDistance(double a, double b)
 	{
-		return Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
+		return sqrt(pow(x - a, 2) + pow(y - b, 2));
 	}
 	
 	public double euclideanDistance(Point other)
