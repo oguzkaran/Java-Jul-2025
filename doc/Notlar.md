@@ -18514,9 +18514,121 @@ public class Point {
 ```
 
 **Anahtar Notlar:** Paketler ve isim arma konularına ilişkin bazı ele alınmayan kurallar ya konular içerisinde ele alınacaktır ya da pratikte kullanılmadığından ele alınmayacaktır.
+
+###### 25 Mart 2026
+
 ##### Diziler
 
 >Elemanları **aynı türden** olan ve bellekte **peş peşe** olacak şekilde yaratılan veri yapısına **dizi (array)** denir. Diziler programlamada en temel veri yapılarıdır. Hatta önemli bazı veri yapıları duruma göre dizi kullanılarak implemente edilirler. 
 >
->Diziler Java'da sınıfsal olarak temsil edilmişlerdir. Dolayısıyla, Java'da diziler heap'de yaratılırlar. Java'da stack'de dizi yaratılamaz. 
+>Diziler Java'da sınıfsal olarak temsil edilmişlerdir. Dolayısıyla, Java'da diziler heap'de yaratılırlar. Java'da stack'de dizi yaratılamaz. T bir tür ismi olmak üzere bir dizi referansı iki şekilde bildirilebilir:
+
+```java
+T [] a; //1
+T b[]; //2
+```
+
+>Burada a ve b referans değişkenlerdir. **Henüz daha dizi (nesnesi) yaratılmamıştır.** İkinci biçime **C stili dizi referansı bildirimi (C style array reference declaration)** denir. Java programcısının birinci biçimi kullanması tavsiye edilir. Hatta bazı statik kod analizi araçlarının default konfigürasyonunda ikinci biçimin kullanımı durumunda uyarı mesajı verilebilmektedir. Biz de kursumuzda ve projelerimizde ikinci biçimi kullanacağız. T tüden bir dizi her bir elemanı T türünden olan dizi denmektir. Örneğin
+
+```java
+int [] a;  
+int b[];
+```
+
+>Burada a ve b referansları int türden bir dizinin adresini tutarlar. Birinci biçim ile ikinci biçimin tek farkı virgül ile değişken bildirimlerinde ortaya çıkmaktadır:
+
+```java
+int []a, b, c; //a, b ve c int türden dizi referanslarıdır
+int x[], y, z; // x int türden bir dizi referansı, y ve z int türden değişkenlerdir
+```
+
+>Dizi (nesnesi) yaratmak içim yine `new` operatörü kullanılır. Dizi yaratmak için new operatörü kullanımının genel biçimi şu şekildedir:
+
+```java
+new <tür ismi>[<değeri int türüne doğrudan dönüşeblşen bir ifade>];
+```
+
+>Burada `[]` içerisinde verilen ifadenin değerine dizinin **uzunluğu (length)** denir. Uzunluk dizinin eleman sayısıdır bellekte kapladığı alanın uzunluğu değildir. Java'da dizi uzunluğunun sabit ifadesi (constant expression) olması gerekmez. **Dizi yaratıldıktan sonra uzunluğu değiştirilemez.** Dizi uzunluğunun negatif bir değer olarak verilmesi durumunda exception oluşur. Dizinin uzunluğuna `length` veri elemanı ile erişilebilir. `length` veri elemanı `read only` biçimindedir, değerinin değiştirilmeye çalışılması durumunda error oluşur. Dizi elemanlarına erişmek için **`[]` operatörü (subscription operator)** kullanılır. Bu operatör, özel amaçlı, iki operandlı ve ara ek durumundadır. Operatör, öncelik tablosunun birinci seviyesindedir. Operatörün birinci operandı bir dizi referansı, ikinci operandı ise  int türüne doğrudan dönüşebilen bir ifade olmalıdır. İkinci operanda ilişkin ifadeye **indeks (index)** denilmektedir. Dizinin ilk elemanına sıfır numaralı indeks değeri ile erişilebilir. Yani bu durumda dizinin elemanlarına erişmek için kullanılan indeks değerleri `[0, length)` aralığında olmalıdır aksi durumda yani bu aralık dışında kalan değerler için exception oluşur. Operatör, dizinin verilen indeks numarasındaki elemanına ilişkin değişkeni üretir. Bu durumda atama operatörünün solunda (left value) kullanılabilir. Dizi yaratıldığında elemanların her birine default değerler verilir. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+import java.util.Random;  
+import java.util.Scanner;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Random r = new Random();  
+        Scanner kb = new Scanner(System.in);  
+  
+        System.out.print("Input count:");  
+        int n = kb.nextInt();  
+  
+        int [] a;  
+        boolean [] b;  
+  
+        a = new int[n];  
+        b = new boolean[n];  
+  
+        System.out.printf("Length of a is %d%n", a.length);  
+        System.out.printf("Length of b is %d%n", b.length);  
+  
+        for (int i = 0; i < a.length; ++i)  
+            System.out.printf("%d ", a[i]);  
+        System.out.println();  
+  
+        for (int i = 0; i < b.length; ++i)  
+            System.out.printf("%b ", b[i]);  
+        System.out.println();  
+  
+        for (int i = 0; i < a.length; ++i) {  
+            a[i] = r.nextInt(100);  
+            b[i] = r.nextBoolean();  
+        }  
+  
+        for (int i = 0; i < a.length; ++i)  
+            System.out.printf("%d ", a[i]);  
+        System.out.println();  
+  
+        for (int i = 0; i < b.length; ++i)  
+            System.out.printf("%b ", b[i]);  
+        System.out.println();  
+    }  
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+import java.util.Random;  
+import java.util.Scanner;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Random r = new Random();  
+        Scanner kb = new Scanner(System.in);  
+  
+        System.out.print("Input count:");  
+        int n = kb.nextInt();  
+        int [] a = new int[n];  
+  
+        a[6] = 30;  
+  
+        for (int i = 0; i < a.length; ++i)  
+            System.out.printf("%d ", a[i]);  
+        System.out.println();  
+    }  
+}
+```
+
+
+
+
+
 
