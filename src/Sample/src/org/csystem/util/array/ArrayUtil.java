@@ -9,6 +9,16 @@ import java.util.Random;
 public class ArrayUtil {
     public static double average(int [] a)
     {
+        return (double)sum(a) / a.length;
+    }
+
+    public static int max(int [] a)
+    {
+
+    }
+
+    public static int min(int [] a)
+    {
 
     }
 
@@ -37,6 +47,11 @@ public class ArrayUtil {
 
     public static long sum(int [] a)
     {
+        long total = 0;
 
+        for (int i = 0; i < a.length; ++i)
+            total += a[i];
+
+        return total;
     }
 }
