@@ -12,14 +12,36 @@ public class ArrayUtil {
         return (double)sum(a) / a.length;
     }
 
+    public static boolean equals(int [] a, int [] b)
+    {
+        if (a.length != b.length)
+            return false;
+
+        for (int i = 0; i < a.length; i++)
+            if (a[i] != b[i])
+                return false;
+
+        return true;
+    }
+
     public static int max(int [] a)
     {
+        int result = a[0];
 
+        for (int i = 1; i < a.length; ++i)
+            result = Math.max(result, a[i]);
+
+        return result;
     }
 
     public static int min(int [] a)
     {
+        int result = a[0];
 
+        for (int i = 1; i < a.length; ++i)
+            result = Math.min(result, a[i]);
+
+        return result;
     }
 
     public static void print(int [] a)
@@ -43,6 +65,16 @@ public class ArrayUtil {
             a[i] = random.nextInt(origin, bound);
 
         return a;
+    }
+
+    public static void reverse(int[] a)
+    {
+
+    }
+
+    public static int [] reversed(int[] a)
+    {
+
     }
 
     public static long sum(int [] a)
