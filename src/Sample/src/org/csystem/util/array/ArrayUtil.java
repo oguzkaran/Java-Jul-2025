@@ -69,12 +69,21 @@ public class ArrayUtil {
 
     public static void reverse(int[] a)
     {
+        int first = 0;
+        int last = a.length - 1;
 
+        while (first < last)
+            swap(a, first++, last--);
     }
 
     public static int [] reversed(int[] a)
     {
+        int [] result = new int [a.length];
 
+        for (int i = a.length - 1; i >= 0; --i)
+            result[result.length - 1 - i] = a[i];
+
+        return result;
     }
 
     public static long sum(int [] a)
@@ -85,5 +94,13 @@ public class ArrayUtil {
             total += a[i];
 
         return total;
+    }
+
+    public static void swap(int [] a, int i, int k)
+    {
+        int temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
     }
 }

@@ -18626,6 +18626,468 @@ class App {
     }  
 }
 ```
+###### 30 Mart 2026
+
+>Bir diziye ilk değer verme (initialization), dizi (nesnesi) yaratılırken elemanlar için verilen değerlere denir. Diziye ilk değer verme `{}` ile yapılır. `{}` içerisindeki ifadeler (yani elemanlar için verilen değerlere ilişkin ifadeler) virgül ile ayrılırlar. Bu durumda dizinin eleman sayısı verilen ifadelerin sayısı kadardır. Buna göre diziye ilk değer verme ile dizi nesnesi yaratılır ve elemanlarının değerleri karşılık geldikleri ifadelerin değeri olur. İlk değer verme sentaksında yine `new` operatörü ile birlikte `[]` kullanılır ancak `[]` içerisi boş bırakılır. İlk değer verme sentaksında `[]` içerisininin boş bırakılmaması durumunda error oluşur. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [] a;  
+  
+        a = new int[] {1, 2, 3, 4, 5};  
+  
+        for (int i = 0; i < a.length; ++i)  
+            System.out.printf("%d ", a[i]);  
+  
+        System.out.println();  
+    }  
+}
+```
+
+>Diziye ilk değer verilirken aynı zamanda elde edilen adresi tutan referansa da ilk değer veriliyorsa new operatörü kullanmadan doğrudan `{}` ile değerler verilebilir. 
+
+>Aşağıdaki demo örnekte diziye ilk değer verilirken elde edilen adresi tutacak olan referansa  da ilk değer verildiğinden new operatörü kullanılmayabilir
+
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [] a = {1, 2, 3, 4, 5};  
+  
+        for (int i = 0; i < a.length; ++i)  
+            System.out.printf("%d ", a[i]);  
+  
+        System.out.println();  
+    }  
+}
+```
+
+>Aşağıdaki demo örnekte diziye ilk değer verilirken elde edilen adresi tutacak olan referansa ilk değer verilmediğinden new operatörü kullanılmalıdır
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [] a;  
+  
+        a = {1, 2, 3, 4, 5}; //error  
+  
+        for (int i = 0; i < a.length; ++i)  
+            System.out.printf("%d ", a[i]);  
+  
+        System.out.println();  
+    }  
+}
+```
+
+>Diziye ilk değer verme sentaksında, son elemandan sonra bir tane virgül geçerlidir. Buna **trailing comma** denilmektedir. Bu virgülü yazmakla yazmamak arasında bir fark yoktur.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [] a = {1, 2, 3, 4, 5,};  
+  
+        for (int i = 0; i < a.length; ++i)  
+            System.out.printf("%d ", a[i]);  
+  
+        System.out.println();  
+    }  
+}
+```
+
+>Trailing comma'nın programcının yaklaşımına göre şu durumlarda kullanımı söz konusu olabilmektedir: Programcı henüz ilk değerleri kod içerisinde tamamlamadığını belirtmek isteyebilir. Örneğin, ekleyeceği bazı değerler olabilir, henüz eklememiştir ya da örneğin verilen ilk değerlerin yerlerinin değiştirilmesi çok kolay bir biçimde yapılabilmektedir. 
+
+>Bir metodun parametre değişkeni bir dizi referansı olabilir.
+
+```java
+package org.csystem.app;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [] a = {1, 2, 5, 4, 3,};  
+  
+        ArrayUtil.print(a);  
+    }  
+}
+```
+
+```java
+package org.csystem.util.array;  
+  
+public class ArrayUtil {  
+	//...
+    public static void print(int [] a)  
+    {  
+        print(a, " ", "\n");  
+    }  
+  
+    public static void print(int [] a, String sep, String end)  
+    {  
+        for (int i = 0; i < a.length; ++i)  
+            System.out.printf("%d%s", a[i], sep);  
+  
+        System.out.print(end);  
+    }  
+    
+    //...
+}
+```
+
+>Bir metodun geri dönüş değeri bir referans olabilir.
+
+```java
+package org.csystem.app;  
+  
+import java.util.Random;  
+  
+import static org.csystem.util.array.ArrayUtil.print;  
+import static org.csystem.util.array.ArrayUtil.randomArray;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Random random = new Random();  
+        int [] a = randomArray(random, 10, 0, 100);  
+  
+        print(a);  
+    }  
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir dizinin elemanlarının toplamına geri dönen `sum` ve ortalamasına geri dönen `average` isimli metotları `ArrayUtil` sınıfı içerisinde yazınız ve test ediniz. Metotların prototipleri şu şekildedir:
+
+```java
+public static long sum(int [] a);
+public static double average(int [] a);
+```
+
+>**Çözüm:**
+
+```java
+package org.csystem.util.array;  
+  
+import java.util.Random;  
+  
+public class ArrayUtil {  
+	//...
+    public static double average(int [] a)  
+    {  
+        return (double)sum(a) / a.length;  
+    }
+      
+    public static long sum(int [] a)  
+    {  
+        long total = 0;  
+  
+        for (int i = 0; i < a.length; ++i)  
+            total += a[i];  
+  
+        return total;  
+    }  
+    
+    //...
+}
+```
+
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+public class ArrayUtilSumTest {  
+    public static void run()  
+    {  
+        int [] a = {1, 2, 3, 4, 5, 6, 7};  
+        long expected = 28;  
+  
+        System.out.println(ArrayUtil.sum(a) == expected);  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+public class ArrayUtilAverageTest {  
+    public static void run()  
+    {  
+        int [] a = {1, 2, 3, 4};  
+        double expected = 2.5;  
+        double delta = 0.00001;  
+  
+        System.out.println(ArrayUtil.average(a) - expected < delta);  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir dizinin en büyük elemanına geri dönen `max` ve en küçük elemanına geri dönen `min` isimli metotları `ArrayUtil` sınıfı içerisinde yazınız ve test ediniz. Metotların prototipleri şu şekildedir:
+
+```java
+public static int max(int [] a);
+public static int max(int [] a);
+```
+
+>**Çözüm:**
+
+```java
+package org.csystem.util.array;  
+  
+import java.util.Random;  
+  
+public class ArrayUtil {  
+	//...
+	
+    public static int max(int [] a)  
+    {  
+        int result = a[0];  
+  
+        for (int i = 1; i < a.length; ++i)  
+            result = Math.max(result, a[i]);  
+  
+        return result;  
+    }  
+  
+    public static int min(int [] a)  
+    {  
+        int result = a[0];  
+  
+        for (int i = 1; i < a.length; ++i)  
+            result = Math.min(result, a[i]);  
+  
+        return result;  
+    }  
+  
+    //...
+}
+```
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+public class ArrayUtilMaxTest {  
+    public static void run()  
+    {  
+        int [] a = {1, 2, 3, 4, -2, 10, 5, 6};  
+        long expected = 10;  
+  
+        System.out.println(ArrayUtil.max(a) == expected);  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+public class ArrayUtilMinTest {  
+    public static void run()  
+    {  
+        int [] a = {1, 2, 3, 4, -2, 10, 5, 6};  
+        long expected = -2;  
+  
+        System.out.println(ArrayUtil.min(a) == expected);  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden diziyi ters-yüz eden `reverse` isimli metodu `ArrayUtil` içerisinde yazınız ve test ediniz. Metodun prototipi şu şekildedir:
+
+```java
+public static void reverse(int [] a);
+```
+
+>**Açıklamalar:** Metodu ikinci bir dizi kullanmadan yazınız.
+
+>**Çözüm:**
+
+```java
+public class ArrayUtil {
+	//...
+	public static void reverse(int[] a)  
+	{  
+	    for (int i = 0; i < a.length / 2; ++i)  
+	        swap(a, i, a.length - 1 - i);  
+	}  
+	//...
+}
+```
+
+
+```java
+public class ArrayUtil {
+	//...
+	public static void reverse(int[] a)  
+	{  
+		int first = 0;  
+		int last = a.length - 1;  
+  
+		while (first < last)  
+		    swap(a, first++, last--);
+	}
+			  
+	public static void swap(int [] a, int i, int k)  
+	{  
+	    int temp = a[i];  
+	  
+	    a[i] = a[k];  
+	    a[k] = temp;  
+	}
+	
+	//...
+}
+```
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+public class ArrayUtilReverseTest {  
+    public static void run()  
+    {  
+        int [] a = {1, 2, 3, 4, 5};  
+        int [] b = {1, 2, 3, 4};  
+        int [] expected1 = {5, 4, 3, 2, 1};  
+        int [] expected2 = {4, 3, 2, 1};  
+  
+        ArrayUtil.reverse(a);  
+        ArrayUtil.reverse(b);  
+  
+        System.out.println(ArrayUtil.equals(a, expected1));  
+        System.out.println(ArrayUtil.equals(b, expected2));  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden dizi için ters-yüz edilmiş  yeni bir diziye geri dönen `reversed` isimli metodu `ArrayUtil` içerisinde yazınız ve test ediniz. Metodun prototipi şu şekildedir:
+
+```java
+public static int [] reversed(int [] a);
+```
+
+>**Çözüm:**
+
+```java
+public class ArrayUtil {
+	//...
+	public static int [] reversed(int[] a)  
+	{  
+	    int [] result = new int [a.length];  
+	  
+	    for (int i = a.length - 1; i >= 0; --i)  
+	        result[result.length - 1 - i] = a[i];  
+	  
+	    return result;  
+	}
+	
+	public static void swap(int [] a, int i, int k)  
+	{  
+	    int temp = a[i];  
+	  
+	    a[i] = a[k];  
+	    a[k] = temp;  
+	}
+	//...
+}
+```
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+public class ArrayUtilReversedTest {  
+    public static void run()  
+    {  
+        int [] a = {1, 2, 3, 4, 5};  
+        int [] b = {1, 2, 3, 4};  
+        int [] expected1 = {1, 2, 3, 4, 5};  
+        int [] expected2 = {1, 2, 3, 4};  
+        int [] expectedReversed1 = {5, 4, 3, 2, 1};  
+        int [] expectedReversed2 = {4, 3, 2, 1};  
+  
+        int [] ar = ArrayUtil.reversed(a);  
+        int [] br = ArrayUtil.reversed(b);  
+  
+        System.out.println(ArrayUtil.equals(a, expected1));  
+        System.out.println(ArrayUtil.equals(b, expected2));  
+        System.out.println(ArrayUtil.equals(ar, expectedReversed1));  
+        System.out.println(ArrayUtil.equals(br, expectedReversed2));  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
