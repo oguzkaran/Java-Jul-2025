@@ -24,6 +24,16 @@ public class ArrayUtil {
         return true;
     }
 
+    public static boolean isEmpty(int [] a)
+    {
+        return a.length == 0;
+    }
+
+    public static boolean hasLength(int [] a)
+    {
+        return !isEmpty(a);
+    }
+
     public static int max(int [] a)
     {
         int result = a[0];
@@ -47,6 +57,21 @@ public class ArrayUtil {
     public static void print(int [] a)
     {
         print(a, " ", "\n");
+    }
+
+    public static void print(int [] a, int n)
+    {
+        print(a, n, " ", "\n");
+    }
+
+    public static void print(int [] a, int n, String sep, String end)
+    {
+        String fmt = "%%0%dd%s".formatted(n, sep);
+
+        for (int i = 0; i < a.length; ++i)
+            System.out.printf(fmt, a[i], sep);
+
+        System.out.print(end);
     }
 
     public static void print(int [] a, String sep, String end)

@@ -11,7 +11,6 @@ public class ArrayUtilReversedTest {
         int [] expected2 = {1, 2, 3, 4};
         int [] expectedReversed1 = {5, 4, 3, 2, 1};
         int [] expectedReversed2 = {4, 3, 2, 1};
-
         int [] ar = ArrayUtil.reversed(a);
         int [] br = ArrayUtil.reversed(b);
 

@@ -1,16 +1,22 @@
 package org.csystem.app;
 
-import java.util.Random;
-
-import static org.csystem.util.array.ArrayUtil.print;
-import static org.csystem.util.array.ArrayUtil.randomArray;
-
 class App {
     public static void main(String [] args)
     {
-        Random random = new Random();
-        int [] a = randomArray(random, 10, 0, 100);
+        int [] a = new int[0];
 
-        print(a);
+        System.out.printf("Length: %d\n", a.length);
+
+        a = new int[]{};
+
+        System.out.printf("Length: %d\n", a.length);
+        a = new int[]{,};
+        System.out.printf("Length: %d\n", a.length);
+
+        int [] b = {};
+        System.out.printf("Length: %d\n", b.length);
+        int [] c = {,};
+
+        System.out.printf("Length: %d\n", c.length);
     }
 }

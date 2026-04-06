@@ -19080,7 +19080,201 @@ public class ArrayUtilReversedTest {
 ```
 
 
+###### 6 Nisan 2026
 
+>Uzunluğu sıfır olan bir dizi yaratılabilir. Bu durumda bu dizi içerisinde herhangi bir değer tutulamaz ancak dizi (nesnesi) yaratılmış olur. Uzunluğu sıfır olan dizilere **boş dizi (empty array)** de denilmektedir. Boş diziler bazı durumlarda kontrol amaçlı kullanılabilmektedir. Örneğin bir metot bir takım değerlere göre bir dizi yaratıp döncek olsun. Metoda geçilen parametrelere ilişkin argümanların geçersiz olması durumunda metot boş dizi referansına geri dönebilir. Bu durumda metodu çağıran programcı geri dönen dizinin eleman saysını kontrol ederek geçerlilik testi yapabilir. Boş dizi yaratmanın sentaks olarak yöntemleri şunlardır:
+
+```java
+int [] a = new int[0];
+
+a = new int[]{};
+a = new int[]{,};
+
+int [] b = {};
+int [] c = {,};
+
+```
+
+Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [] a = new int[0];  
+  
+        System.out.printf("Length: %d\n", a.length);  
+  
+        a = new int[]{};  
+  
+        System.out.printf("Length: %d\n", a.length);  
+        a = new int[]{,};  
+        System.out.printf("Length: %d\n", a.length);  
+  
+        int [] b = {};  
+        System.out.printf("Length: %d\n", b.length);  
+        int [] c = {,};  
+  
+        System.out.printf("Length: %d\n", c.length);  
+    }  
+}
+```
+
+>**Sınıf Çalışması:** Sayısal loto kuponu üreten programı yazınız
+>
+>**Açıklamalar:** 
+>- Bir sayısal loto kuponu içerisinde `[1, 49]`aralığında birbirinden farklı 6 tane sayı bulunur. 
+>- Sayılar, artan sırada (ascending) yani küçükten büyüğe olacak şekilde sıralanmalıdır.
+>- Programı mümkün olduğunda NYPT kullanarak yazınız. Bunun için `NumericLottery` isimli bir sınıf ile üretim yapma işlemini temsil edebilirsiniz.
+
+>**Not:** İleride daha iyisi yazılacaktır.
+
+>**Çözüm:**
+
+```java
+package org.csystem.app.lottery;  
+  
+import org.csystem.generator.random.lottery.NumericLottery;  
+import org.csystem.util.array.ArrayUtil;  
+  
+import java.util.Scanner;  
+  
+public class NumericLotteryApp {  
+    public static void main(String[] args)  
+    {  
+        run();  
+    }  
+  
+    public static void run()  
+    {  
+        Scanner kb = new Scanner(System.in);  
+  
+        System.out.print("Input count:");  
+        int count = kb.nextInt();  
+        NumericLottery lottery = new NumericLottery();  
+  
+        for (int i = 0; i <= count; ++i)  
+            ArrayUtil.print(lottery.numbers(), 2);  
+    }  
+}
+```
+
+>NumericLottery sınıfının bir implementasyonu
+
+```java
+package org.csystem.generator.random.lottery;  
+  
+import java.util.Arrays;  
+import java.util.Random;  
+  
+public class NumericLottery {  
+    public Random random;  
+  
+    public NumericLottery()  
+    {  
+        random = new Random();  
+    }  
+  
+    public int [] numbers()  
+    {  
+        int [] a = new int[6];  
+  
+        for (int i = 0; i < 6; ++i) {  
+            boolean repeat;  
+  
+            do {  
+                repeat = false;  
+                a[i] = random.nextInt(1, 50);  
+                for (int k = 0; k < i; ++k) {  
+                    if (a[i] == a[k]) {  
+                        repeat = true;  
+                        break;  
+                    }  
+                }
+            } while (repeat);  
+        }  
+        Arrays.sort(a);  
+  
+        return a;  
+    }  
+}
+```
+
+>Burada `Arrays` sınıfının `sort` metodu sayıların artan sırada (ascending) elde edilmesi için kullanılmıştır. `Arrays` sınıfının ve `sort` metodunun detaylarının şu aşamada önemli yoktur.
+
+>NumericLottery sınıfı aşağıdaki gibi öncekine göre göre daha iyi bir yaklaşımla çözülmüştür
+
+```java
+package org.csystem.generator.random.lottery;  
+  
+import java.util.Random;  
+  
+public class NumericLottery {  
+    public Random random;  
+  
+    public static int [] numbers(boolean [] flags)  
+    {  
+        int [] a = new int[6];  
+        int idx = 0;  
+  
+        for (int i = 1; i < flags.length; ++i)  
+            if (flags[i])  
+                a[idx++] = i;  
+  
+        return a;  
+    }  
+  
+    public boolean[] getFlags()  
+    {  
+        boolean[] flags = new boolean[50];  
+  
+        for(int i = 0; i < 6; ++i) {  
+            int val;  
+  
+            while (true) {  
+                val = random.nextInt(1, 50);  
+                if (!flags[val])  
+                    break;  
+            }  
+  
+            flags[val] = true;  
+        }  
+  
+        return flags;  
+    }  
+  
+    public NumericLottery()  
+    {  
+        random = new Random();  
+    }  
+  
+    public int [] numbers()  
+    {  
+        return numbers(getFlags());  
+    }  
+}
+```
+
+>Burada kullanılan algoritma (yaklaşım) genel olarak düşünülmelidir, sayısal loto örnek olarak verilmiştir. Yani bu yaklaşım başka problemlerin çözümlerinde de kullanılabilmektedir.
+
+>**Sınıf Çalışması:** Parametresi ile aldığı long türden bir sayının basamaklarından oluşan int türden diziye geri dönen `digits` isimli metodu `NumberUtil` sınıfı içerisinde yazınız ve test ediniz. Sayı negatifse basamaklar pozitif olarak elde edilecektir. Metodun prototipi şu şekilde olmalıdır:
+
+```java
+public static int [] digits(long a);
+```
+
+>**Sınıf Çalışması:** Aşağıda prototipi verilen metodu açıklamalara göre `ArrayUtil` sınıfı içerisinde yazınız ve test ediniz:
+
+```java
+public static int [] histogramData(int [] a, int n);
+```
+
+>**Açıklamalar**
+>- Metodun parametresi ile aldığı dizi içerisinde `[0, n]` aralığında değerler bulunacaktır.
+>- Metot, parametresi ile aldığı dizi içerisindeki sayılar için her birinden kaç tane (sıklık sayısı) olduğu bilgisine geri dönecektir.
+>- Metot, dizinin elemanlarının aralıkta olup olmadığı, n sayısının pozitif olup olmadığı gibi geçerlilik kontrolleri yapmayacaktır.
 
 
 
