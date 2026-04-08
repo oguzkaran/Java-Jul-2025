@@ -16,6 +16,17 @@ public class NumberUtil {
         return total;
     }
 
+    public static int [] digits(long a)
+    {
+        int [] d = new int[countDigits(a)];
+
+        a = Math.abs(a);
+        for (int i = d.length - 1; a != 0; d[i--] = (int)(a % 10), a /= 10)
+            ;
+
+        return d;
+    }
+
     public static int countDigits(int a)
     {
         return countDigits((long)a);

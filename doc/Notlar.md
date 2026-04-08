@@ -19259,11 +19259,62 @@ public class NumericLottery {
 
 >Burada kullanılan algoritma (yaklaşım) genel olarak düşünülmelidir, sayısal loto örnek olarak verilmiştir. Yani bu yaklaşım başka problemlerin çözümlerinde de kullanılabilmektedir.
 
+###### 8 Nisan 2026
+
 >**Sınıf Çalışması:** Parametresi ile aldığı long türden bir sayının basamaklarından oluşan int türden diziye geri dönen `digits` isimli metodu `NumberUtil` sınıfı içerisinde yazınız ve test ediniz. Sayı negatifse basamaklar pozitif olarak elde edilecektir. Metodun prototipi şu şekilde olmalıdır:
 
 ```java
 public static int [] digits(long a);
 ```
+
+>**Çözüm:**
+
+```java
+package org.csystem.util.numeric.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+import org.csystem.util.numeric.NumberUtil;  
+  
+public class NumberUtilDigitsTest {  
+    public static void run()  
+    {  
+        long a = 12345678912L;  
+        long b = 0;  
+        long c = -12345678912L;  
+        int [] expectedDigitsAC = {1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2};  
+        int [] expectedDigitsB = {0};  
+  
+        System.out.println(ArrayUtil.equals(NumberUtil.digits(a), expectedDigitsAC));  
+        System.out.println(ArrayUtil.equals(NumberUtil.digits(c), expectedDigitsAC));  
+        System.out.println(ArrayUtil.equals(NumberUtil.digits(b), expectedDigitsB));  
+    }  
+  
+    public static void main(String[] args)  
+    {  
+        run();  
+    }  
+}
+```
+
+```java
+package org.csystem.util.numeric;
+
+public class NumberUtil {
+	//...
+	public static int [] digits(long a)  
+	{  
+	    int [] d = new int[countDigits(a)];  
+	  
+	    a = Math.abs(a);  
+	    for (int i = d.length - 1; a != 0; d[i--] = (int)(a % 10), a /= 10)  
+	        ;  
+	  
+	    return d;  
+	}
+	//...
+}
+```
+
 
 >**Sınıf Çalışması:** Aşağıda prototipi verilen metodu açıklamalara göre `ArrayUtil` sınıfı içerisinde yazınız ve test ediniz:
 
@@ -19275,6 +19326,55 @@ public static int [] histogramData(int [] a, int n);
 >- Metodun parametresi ile aldığı dizi içerisinde `[0, n]` aralığında değerler bulunacaktır.
 >- Metot, parametresi ile aldığı dizi içerisindeki sayılar için her birinden kaç tane (sıklık sayısı) olduğu bilgisine geri dönecektir.
 >- Metot, dizinin elemanlarının aralıkta olup olmadığı, n sayısının pozitif olup olmadığı gibi geçerlilik kontrolleri yapmayacaktır.
+
+>**Çözüm:**
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+import static org.csystem.util.array.ArrayUtil.histogramData;  
+  
+public class ArrayUtilHistogramDataTest {  
+    public static void run()  
+    {  
+        int [] a = {2, 3, 2, 1, 5, 5, 1, 3, 0, 2, 5, 1, 5, 3, 0, 3, 2};  
+        int [] expected = {2, 3, 4, 4, 0, 4};  
+  
+        System.out.println(ArrayUtil.equals(histogramData(a, 5),  expected));  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+```java
+package org.csystem.util.array;
+
+public class ArrayUtil {
+	//...
+	public static int [] histogramData(int [] a, int n)  
+	{  
+	    int [] counts = new int[n + 1];  
+	  
+	    for (int i = 0; i < a.length; ++i)  
+	        ++counts[a[i]];  
+	  
+	    return counts;  
+	}
+	//...
+}
+```
+
+
+
+
+
+
 
 
 

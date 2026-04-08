@@ -24,15 +24,26 @@ public class ArrayUtil {
         return true;
     }
 
+    public static boolean hasLength(int [] a)
+    {
+        return !isEmpty(a);
+    }
+
+    public static int [] histogramData(int [] a, int n)
+    {
+        int [] counts = new int[n + 1];
+
+        for (int i = 0; i < a.length; ++i)
+            ++counts[a[i]];
+
+        return counts;
+    }
+
     public static boolean isEmpty(int [] a)
     {
         return a.length == 0;
     }
 
-    public static boolean hasLength(int [] a)
-    {
-        return !isEmpty(a);
-    }
 
     public static int max(int [] a)
     {
