@@ -64,6 +64,56 @@ public class ArrayUtil {
 
         return result;
     }
+    public static int partitionByLess(int [] a, int threshold)
+    {
+        int pi = 0;
+
+        while (pi != a.length && a[pi] < threshold)
+            ++pi;
+
+        if (pi == a.length)
+            return pi;
+
+        for (int i = pi + 1; i < a.length; ++i)
+            if (a[i] < threshold)
+                swap(a, i, pi++);
+
+        return pi;
+    }
+
+    public static int partitionByGreater(int [] a, int threshold)
+    {
+        int pi = 0;
+
+        while (pi != a.length && threshold < a[pi])
+            ++pi;
+
+        if (pi == a.length)
+            return pi;
+
+        for (int i = pi + 1; i < a.length; ++i)
+            if (threshold < a[i])
+                swap(a, i, pi++);
+
+        return pi;
+    }
+
+    public static int partitionByEven(int [] a)
+    {
+        int pi = 0;
+
+        while (pi != a.length && a[pi] % 2 == 0)
+            ++pi;
+
+        if (pi == a.length)
+            return pi;
+
+        for (int i = pi + 1; i < a.length; ++i)
+            if (a[i] % 2 == 0)
+                swap(a, i, pi++);
+
+        return pi;
+    }
 
     public static void print(int [] a)
     {
@@ -132,9 +182,25 @@ public class ArrayUtil {
         return total;
     }
 
+    public static void swap(long [] a, int i, int k)
+    {
+        long temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+
     public static void swap(int [] a, int i, int k)
     {
         int temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+
+    public static void swap(double [] a, int i, int k)
+    {
+        double temp = a[i];
 
         a[i] = a[k];
         a[k] = temp;

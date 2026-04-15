@@ -19370,7 +19370,190 @@ public class ArrayUtil {
 }
 ```
 
+###### 15 Nisan 2026
 
+> **Bölümleme Algoritması (Partition Algorithm):** Burada amaç bir dizinin belirli bir koşula uyan elemanlarının dizinin başına, koşula uymayanların ise dizinin sonuna getirilmesidir. Bu algoritma başka bir dizi kullanmadan gerçekleştirilebilir. Dizi bölümlendikten sonra ilk koşula uymayan elemanın indeks değerine **bölümleme indeksi (partition index)** denir. Bu durumda dizinin tüm elemanları koşula uyuyorsa bölümleme indeksi dizinin uzunluğudur, hiç bir eleman koşulan uymuyorsa bölümleme indeksi sıfır değerindedir. Bu algoritma tipik olarak şu şekildedir: Önce dizinin koşula uymayan ilk elemanı bulunur. Daha sonra ikinci bir indeks, koşula uymayan ilk elemandan sonraki elemana konumlandırılır. İkinci indeksteki eleman koşula uyuyorsa, birinci indeksteki eleman ile yer değiştirilir. İkinci indeksteki eleman koşula uymuyorsa herhangi bir değiştirme işlemi yapılmaz, yalnızca ikinci indeks bir sonraki elemana konumlandırılır. Böylece ilerlenir. Bu durumda ikinci indeks ile dizinin son elemanı da kontrol edilip ilgili işlemler yapıldıktan sonra birinci indeks artık bölümleme indeksi olur.
+>
+>Örneğin
+>
+>3, 9, -5, 6, 7, -4, 2, 6, 9, 11, -56, 17, 11, 2 dizisi için 6 sayısından küçük olan elemanların bölümlenmesi şu şekilde yapılabilir:
+>1.indeks (i1): 1
+>2.indekİ (i2): 2
+>3 -5 9 6 7 -4 2 6 9 11 -56 17 11 2
+>i1:2
+>i2:3
+>3 -5 9 6 7 -4 2 6 9 11 -56 17 11 2
+>i1:2
+>i2:4
+>3 -5 9 6 7 -4 2 6 9 11 -56 17 11 2
+>i1:2
+>i2:5
+>3 -5 -4 6 7 9 2 6 9 11 -56 17 11 2
+>i1:3
+>i2:6
+>3 -5 -4 2 7 9 6 6 9 11 -56 17 11 2
+>i1:4
+>i2:7
+>. . .
+
+>Aşağıdaki partition metotlarını ve test kodlarını inceleyiniz
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+import static org.csystem.util.array.ArrayUtil.partitionByLess;  
+  
+public class ArrayUtilPartitionByLessTest {  
+    public static void run()  
+    {  
+        int [] a = {3, 9, -5, 6, 7, -4, 2, 6, 9, 11, -56, 17, 11, 2};  
+        int [] expected = {3, -5, -4, 2, -56, 2, 6, 6, 9, 11, 7, 17, 11, 9};  
+        int expectedIndex = 6;  
+  
+        int pi = partitionByLess(a, 6);  
+  
+        System.out.println(pi == expectedIndex);  
+        System.out.println(ArrayUtil.equals(a,  expected));  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+import static org.csystem.util.array.ArrayUtil.partitionByGreater;  
+  
+public class ArrayUtilPartitionByGreaterTest {  
+    public static void run()  
+    {  
+        int [] a = {3, 9, -5, 6, 7, -4, 2, 6, 9, 11, -56, 17, 11, 2};  
+        int [] expected = {9, 7, 9, 11, 17, 11, 2, 6, -5, 6, -56, 3, -4, 2};  
+        int expectedIndex = 6;  
+  
+        int pi = partitionByGreater(a, 6);  
+  
+        System.out.println(pi == expectedIndex);  
+        System.out.println(ArrayUtil.equals(a,  expected));  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+import static org.csystem.util.array.ArrayUtil.partitionByEven;  
+  
+public class ArrayUtilPartitionByEvenTest {  
+    public static void run()  
+    {  
+        int [] a = {3, 9, -5, 6, 7, -4, 2, 6, 9, 11, -56, 17, 11, 2};  
+        int [] expected = {6, -4, 2, 6, -56, 2, -5, 3, 9, 11, 7, 17, 11, 9};  
+        int expectedIndex = 6;  
+  
+        int pi = partitionByEven(a);  
+  
+        System.out.println(pi == expectedIndex);  
+        System.out.println(ArrayUtil.equals(a,  expected));  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+
+```java
+package org.csystem.util.array;
+
+public class ArrayUtil {
+	//...
+	
+	public static int partitionByLess(int [] a, int threshold)  
+	{  
+	    int pi = 0;  
+	  
+	    while (pi != a.length && a[pi] < threshold)  
+	        ++pi;  
+	  
+	    if (pi == a.length)  
+	        return pi;  
+	  
+	    for (int i = pi + 1; i < a.length; ++i)  
+	        if (a[i] < threshold)  
+	            swap(a, i, pi++);  
+	  
+	    return pi;  
+	}  
+  
+	public static int partitionByGreater(int [] a, int threshold)
+	{  
+	    int pi = 0;  
+	  
+	    while (pi != a.length && threshold < a[pi])  
+	        ++pi;  
+	  
+	    if (pi == a.length)  
+	        return pi;  
+	  
+	    for (int i = pi + 1; i < a.length; ++i)  
+	        if (threshold < a[i])  
+	            swap(a, i, pi++);  
+	  
+	    return pi;  
+	}  
+	  
+	public static int partitionByEven(int [] a)  
+	{  
+	    int pi = 0;  
+	  
+	    while (pi != a.length && a[pi] % 2 == 0)  
+	        ++pi;  
+	  
+	    if (pi == a.length)  
+	        return pi;  
+	  
+	    for (int i = pi + 1; i < a.length; ++i)  
+	        if (a[i] % 2 == 0)  
+	            swap(a, i, pi++);  
+	  
+	    return pi;  
+	}
+	
+	public static void swap(int [] a, int i, int k)  
+	{  
+	    int temp = a[i];  
+	  
+	    a[i] = a[k];  
+	    a[k] = temp;  
+	}
+	
+	//...
+}
+```
+
+**Anahtar Notlar:** Yukarıdaki metotlar aslında tek bir metot olarak genellenebilir. Buna ilişkin detaylar `Java ile Uygulama Geliştirme I` kursunda ele alınacaktır.
+
+###### Dizilerin Sıraya Dizilmesİ
 
 
 
