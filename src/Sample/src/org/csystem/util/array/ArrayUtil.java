@@ -7,9 +7,58 @@ import java.util.Random;
  * @author Java-Jul-2025 Group
  */
 public class ArrayUtil {
+    public static void bubbleSortAscending(int [] a) //ileride gizlenecektir
+    {
+        for (int i = 0; i < a.length - 1; ++i)
+            for (int k = 0; k < a.length -1 - i; ++k)
+                if (a[k + 1] < a[k])
+                    swap(a, k, k + 1);
+    }
+
+    public static void bubbleSortDescending(int [] a) //ileride gizlenecektir
+    {
+        for (int i = 0; i < a.length - 1; ++i)
+            for (int k = 0; k < a.length -1 - i; ++k)
+                if (a[k] < a[k + 1])
+                    swap(a, k, k + 1);
+    }
+
+    public static void selectionSortAscending(int [] a) //ileride gizlenecektir
+    {
+        for (int i = 0; i < a.length - 1; ++i) {
+            int idx = minIndex(a, i);
+
+            if (a[idx] < a[i])
+                swap(a, i, idx);
+        }
+    }
+
+    public static void selectionSortDescending(int [] a) //ileride gizlenecektir
+    {
+        for (int i = 0; i < a.length - 1; ++i) {
+            int idx = maxIndex(a, i);
+
+            if (a[i] < a[idx])
+                swap(a, i, idx);
+        }
+    }
+
     public static double average(int [] a)
     {
         return (double)sum(a) / a.length;
+    }
+
+    public static void bubbleSort(int [] a)
+    {
+        bubbleSort(a, false);
+    }
+
+    public static void bubbleSort(int [] a, boolean descending)
+    {
+        if (descending)
+            bubbleSortDescending(a);
+        else
+            bubbleSortAscending(a);
     }
 
     public static boolean equals(int [] a, int [] b)
@@ -44,26 +93,68 @@ public class ArrayUtil {
         return a.length == 0;
     }
 
-
     public static int max(int [] a)
     {
-        int result = a[0];
+        return max(a, 0);
+    }
 
-        for (int i = 1; i < a.length; ++i)
+    public static int max(int [] a, int start)
+    {
+        int result = a[start];
+
+        for (int i = start + 1; i < a.length; ++i)
             result = Math.max(result, a[i]);
 
         return result;
     }
 
+    public static int maxIndex(int [] a)
+    {
+        return maxIndex(a, 0);
+    }
+
+    public static int maxIndex(int [] a, int start)
+    {
+        int idx = start;
+
+        for (int i = start + 1; i < a.length; ++i)
+            if (a[idx] < a[i])
+                idx = i;
+
+        return idx;
+    }
+
     public static int min(int [] a)
     {
-        int result = a[0];
+        return  min(a, 0);
+    }
 
-        for (int i = 1; i < a.length; ++i)
+    public static int min(int [] a, int start)
+    {
+        int result = a[start];
+
+        for (int i = start + 1; i < a.length; ++i)
             result = Math.min(result, a[i]);
 
         return result;
     }
+
+    public static int minIndex(int [] a)
+    {
+        return minIndex(a, 0);
+    }
+
+    public static int minIndex(int [] a, int start)
+    {
+        int idx = start;
+
+        for (int i = start + 1; i < a.length; ++i)
+            if (a[i] < a[idx])
+                idx = i;
+
+        return idx;
+    }
+
     public static int partitionByLess(int [] a, int threshold)
     {
         int pi = 0;
@@ -170,6 +261,19 @@ public class ArrayUtil {
             result[result.length - 1 - i] = a[i];
 
         return result;
+    }
+
+    public static void selectionSort(int [] a)
+    {
+        selectionSort(a, false);
+    }
+
+    public static void selectionSort(int [] a, boolean descending)
+    {
+        if (descending)
+            selectionSortDescending(a);
+        else
+            selectionSortAscending(a);
     }
 
     public static long sum(int [] a)

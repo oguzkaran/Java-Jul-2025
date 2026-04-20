@@ -19553,7 +19553,300 @@ public class ArrayUtil {
 
 **Anahtar Notlar:** Yukarıdaki metotlar aslında tek bir metot olarak genellenebilir. Buna ilişkin detaylar `Java ile Uygulama Geliştirme I` kursunda ele alınacaktır.
 
-###### Dizilerin Sıraya Dizilmesİ
+###### 20 Nisan 2026
+
+###### Dizilerin Sıraya Dizilmesi
+
+>Dizilerin sıraya dizilmesine (sorting) yönelik pek çok algoritma bulunmaktadır. Sıralama işleminin artan sırada (ascending order) ya da başka bir deyişle küçükten büyüğe (mantıksal) yapılmasına **doğal sıralama (natural sort order)** denir. Azalan sırada ya da başka bir deyişle büyükten küçüğe (mantıksal) sıralama işlemine `descending order` denilmektedir. Bu bölümde **kabarcık sıralama (bubble sort)** ve **seçerek sıralama (selection sort)** algoritmaları ele alınacaktır. Bu algoritmalar doğal sıralayacak biçimde anlatılacaktır ancak hem ascending hem de descending order biçimleri implemente edilecektir.
+
+**Anahtar Notlar:** Algoritmaların karşılaştırılmasına yönelik iki ölçüt kullanılır: **hız (speed)**, **kaynak kullanımı (resource usage)**. Burada ele alınacak olan sıralama algoritmaları bu anlamda karşılaştırılmayacaktır. `Temel Algoritma Analizi` konusu içerisinde buradaki sıralama algoritmalarının da karşılaştırması ayrıca yapılacaktır.
+
+>**Kabarcık Sıralama (Bubble Sort) Algoritması:** Bu algoritmada dizinin yan yana iki elemanı karşılaştırılır, duruma göre yer değiştirilir. Her yinelemede en büyük eleman daraltılmış dizinin sonuna gider. Böylece her yinelemede bir geriye kadar gidilmiştir. 
+>
+>Örneğin
+>22 8 67 -7 34 -6 17 21 69 45 -12 4 16
+>
+>8 22 -7 34 -6 17 21 67 45 -12 4 16 **69**
+>
+>8 -7 22 -6 17 21 34 45 -12 4 16 **67 69**
+>
+>-7 8 -6 17 21 22 34 -12 4 16 **45 67 69**
+>
+>`...`
+
+>Aşağıdaki bubbleSort metotlarını ve test kodlarını inceleyiniz
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+public class ArrayUtilBubbleSortAscendingTest {  
+    public static void run()  
+    {  
+        int [] a = {4, -5, 7, -4, 3, 8, 6, 9, 5, -6, 5};  
+        int [] expected = {-6, -5, -4, 3, 4, 5, 5, 6, 7, 8, 9};  
+  
+        ArrayUtil.bubbleSort(a);  
+  
+        System.out.println(ArrayUtil.equals(a,  expected));  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+public class ArrayUtilBubbleSortDescendingTest {  
+    public static void run()  
+    {  
+        int [] a = {4, -5, 7, -4, 3, 8, 6, 9, 5, -6, 5};  
+        int [] expected = {9, 8, 7, 6, 5, 5, 4, 3, -4, -5, -6};  
+  
+        ArrayUtil.bubbleSort(a, true);  
+  
+        System.out.println(ArrayUtil.equals(a,  expected));  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+
+```java
+package org.csystem.util.array;
+
+public class ArrayUtil {
+	//...
+	public static void bubbleSortAscending(int [] a) //ileride gizlenecektir  
+	{  
+	    for (int i = 0; i < a.length - 1; ++i)  
+	        for (int k = 0; k < a.length -1 - i; ++k)  
+	            if (a[k + 1] < a[k])  
+	                swap(a, k, k + 1);  
+	}  
+	  
+	public static void bubbleSortDescending(int [] a) //ileride gizlenecektir  
+	{  
+	    for (int i = 0; i < a.length - 1; ++i)  
+	        for (int k = 0; k < a.length -1 - i; ++k)  
+	            if (a[k] < a[k + 1])  
+	                swap(a, k, k + 1);  
+	}
+	
+	public static void bubbleSort(int [] a)  
+	{  
+	    bubbleSort(a, false);  
+	}  
+	  
+	public static void bubbleSort(int [] a, boolean descending)  
+	{  
+	    if (descending)  
+	        bubbleSortDescending(a);  
+	    else  
+	        bubbleSortAscending(a);  
+	}
+	//...
+}
+```
+
+>**Seçerek Sıralama (Selection Sort) Algoritması:** Bu algoritmada dizinin en küçük elemanı bulunur, ilk eleman ile yer değiştirilir. Dizi daraltılır. Aynı işlem daraltılmış dizi için yapılır. Böylece ilerlenir.
+>
+>Örneğin
+>22 8 67 -7 34 -6 17 21 69 45 -12 4 16
+>
+>**-12** 8 67 -7 34 -6 17 21 69 45 22 4 16
+>
+>**-12 -7** 67  8 34 -6 17 21 69 45 22 4 16
+>
+>**-12 -7 -6*** 8 34 67 17 21 69 45 22 4 16
+>
+>`...`
+
+
+>Aşağıdaki selectionSort metotlarını ve test kodlarını inceleyiniz
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+public class ArrayUtilSelectionSortAscendingTest {  
+    public static void run()  
+    {  
+        int [] a = {4, -5, 7, -4, 3, 8, 6, 9, 5, -6, 5};  
+        int [] expected = {-6, -5, -4, 3, 4, 5, 5, 6, 7, 8, 9};  
+  
+        ArrayUtil.selectionSort(a);  
+  
+        System.out.println(ArrayUtil.equals(a,  expected));  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+```java
+package org.csystem.util.array.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+public class ArrayUtilSelectionSortDescendingTest {  
+    public static void run()  
+    {  
+        int [] a = {4, -5, 7, -4, 3, 8, 6, 9, 5, -6, 5};  
+        int [] expected = {9, 8, 7, 6, 5, 5, 4, 3, -4, -5, -6};  
+  
+        ArrayUtil.selectionSort(a, true);  
+  
+        System.out.println(ArrayUtil.equals(a,  expected));  
+    }  
+  
+    public static void main()  
+    {  
+        run();  
+    }  
+}
+```
+
+```java
+package org.csystem.util.array;
+
+public class ArrayUtil {
+	//...
+	public static void selectionSortAscending(int [] a) //ileride gizlenecektir  
+	{  
+	    int min, minIndex;  
+	  
+	    for (int i = 0; i < a.length - 1; ++i) {  
+	        min = a[i];  
+	        minIndex = i;  
+	  
+	        for (int k = i + 1; k < a.length; ++k)  
+	            if (a[k] < min) {  
+	                min = a[k];  
+	                minIndex = k;  
+	            }  
+	        a[minIndex] = a[i];  
+	        a[i] = min;  
+	    }  
+	}  
+	  
+	public static void selectionSortDescending(int [] a) //ileride gizlenecektir  
+	{  
+	    int max, maxIndex;  
+	  
+	    for (int i = 0; i < a.length - 1; ++i) {  
+	        max = a[i];  
+	        maxIndex = i;  
+	  
+	        for (int k = i + 1; k < a.length; ++k)  
+	            if (max < a[k]) {  
+	                max = a[k];  
+	                maxIndex = k;  
+	            }  
+	        a[maxIndex] = a[i];  
+	        a[i] = max;  
+	    }  
+	}
+	
+	public static void selectionSort(int [] a)  
+	{
+	    selectionSort(a, false);  
+	}  
+	  
+	public static void selectionSort(int [] a, boolean descending)  
+	{  
+	    if (descending)  
+	        selectionSortDescending(a);  
+	    else  
+	        selectionSortAscending(a);  
+	}
+	//...
+}
+```
+
+```java
+package org.csystem.util.array;
+
+public class ArrayUtil {
+	//...
+	public static void selectionSortAscending(int [] a) //ileride gizlenecektir  
+	{  
+	    for (int i = 0; i < a.length - 1; ++i) {  
+	        int idx = minIndex(a, i);  
+	  
+	        if (a[idx] < a[i])  
+	            swap(a, i, idx);  
+	    }  
+	}  
+	  
+	public static void selectionSortDescending(int [] a) //ileride gizlenecektir 
+	{  
+	    for (int i = 0; i < a.length - 1; ++i) {  
+	        int idx = maxIndex(a, i);  
+	  
+	        if (a[i] < a[idx])  
+	            swap(a, i, idx);  
+	    }  
+	}
+	
+	public static int maxIndex(int [] a, int start)  
+	{  
+	    int idx = start;  
+	  
+	    for (int i = start + 1; i < a.length; ++i)  
+	        if (a[idx] < a[i])  
+	            idx = i;  
+	  
+	    return idx;  
+	}
+	
+	public static int minIndex(int [] a, int start)  
+	{  
+	    int idx = start;  
+	  
+	    for (int i = start + 1; i < a.length; ++i)  
+	        if (a[i] < a[idx])  
+	            idx = i;  
+	  
+	    return idx;  
+	}
+	
+	public static void selectionSort(int [] a)  
+	{  
+	    selectionSort(a, false);  
+	}  
+	  
+	public static void selectionSort(int [] a, boolean descending)  
+	{  
+	    if (descending)  
+	        selectionSortDescending(a);  
+	    else  
+	        selectionSortAscending(a);  
+	}
+	//...
+}
+```
+
+###### char Türden Diziler
+
+
+
+
 
 
 
