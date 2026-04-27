@@ -253,6 +253,15 @@ public class ArrayUtil {
             swap(a, first++, last--);
     }
 
+    public static void reverse(char[] a)
+    {
+        int first = 0;
+        int last = a.length - 1;
+
+        while (first < last)
+            swap(a, first++, last--);
+    }
+
     public static int [] reversed(int[] a)
     {
         int [] result = new int [a.length];
@@ -286,14 +295,6 @@ public class ArrayUtil {
         return total;
     }
 
-    public static void swap(long [] a, int i, int k)
-    {
-        long temp = a[i];
-
-        a[i] = a[k];
-        a[k] = temp;
-    }
-
     public static void swap(int [] a, int i, int k)
     {
         int temp = a[i];
@@ -302,9 +303,25 @@ public class ArrayUtil {
         a[k] = temp;
     }
 
+    public static void swap(long [] a, int i, int k)
+    {
+        long temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+
     public static void swap(double [] a, int i, int k)
     {
         double temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+
+    public static void swap(char [] a, int i, int k)
+    {
+        char temp = a[i];
 
         a[i] = a[k];
         a[k] = temp;

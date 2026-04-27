@@ -1,5 +1,7 @@
 package org.csystem.util.string;
 
+import org.csystem.util.array.ArrayUtil;
+
 import java.util.Random;
 
 /**
@@ -48,6 +50,8 @@ public class StringUtil {
 
         return sb.toString();
     }
+
+
 
     public static boolean isPalindrome(String s) 
     {
@@ -164,5 +168,10 @@ public class StringUtil {
     {
 
         return randomText(random, count, "abcdefghijklmnopqrstuwxvyzABCDEFGHIKLMNOPQRSTUWXYZ");
+    }
+
+    public static String reverse(String s)
+    {
+        return new StringBuilder(s).reverse().toString();
     }
 }

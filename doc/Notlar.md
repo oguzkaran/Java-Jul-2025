@@ -19842,7 +19842,166 @@ public class ArrayUtil {
 }
 ```
 
+
+###### 27 Nisan 2026
 ###### char Türden Diziler
+
+>char türden diziler `String` sınıfına benzetilebilir. char türden diziler (aslında tüm diziler) immutable değildir. Bu anlamda char türden diziler String sınıfına yardımcı olarak da kullanılabilir. Örneğin String sınıfının immutable olmasından dolayı oluşabilecek maliyetli bir durum için char türden bir dizi kullanılabilir. Şüphesiz böyle bir durumda `StringBuilder` sınıfı da String sınıfına yardımcı olarak tercih edilebilir. Aslında StringBuilder sınıfı da içsel olarak char türden dizi kullanılarak yazılabilir. String sınıfının `toCharArray` metodu, yazıya ilişkin karakterlerden oluşan char türden bir dizi referansına geri döner. Bu metot her çağrıda yeni bir dizi yaratır. String sınıfının `char []` parametreli ctor'ları ile char türden dizi içerisindeki karakterleri tutan bir String nesnesi elde edilebilir. String sınıfının `char []` parametresi alan 3 parametreli ctor'u ikinci parametresi ile aldığı indeksten itibaren, 3. parametresi ile aldığı sayı kadar karakterden oluşan bir String nesnesi yaratılmasını sağlar. Ayrıca String sınıfının `char []` parametresi alan `valueOf` factory metotları da tek parametreli ve 3 parametreli olarak bulunmaktadır. Bu metotlar ile char türden diziden String nesnesi elde edilebilir. 
+
+>Aşağıdaki reverse metodu her adımda yeni bir String nesnesi yaratılması dolayısıyla efektif olarak yazılmamıştır
+
+```java
+package org.csystem.util.string;
+
+public class StringUtil {
+	//...
+	public static String reverse(String s)  
+	{  
+	    String str = "";  
+	  
+	    for (int i = s.length() - 1; i >= 0; --i)  
+	        str += s.charAt(i);  
+	  
+	    return str;  
+	}
+	//...
+}
+```
+
+>Bu metot char türden dizi kullanarak daha efektif bir biçimde aşağıdaki gibi yazılabilir
+
+```java
+package org.csystem.util.string;
+
+public class StringUtil {
+	//...
+	public static String reverse(String s)  
+	{  
+	    char [] c = s.toCharArray();  
+	  
+	    ArrayUtil.reverse(c);  
+	  
+	    return new String(c);  
+	}
+	//...
+}
+```
+
+>Bu metot içerisinde String sınıfının valueOf factory metodu kullanılarak da yazıya çevirme işlemi yapılabilir
+
+```java
+package org.csystem.util.string;
+
+public class StringUtil {
+	//...
+	public static String reverse(String s)  
+	{  
+	    char [] c = s.toCharArray();  
+	  
+	    ArrayUtil.reverse(c);  
+	  
+	    return String.valueOf(c);  
+	}
+	//...
+}
+```
+
+>Şüphesiz bu metot StringBuilder sınıfı kullanılarak da aşağıdaki gibi yapılabilir
+
+```java
+package org.csystem.util.string;
+
+public class StringUtil {
+	//...
+	public static String reverse(String s)  
+	{  
+	    return new StringBuilder(s).reverse().toString();  
+	}
+	//...
+}
+```
+
+>Bu metoda ilişkin basit bir test kodu şu şekilde yazılabilir
+
+```java
+package org.csystem.util.string.test;  
+  
+import org.csystem.util.string.StringUtil;  
+import java.util.Random;  
+import java.util.Scanner;  
+  
+public class StringUtilReverseTest {  
+    public static void run()  
+    {  
+        String s = "ankara";  
+        String expected = "arakna";  
+  
+        System.out.println(StringUtil.reverse(s).equals(expected));  
+    }  
+  
+    public static void main(String[] args)  
+    {  
+        run();  
+    }  
+}
+```
+
+
+>StringUtil içerisinde daha önce StringBuilder kullanarak yazmış olduğumuz `letters` metodu char türden dizi kullanılarak aşağıdaki gibi yazılabilir
+
+```java
+package org.csystem.util.string;
+
+public class StringUtil {
+	//...
+	public static String letters(String s)  
+	{  
+	    char [] c = new char[s.length()];  
+	    int idx = 0;  
+	  
+	    for (int i = 0; i < s.length(); ++i) {  
+	        char ch =  s.charAt(i);  
+	  
+	        if (Character.isLetter(ch))  
+	            c[idx++] = ch;  
+	    }  
+	  
+	    return String.valueOf(c, 0, idx);  
+	}
+	//...
+}
+```
+
+>Bu metoda ilişkin basit bir test kodu şu şekilde yazılabilir
+
+```java
+package org.csystem.util.string.test;  
+  
+import org.csystem.util.string.StringUtil;  
+  
+public class StringUtilLettersTest {  
+    public static void run()  
+    {  
+        String s = "ankara06istanbul34";  
+        String expected = "ankaraistanbul";  
+  
+        System.out.println(StringUtil.letters(s).equals(expected));  
+    }  
+  
+    public static void main(String[] args)  
+    {  
+        run();  
+    }  
+}
+```
+
+
+>Peki yukarıdaki metotlar için hangisini kullanmak daha iyidir? Aslında StringBuilder veya char türden dizinin kullanılması maliyet açısından neredeyse aynıdır. Yani iki yaklaşım da efektiftir denebilir. Bununla birlikte StringBuilder kullanımı hem kolaylık açısından hem de hata yapma olasılığını azaltmak açısından tercih edilebilir. Ayrıca bazı mülakatlarda böylesi problemlerde hem efektif olması istenir hem de StringBuilder kullanılması istenmezse char türden dizi yaklaşımı tercih edilebilir. Her iki yaklaşımın da String sınıfının immutable özelliğinin performans ve verim açısından dezavantaj oluşturduğu durumda tercih edilebildiğine yani String sınıfına yardımcı olarak kullanıldığına dikkat ediniz.
+
+###### Referans Dizileri
+
+>
+
 
 
 
