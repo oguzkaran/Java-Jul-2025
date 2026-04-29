@@ -136,19 +136,6 @@ public class StringUtil {
         return len < n ? s + String.valueOf(ch).repeat(n - len) : s;
     }
 
-    public static String removeWhitespaces(String s) 
-    {
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < s.length(); ++i) {
-            char c = s.charAt(i);
-
-            if (!Character.isWhitespace(c))
-                sb.append(c);
-        }
-        return sb.toString();
-    }
-
     public static String randomText(Random random, int count, String source)
     {
         StringBuilder sb = new StringBuilder();
@@ -166,8 +153,40 @@ public class StringUtil {
 
     public static String randomTextEN(Random random, int count)
     {
-
         return randomText(random, count, "abcdefghijklmnopqrstuwxvyzABCDEFGHIKLMNOPQRSTUWXYZ");
+    }
+
+    public static String [] randomTexts(Random random, int n, int origin, int bound, String source)
+    {
+        String [] str = new String[n];
+
+        for (int i = 0; i < n; ++i)
+            str[i] = randomText(random, random.nextInt(origin, bound), source);
+
+        return str;
+    }
+
+    public static String [] randomTextsEN(Random random, int n, int origin, int bound)
+    {
+        return randomTexts(random, n, origin, bound, "abcdefghijklmnopqrstuwxvyzABCDEFGHIKLMNOPQRSTUWXYZ");
+    }
+
+    public static String [] randomTextsTR(Random random, int n, int origin, int bound)
+    {
+        return randomTexts(random, n, origin, bound, "abcçdefgğhıijklmnoöprsştuüvyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ");
+    }
+
+    public static String removeWhitespaces(String s)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+
+            if (!Character.isWhitespace(c))
+                sb.append(c);
+        }
+        return sb.toString();
     }
 
     public static String reverse(String s)

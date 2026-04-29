@@ -19998,16 +19998,368 @@ public class StringUtilLettersTest {
 
 >Peki yukarıdaki metotlar için hangisini kullanmak daha iyidir? Aslında StringBuilder veya char türden dizinin kullanılması maliyet açısından neredeyse aynıdır. Yani iki yaklaşım da efektiftir denebilir. Bununla birlikte StringBuilder kullanımı hem kolaylık açısından hem de hata yapma olasılığını azaltmak açısından tercih edilebilir. Ayrıca bazı mülakatlarda böylesi problemlerde hem efektif olması istenir hem de StringBuilder kullanılması istenmezse char türden dizi yaklaşımı tercih edilebilir. Her iki yaklaşımın da String sınıfının immutable özelliğinin performans ve verim açısından dezavantaj oluşturduğu durumda tercih edilebildiğine yani String sınıfına yardımcı olarak kullanıldığına dikkat ediniz.
 
+
+###### 29 Nisan 2026
 ###### Referans Dizileri
 
+>Her bir elemanı bir referans olan dizilere **referans dizileri (reference arrays)** denir. Bu durumda dizinin her bir elemanı ilgili türden bir adres tutar. Bu durumda bir referans dizisinin yaratılması, elemanı olan her bir referansın gösterdiği nesnenin yaratılması anlamına gelmez. Yani bir referans dizisi yaratıldıktan sonra, dizinin elemanları olan referanslar kullanılmadan önce uygun adreslerin verilmesi gerekir. Bir referans dizisi ilk değer verilmeden yaratıldığında her bir elemanına `null` değeri verilmiş olur. 
+
+**Anahtar Notlar:** Programlamda kullanılmayan adrese **null adres (null address/pointer)** denir. Java'da null adres (Java düzeyinde `null reference` da denebilir) `null` isimli bir sabit ile temsil edilir. `null` aynı zamanda bir anahtar sözcüktür. null bir referansın default değeri olarak atanır. null adrese ilişkin diğer detaylar ileride ayrı bir bölüm olarak ele alınacaktır. 
+
+>İçerisinde null olan bir referans kullanılarak non-static elemanlara erişmeye çalışıldığında exception oluşur.
+
+>Aşağıdaki demo örnekte referans dizisi yaratılmış ancak dizinin elemanları olan referanslar içerisinde null olduğundan nesne varmışcasına erişmeye çalışıldığı için exception oluşur
+
+```java
+package org.csystem.app;  
+  
+import java.util.Scanner;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Scanner kb = new Scanner(System.in);  
+  
+        System.out.print("Input count:");  
+        int n = kb.nextInt();  
+        Sample [] samples = new Sample[n];  
+  
+        System.out.println("Fill array:");  
+        for (int i = 0; i < n; ++i)  
+            samples[i].a = i +  10;  
+  
+        System.out.println("Print array:");  
+        for (int i = 0; i < n; ++i)  
+            System.out.printf("%d ", samples[i].a);  
+  
+        System.out.println();  
+    }  
+}  
+  
+class Sample {  
+    public int a;  
+  
+    //...  
+  
+    public Sample(int x)  
+    {  
+        a = x;  
+    }  
+  
+    //...  
+}
+```
+
+>Yukarıdaki örnek aşağıdaki gibi, her bir referansa yeni yaratılmış bir nesnenin adresi verilerek yapılabilir. Referans dizilerinin elemanları olan referanslara verilecek olan adresler senaryoya göre daha önceden yaratılmış olan nesnelerin de adresleri olabilir. Buradaki çözüm duruma anlatmak için yapılmıştır
+
+```java
+package org.csystem.app;  
+  
+import java.util.Scanner;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Scanner kb = new Scanner(System.in);  
+  
+        System.out.print("Input count:");  
+        int n = kb.nextInt();  
+        Sample [] samples = new Sample[n];  
+  
+        System.out.println("Fill array:");  
+        for (int i = 0; i < n; ++i)  
+            samples[i] = new Sample(i + 10);  
+  
+        System.out.println("Print array:");  
+        for (int i = 0; i < n; ++i)  
+            System.out.printf("%d ", samples[i].a);  
+  
+        System.out.println();  
+    }  
+}  
+  
+class Sample {  
+    public int a;  
+  
+    //...  
+  
+    public Sample(int x)  
+    {  
+        a = x;  
+    }  
+  
+    //...  
+}
+```
+
+>Referans dizilerinde ilk değer verilmesi aslında referans dizisinin elemanları olan referanslara uygun adreslerin verilmesi demektir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+import java.util.Scanner;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Sample s1 = new Sample(67);  
+        Sample s2 = new Sample(34);  
+  
+        Sample [] samples = {new Sample(10), s1, s2, new Sample(20), s1, new Sample(30), s2};  
+  
+        System.out.println("Print array:");  
+        for (int i = 0; i < samples.length; ++i)  
+            System.out.printf("%d ", samples[i].a);  
+  
+        System.out.println();  
+    }  
+}  
+  
+class Sample {  
+    public int a;  
+  
+    //...  
+  
+    public Sample(int x)  
+    {  
+        a = x;  
+    }  
+  
+    //...  
+}
+```
+
+>Pratikte String türden diziler çok fazla kullanılmaktadır. String türden bir diziye ilk değer olarak String literal'lar da verilebilir.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        String [] cities = {"ankara", "istanbul", "izmir", "zonguldak", "bolu", "kastamonu"};  
+  
+        for (int i = 0; i < cities.length; ++i)  
+            System.out.println(cities[i].toUpperCase());  
+    }  
+}
+```
+
+
+>**Sınıf Çalışması:** Parametresi ile aldığı gün, ay ve yıl bilgilerine ilişkin tarihin yılın hangi günü olduğu bilgisine geri dönen `getDayOfWeek` isimli metodu aşağıdaki açıklamalara göre DateUtil sınıfı içerisinde yazınız ve test ediniz
 >
+>**Açıklamalar:** 
+>- Metot geçersiz bir tarih için `-1` değerine geri dönecektir.
+>- Tarihin haftanın hangi gününe geldiği aşağıdaki yöntemle belirlenecektir:
+> 01.01.1900 ile ilgili tarih arasındaki toplam gün sayısı hesaplanır ve 7 değerine göre modu alınır. Bu durumda elde edilen değer 0 ise Pazar, 1 ise Pazartesi, ..., 6 ise Cumartesi gününe ilişkindir.
+>- Metot yukarıdaki metotlar kullanılarak yazılabilir.
+>- 01.01.1900 öncesindeki tarihler geçersiz kabul edilecektir.
+
+>**Not:** İleride daha iyisi yazılacaktır.
+
+>**Çözüm:**
+
+```java
+package org.csystem.app.date.test;  
+  
+import org.csystem.app.date.DateUtil;  
+  
+import java.util.Scanner;  
+  
+public class DateUtilGetDayOfWeekTest {  
+    public static void run()  
+    {  
+       Scanner kb = new Scanner(System.in);  
+         
+       while (true) {  
+          System.out.print("Input day, month and year:");  
+          int day = kb.nextInt();  
+          int month = kb.nextInt();  
+          int year = kb.nextInt();  
+            
+          if (day == 0 && month == 0 && year == 0)  
+             break;  
+            
+          DateUtil.printDateEN(day, month, year);  
+       }  
+    }  
+  
+    public static void main()  
+    {  
+       run();  
+    }  
+}
+```
+
+```java
+package org.csystem.app.date;  
+  
+public class DateUtil {  
+    public static int [] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};  
+    public static String [] weekDays = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};  
+    public static String [] months = {"January", "February", "March", "April", "May", "June",  
+          "July", "August", "September", "October", "November", "December"};  
+  
+    public static void printDateEN(int day, int month, int year)  
+    {  
+       int dayOfWeek = getDayOfWeek(day, month, year);  
+  
+       System.out.println(dayOfWeek != -1 ? "%d%s %s %d %s".formatted(day, getDaySuffix(day), months[month - 1], year, weekDays[dayOfWeek]) : "Invalid date values!...");  
+    }  
+      
+    public static int getDayOfWeek(int day, int month, int year)  
+    {  
+       int totalDays;  
+         
+       if (year < 1900 || (totalDays = getDayOfYear(day, month, year)) == -1)  
+          return -1;  
+         
+       for (int y = 1900; y < year; ++y) {  
+          totalDays += 365;  
+          if (isLeapYear(y))  
+             ++totalDays;  
+       }  
+         
+       return totalDays % 7;             
+    }  
+      
+    public static int getDayOfYear(int day, int month, int year)  
+    {  
+       if (isValidDate(day, month, year))  
+          return getDayOfYearValue(day, month, year);  
+         
+       return -1;  
+    }  
+      
+    public static int getDayOfYearValue(int day, int month, int year)  
+    {  
+       int dayOfYear = day;  
+  
+       for (int m = month - 1; m >= 1; --m)  
+          dayOfYear += getMonthDays(m, year);  
+  
+       return dayOfYear;  
+    }  
+  
+    public static String getDaySuffix(int day)  
+    {  
+       return switch (day) {  
+          case 1, 21, 31 -> "st";  
+          case 2, 22 -> "nd";  
+          case 3, 23 -> "rd";  
+          default -> "th";  
+       };  
+    }  
+      
+    public static boolean isValidDate(int day, int month, int year)  
+    {  
+       return 1 <= day && day <= 31 && 1 <= month && month <= 12 && day <= getMonthDays(month, year);  
+    }  
+      
+    public static int getMonthDays(int month, int year)  
+    {  
+       return month == 2 && isLeapYear(year) ? 29 : monthDays[month - 1];  
+    }  
+      
+    public static boolean isLeapYear(int year)  
+    {  
+       return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;  
+    }  
+}
+```
+
+>**Sınıf Çalışması:** Aşağıda prototipleri verilen metotları açıklamalara göre StringUtil sınıfı içerisinde yazınız
+
+```java
+public static String [] randomTextsEN(Random random, int n, int origin, int bound);
+public static String [] randomTextsTR(Random random, int n, int origin, int bound);
+```
+
+>**Açıklamalar:** 
+>
+>- randomTextsEN metodu parametresi ile aldığı n sayısı uzunlukta her bir elemanı `[origin, bound)` aralığında rassal olarak üretilmiş bir sayı kadar, rassal olarak üretilmiş İngilizce karakterlerden oluşan bir String dizisine geri dönecektir.
+>- randomTextsTR metodu parametresi ile aldığı n sayısı uzunlukta her bir elemanı `[origin, bound)` aralığında rassal olarak üretilmiş bir sayı kadar, rassal olarak üretilmiş Türkçe karakterlerden oluşan bir String dizisine geri dönecektir.
 
 
+>**Çözüm:**
 
 
+```java
+package org.csystem.util.string.test;  
+  
+import org.csystem.util.string.StringUtil;  
+import java.util.Random;  
+import java.util.Scanner;  
+  
+public class StringUtilRandomTextsTRENTest {  
+    public static void run()  
+    {  
+        Scanner kb = new Scanner(System.in);  
+        Random r = new Random();  
+  
+        System.out.print("Input count:");  
+        int count = kb.nextInt();  
+  
+        String [] strEN = StringUtil.randomTextsEN(r, count, 5, 15);  
+        String [] strTR = StringUtil.randomTextsTR(r, count, 5, 15);  
+  
+        System.out.println("English Texts:");  
+        for (int i = 0; i < strEN.length; ++i)  
+            System.out.println(strEN[i]);  
+  
+        System.out.println("Turkish Texts:");  
+        for (int i = 0; i < strTR.length; ++i)  
+            System.out.println(strTR[i]);  
+    }  
+  
+    public static void main(String[] args)  
+    {  
+        run();  
+    }  
+}
+```
 
+```java
+package org.csystem.util.string;
 
-
+public class StringUtil {
+	//...
+	public static String randomTextTR(Random random, int count)  
+	{  
+	    return randomText(random, count, "abcçdefgğhıijklmnoöprsştuüvyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ");  
+	}  
+  
+	public static String randomTextEN(Random random, int count)  
+	{  
+	    return randomText(random, count, "abcdefghijklmnopqrstuwxvyzABCDEFGHIKLMNOPQRSTUWXYZ");  
+	}  
+	  
+	public static String [] randomTexts(Random random, int n, int origin, int bound, String source)  
+	{  
+	    String [] str = new String[n];  
+	  
+	    for (int i = 0; i < n; ++i)  
+	        str[i] = randomText(random, random.nextInt(origin, bound), source);  
+	  
+	    return str;  
+	}  
+	  
+	public static String [] randomTextsEN(Random random, int n, int origin, int bound)  
+	{  
+	    return randomTexts(random, n, origin, bound, "abcdefghijklmnopqrstuwxvyzABCDEFGHIKLMNOPQRSTUWXYZ");  
+	}  
+	  
+	public static String [] randomTextsTR(Random random, int n, int origin, int bound)  
+	{  
+	    return randomTexts(random, n, origin, bound, "abcçdefgğhıijklmnoöprsştuüvyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ");  
+	}
+	//...
+}
+```
 
 
 
