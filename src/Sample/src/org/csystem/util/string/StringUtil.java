@@ -9,6 +9,29 @@ import java.util.Random;
  * @author Java-Jul-2025 Group 
  */
 public class StringUtil {
+    public static String [] ones = {"", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"};
+    public static String [] tens = {"", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"};
+
+    public static String numToStr3DigitsTR(int val)
+    {
+        int a = val / 100;
+        int b = val / 10 % 10;
+        int c = val % 10;
+
+        StringBuilder sb = new StringBuilder();
+
+        if (a != 1)
+            sb.append(ones[a]);
+
+        if (a != 0)
+            sb.append("yüz");
+
+        sb.append(tens[b]);
+        sb.append(ones[c]);
+
+        return sb.toString();
+    }
+
     public static String capitalize(String s)
     {
         return s.isEmpty() ? s : Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
@@ -97,6 +120,45 @@ public class StringUtil {
     public static boolean isPangramTR(String s) 
     {
         return isPangram(s.toLowerCase(), "abcçdefgğhıijklmnoöprsştuüvyz");
+    }
+
+    public static String join(String [] s)
+    {
+        return join(s, "");
+    }
+
+    public static String join(String [] s, String delimiter)
+    {
+        return join(s, delimiter, false);
+    }
+
+    public static String join(String [] s,  char delimiter)
+    {
+        return join(s, String.valueOf(delimiter));
+    }
+
+    public static String join(String [] s, boolean ignoreBlanks)
+    {
+        return join(s, "",  ignoreBlanks);
+    }
+
+    public static String join(String [] s, String delimiter, boolean ignoreBlanks)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < s.length; ++i) {
+            if (ignoreBlanks && s[i].isBlank())
+                continue;
+
+            sb.append(s[i]).append(delimiter);
+        }
+
+        return sb.substring(0, sb.length() - delimiter.length());
+    }
+
+    public static String join(String [] s, char delimiter, boolean ignoreBlanks)
+    {
+        return join(s, String.valueOf(delimiter), ignoreBlanks);
     }
 
     public static String letters(String s) {

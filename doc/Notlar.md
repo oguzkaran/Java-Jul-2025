@@ -20361,6 +20361,166 @@ public class StringUtil {
 }
 ```
 
+###### 4 Mayıs 2026
+
+>**Sınıf Çalışması:** Parametresi ile aldığı en fazla üç basamaklı bir sayının Türkçe okunuşunu döndüren `numToStr3DigitsTR` isimli metodu `NumberUtil`sınıfı içerisinde yazınız.
+>
+>**Açıklamalar:** 
+>- Metot sayının 3 basamaktan büyük olması kontrolünü yapmayacaktır.
+>
+>- Metot pozitifsayılar için çalışacak, sayının pozitif olup olmaması kontrolünü yapmayacaktır.
+
+>**Çözüm:**
+
+```java
+package org.csystem.util.string.test;  
+  
+import org.csystem.util.string.StringUtil;  
+  
+public class StringUtilNumToStr3DigitsTRTest {  
+    public static void run()  
+    {  
+        int a = 1;  
+        String expectedA = "bir";  
+        int b = 100;  
+        String expectedB = "yüz";  
+        int c = 102;  
+        String expectedC = "yüziki";  
+        int d = 110;  
+        String expectedD = "yüzon";  
+        int e = 497;  
+        String expectedE = "dörtyüzdoksanyedi";  
+  
+        System.out.println(StringUtil.numToStr3DigitsTR(a).equals(expectedA));  
+        System.out.println(StringUtil.numToStr3DigitsTR(b).equals(expectedB));  
+        System.out.println(StringUtil.numToStr3DigitsTR(c).equals(expectedC));  
+        System.out.println(StringUtil.numToStr3DigitsTR(d).equals(expectedD));  
+        System.out.println(StringUtil.numToStr3DigitsTR(e).equals(expectedE));  
+    }  
+  
+    public static void main(String[] args)  
+    {  
+        run();  
+    }  
+}
+```
+```java
+package org.csystem.util.string;
+
+public class StringUtil {
+	//...
+	public static String [] ones = {"", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"};  
+	public static String [] tens = {"", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"};  
+  
+	public static String numToStr3DigitsTR(int val)  
+	{  
+	    int a = val / 100;  
+	    int b = val / 10 % 10;  
+	    int c = val % 10;  
+	  
+	    StringBuilder sb = new StringBuilder();  
+	  
+	    if (a != 1)  
+	        sb.append(ones[a]);  
+	  
+	    if (a != 0)  
+	        sb.append("yüz");  
+	  
+	    sb.append(tens[b]);  
+	    sb.append(ones[c]);  
+	  
+	    return sb.toString();  
+	}
+	//...
+}
+```
+
+>**Sınıf Çalışması:** Aşağıda prototipi verilen metotları `StringUtil` sınıfı içerisinde açıklamalara göre yazınız.
+
+```java
+public static String join(String [] s)
+public static String join(String [] s, String delimiter)
+public static String join(String [] s,  char delimiter)
+public static String join(String [] s, boolean ignoreBlanks)
+public static String join(String [] s, String delimiter, boolean ignoreBlanks)
+public static String join(String [] s, char delimiter, boolean ignoreBlanks)
+```
+
+>**Açıklamalar:** 
+>- Birinci metot, birinci parametresi ile aldığı String dizisi ile tutulan yazıları ikinci parametresi ile aldığı ayraç ile birleştirilmiş bir yazıya geri dönecektir.
+>- Metotlar parametre geçerlilik kontrolü yapmayacaktır.
+>- Aslında JavaSE'de bu işlemi yapmanın yolları vardır. Bunlar **kullanılmayacaktır.**
+>- Metotların delimiter almadığında doğrudan birleştirme yapan overload'unu yazınız.
+>- Metodun ignoreBlanks parametreli overload'ları dizi içerisindeki blank string'lerin birleştirilip birleştirilmeyeceğine yönelik flag değeridir. Değerin true olması durumunda blank String'ler birleştirilmeyecektir.
+>- Metotların delimiter'ı char olarak alan oveload'ları da  yazılacaktır.
+
+>**Çözüm:**
+
+```java
+package org.csystem.util.string.test;  
+  
+import org.csystem.util.string.StringUtil;  
+  
+public class StringUtilJoinTest {  
+    public static void run()  
+    {  
+        String [] str = {"ankara", "istanbul", "izmir", "  ", "zonguldak"};  
+  
+        System.out.println(StringUtil.join(str, "--", true).equals("ankara--istanbul--izmir--zonguldak"));  
+        System.out.println(StringUtil.join(str, "--", false).equals("ankara--istanbul--izmir--  --zonguldak"));  
+        System.out.println(StringUtil.join(str, "--").equals("ankara--istanbul--izmir--  --zonguldak"));  
+    }  
+  
+    public static void main(String[] args)  
+    {  
+        run();  
+    }  
+}
+```
+
+```java
+package org.csystem.util.string;
+
+public class StringUtil {
+	//...
+	public static String join(String [] s)  
+	{  
+	    return join(s, "");  
+	}  
+	  
+	public static String join(String [] s, String delimiter)  
+	{  
+	    return join(s, delimiter, false);  
+	}  
+	  
+	public static String join(String [] s,  char delimiter)  
+	{  
+	    return join(s, String.valueOf(delimiter));  
+	}  
+	  
+	public static String join(String [] s, boolean ignoreBlanks)  
+	{  
+	    return join(s, "",  ignoreBlanks);  
+	}  
+	  
+	public static String join(String [] s, String delimiter, boolean ignoreBlanks)  
+	{  
+	    StringBuilder sb = new StringBuilder();  
+	  
+	    for (int i = 0; i < s.length; ++i) {  
+	        if (ignoreBlanks && s[i].isBlank())  
+	            continue;  
+	  
+	        sb.append(s[i]).append(delimiter);  
+	    }  
+	  
+	    return sb.substring(0, sb.length() - delimiter.length());  
+	}
+	//...
+}
+```
+
+
 
 
 
