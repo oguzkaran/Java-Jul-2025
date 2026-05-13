@@ -6977,8 +6977,7 @@ package csd;
 class App {
 	public static void main(String[] args) 
 	{
-		DemoMenuApp.run();
-		
+		DemoMenuApp.run();	
 	}
 }
 
@@ -20520,10 +20519,126 @@ public class StringUtil {
 }
 ```
 
+###### 11 Mayıs 2026 - 13 Mayıs 2026
+###### Programın Komut Satırı Argümanları
 
+>Program çalıştırılırken, programa geçilen yazılara **komut satırı argümanları (command line arguments)** denir. Komut satırı argümanları ilgili işletim sistemin `console/terminal/shell/command-prompt` üzerinden boşluk (whitespace) karakterleri ile ayrılacak şekilde verilebilmektedir. Komut satırı argümanları kullanıcı arayüzü içeren (GUI) işletim sistemlerinde de programa verilebilmektedir. Bir java programı çalıştırıldığında komut satırı argümanlarından oluşan bir `String` dizisi yaratılır ve dizinin referansı ilgili `main` metoduna argüman olarak verilir. Yani, ilgili main metodu JVM tarafından komut satırı argümanlarından oluşan dizi referansı ile çağrılır. Program çalıştırılırken hiç komut satırı argümanı verilmemişse main, sıfır elemanlı bir dizi referansı ile çağrılır. Bu durumda programcı komut satırılı argümanlarını alarak ilgili işlemleri yapar. Komut satırı argümanları işletim sistemi tarafından programa aktarılır. Şüphesiz bir Java programı için komut satırı argümanları işletim sistemi tarafından JVM'e aktarılır, JVM ilgili diziyi yaratarak ilgili main metodunu bu dizi referansı ile çağırır. Modern pek çok işletim sisteminde program ismi de komut satırı argümanı olarak geçilir. Java'da hangi işletim sisteminden çalışıldığının önemi olmaksızın main metoduna yalnızca komut satırı argümanlarından oluşan dizinin referansı geçilir. Yani bir Java uygulamasından main metodunun parametresi olan dizinin içerisinde yalnızca komut satırı argümanları bulunur. Programın komut satırı argümanlarının anlamı programın senaryosuna özgüdür. Dolayısıyla bazı durumlarda programın komut satırı argümanlarının sayısı da önemli olabilmektedir. Bu durumda programcı main metoduna geçilen dizinin uzunluğuna bakarak komut satırı argümanlarına ilişkin işlem yapar.
 
+**Anahtar Notlar:** Boşluk (white space) içeren bir yazının tamamının bir komut satırı argümanı olarak verilebilmesi işletim sistemine göre değişkenlik gösterebilir. Örneğin pek çok işletim sisteminde ilgili argümanı `""` içerisinde vermek tek bir argüman olarak geçmek anlamındadır. 
 
+>Aşağıdaki demo örneği çeşitli komut satır argümanları ile çalıştırarak sonuçları gözlemleyiniz
 
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        System.out.printf("Length of command line arguments:%d%n", args.length);  
+  
+        if (args.length != 0) {  
+            System.out.println("Command line arguments:");  
+            for (int i = 0; i < args.length; ++i)  
+                System.out.println(args[i]);  
+        }  
+    }  
+}
+```
+
+**Anahtar Notlar:** Programlara hata mesajlarını genellikle **standard error (stderr)** isimli bir dosyaya yazarlar. Java'da stderr dosyasına yazma yapmak için `System` sınıfının `err` referansı kullanılabilir. `stdin, stdout ve stderr`dosyalarına ilişkin detaylar ileride ele alınacaktır.
+
+>Aşağıdaki demo örnekte komut satırı argümanlarının sayısı kontrol edilmiş ve geçersiz sayıda olması durumunda stderr dosyasına yazma yapılarak program sonlandırılmıştır. Örnekte oluşabilecek exception durumları ele alınmamıştır
+
+```java
+package org.csystem.app;  
+  
+import org.csystem.util.string.StringUtil;  
+  
+import java.util.Random;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        if (args.length != 3) {  
+            System.err.println("usage: java org.csystem.app.App <count> <origin> <bound>");  
+            System.exit(1);  
+        }  
+  
+        Random random = new Random();  
+        long count = Long.parseLong(args[0]);  
+        int origin = Integer.parseInt(args[1]);  
+        int bound = Integer.parseInt(args[2]);  
+  
+        while (count-- > 0)  
+            System.out.println(StringUtil.randomTextEN(random, random.nextInt(origin, bound)));  
+    }  
+}
+```
+
+>Aşağıdaki demo örneği ve CommandLineArgs sınıfını inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+import org.csystem.util.string.StringUtil;  
+  
+import java.util.Random;  
+  
+import static org.csystem.util.console.commandline.CommandLineArgsUtil.checkLengthEquals;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        checkLengthEquals(3, args.length, "usage: java org.csystem.app.App <count> <origin> <bound>");  
+        Random random = new Random();  
+        long count = Long.parseLong(args[0]);  
+        int origin = Integer.parseInt(args[1]);  
+        int bound = Integer.parseInt(args[2]);  
+  
+        while (count-- > 0)  
+            System.out.println(StringUtil.randomTextEN(random, random.nextInt(origin, bound)));  
+    }  
+}
+```
+
+```java
+package org.csystem.util.console.commandline;  
+  
+public class CommandLineArgsUtil {  
+	//...
+    public static void checkLengthEquals(int length, int argsLength, String errMessage)  
+    {  
+        checkLengthEquals(length, argsLength, errMessage, 1);  
+    }  
+  
+    public static void checkLengthEquals(int length, int argsLength, String errMessage, int exitCode)  
+    {  
+        if (length != argsLength) {  
+            System.err.println(errMessage);  
+            System.exit(exitCode);  
+        }  
+    }  
+  
+    public static void checkLengthGreater(int length, int argsLength, String errMessage)  
+    {  
+        checkLengthGreater(length, argsLength, errMessage, 1);  
+    }  
+  
+    public static void checkLengthGreater(int length, int argsLength, String errMessage, int exitCode)  
+    {  
+        if (argsLength <= length) {  
+            System.err.println(errMessage);  
+            System.exit(exitCode);  
+        }  
+    }  
+  
+    //...  
+}
+```
+
+###### String sınıfının split metodu
+
+>
 
 
 
