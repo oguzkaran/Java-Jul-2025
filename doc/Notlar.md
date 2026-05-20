@@ -20362,7 +20362,7 @@ public class StringUtil {
 
 ###### 4 Mayıs 2026
 
->**Sınıf Çalışması:** Parametresi ile aldığı en fazla üç basamaklı bir sayının Türkçe okunuşunu döndüren `numToStr3DigitsTR` isimli metodu `NumberUtil`sınıfı içerisinde yazınız.
+>**Sınıf Çalışması:** Parametresi ile aldığı en fazla üç basamaklı bir sayının Türkçe okunuşunu döndüren `numToStr3DigitsTR` isimli metodu `NumberUtil` sınıfı içerisinde yazınız.
 >
 >**Açıklamalar:** 
 >- Metot sayının 3 basamaktan büyük olması kontrolünü yapmayacaktır.
@@ -20372,11 +20372,11 @@ public class StringUtil {
 >**Çözüm:**
 
 ```java
-package org.csystem.util.string.test;  
+package org.csystem.util.numeric.test;  
   
-import org.csystem.util.string.StringUtil;  
+import org.csystem.util.numeric.NumberUtil;  
   
-public class StringUtilNumToStr3DigitsTRTest {  
+public class NumberUtilNumToStr3DigitsTRTest {  
     public static void run()  
     {  
         int a = 1;  
@@ -20390,11 +20390,11 @@ public class StringUtilNumToStr3DigitsTRTest {
         int e = 497;  
         String expectedE = "dörtyüzdoksanyedi";  
   
-        System.out.println(StringUtil.numToStr3DigitsTR(a).equals(expectedA));  
-        System.out.println(StringUtil.numToStr3DigitsTR(b).equals(expectedB));  
-        System.out.println(StringUtil.numToStr3DigitsTR(c).equals(expectedC));  
-        System.out.println(StringUtil.numToStr3DigitsTR(d).equals(expectedD));  
-        System.out.println(StringUtil.numToStr3DigitsTR(e).equals(expectedE));  
+        System.out.println(NumberUtil.numToStr3DigitsTR(a).equals(expectedA));  
+        System.out.println(NumberUtil.numToStr3DigitsTR(b).equals(expectedB));  
+        System.out.println(NumberUtil.numToStr3DigitsTR(c).equals(expectedC));  
+        System.out.println(NumberUtil.numToStr3DigitsTR(d).equals(expectedD));  
+        System.out.println(NumberUtil.numToStr3DigitsTR(e).equals(expectedE));  
     }  
   
     public static void main(String[] args)  
@@ -20404,9 +20404,9 @@ public class StringUtilNumToStr3DigitsTRTest {
 }
 ```
 ```java
-package org.csystem.util.string;
+package org.csystem.util.numeric;
 
-public class StringUtil {
+public class NumberUtil {
 	//...
 	public static String [] ones = {"", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"};  
 	public static String [] tens = {"", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"};  
@@ -20636,13 +20636,152 @@ public class CommandLineArgsUtil {
 }
 ```
 
+
+###### 20 Mayıs 2026
+
 ###### String sınıfının split metodu
 
+>String sınıfının `split` isimli metodu ile bir yazı ayraç (delimiter/separator) ya da ayraçlara göre parçalanabilir. Bu metot parametresi ile ayraç veya ayraçlara ilişkin bir yazı alır. Bu metot ayraç veya ayraçlara ilişkin yazıyı bir `düzenli ifade (regular expression)` pattern'i olarak alır.
+
+**Anahtar Notlar:** Bir yazı içerisinde belirli örüntülere (pattern) uygun yazıları aramak için düzenli ifade motorları (regular expression engines/regex engines) kullanılır. Örneğin bir yazı içerisinde sayıların bulunması isteniyorsa ya da örneğin bir yazı içerisinde `gg/aa/yyyy` formatındaki tarih bilgileri bulunması isteniyorsa ya da örneğin bir yazı içerisinde a ile başlayan ve z biten ve içerisinde rakamların olmadığı yazılar bulunmak isteniyorsa düzenli ifadeler kullanılır. Düzenli ifadeler `Java ile Uygulama Geliştirme` kurslarında detaylı olarak ele alınacaktır.
+
+>Aşağıdaki demo örnekte yazı SPACE karakteri ayraç olacak şekilde parçalanmıştır
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        String s = "Bugün hava çok güzel. Bu güzel havada denize mi gitsek?";  
+        String [] str = s.split(" ");  
+  
+        for (int i = 0; i < str.length; ++i)  
+            System.out.println(str[i]);  
+    }  
+}
+```
+
+
+>**Burada split metodunun kullanımında en çok karşılaşılan regex pattern'leri ele alınacaktır. Pattern'lere ilişkin detayların bilinmesine şu aşamada gerek yoktur. Birer kalıp olarak hatırlanması önerilir.**
 >
+>split metodunda ayraçların `[` ve `]` arasında yazılması önerilir. Bazı karakterlerin regex için özel anlamları vardır ve tek başına split metoduna verildiklerinde doğrudan ayraç olarak ele alınmaz. İlgili karakterin ayraç olarak ele alınması için `[` ve `]` arasında yazılması gerekir. Bazı programcılar özel karakter olup olmamasına bakmazsınız her karakteri `[` ve `]` arasında verme eğiliminde olabilirler.
+
+>Aşağıdaki demo örnekte `.` karakterini `[` ve `]` arasında olmadan da vererek programı çalıştırıp sonuçları gözlemleyiniz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        String s = "Bugün hava çok güzel. Bu güzel havada denize mi gitsek?";  
+        String [] str = s.split("[.]");  
+  
+        for (int i = 0; i < str.length; ++i)  
+            System.out.println(str[i]);  
+    }  
+}
+```
+
+>split metoduna birden fazla ayraç verilecekse bu durumda ayraçların bitişik olarak `[` ve `]` arasında yazılması gerekir.
+
+>Aşağıdaki demo örnekte SPACE ve `.` karakterleri ayraç olarak verilmiştir
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        String s = "Bugün hava çok güzel. Bu güzel havada denize mi gitsek?";  
+        String [] str = s.split("[ .]");  
+  
+        for (int i = 0; i < str.length; ++i)  
+            System.out.println(str[i]);  
+    }  
+}
+```
+
+>Buradaki örüntüde `[` ve `]`  kalan karakterler yazıda yan yana bulunurlarsa aralarındaki `boş string` de diziye dahil edilir. Ayraçların yazı içerisinde bir ya da birden fazlasının yan yana bulunması durumunda da ayraç kabul edilmesi, başka bir deyişle aralarındaki boş string'in diziye dahil edilmemesi için `]` karakterine bitişik olarak `+` işaretinin konması gerekir. `+` işareti burada `bir ya da daha fazlası` anlamına gelir. 
 
 
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        String s = "Bugün hava çok   güzel. Bu güzel havada denize mi gitsek?";  
+        String [] str = s.split("[ .]+");  
+  
+        for (int i = 0; i < str.length; ++i)  
+            System.out.println(str[i]);  
+    }  
+}
+```
+
+>Eğer `[` veya `]` ayraç olarak kullanılacaksa ters bölü ile yazılmalıdır.
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        String s = "Bugün hava [çok] güzel. Bu [güzel] havada denize mi gitsek?";  
+        String [] str = s.split("[ \\]\\[.]+");  
+  
+        for (int i = 0; i < str.length; ++i)  
+            System.out.println(str[i]);  
+    }  
+}
+```
+
+**Anahtar Notlar:** Buradaki kullanımların istisna durumları olabilmektedir ancak pratikte buradaki kullanımlar çoğu zaman ihtiyacımızı karşılar.
+
+>**Sınıf Çalışması:** Klavyeden aşağıdaki formatta girilen yazıyı açıklamalara göre ayrıştırınız:
+>`<student number>:<fullname>:<birth date>:<lecture name>:<midterm grade>:<final grade>`
+>
+>**Açıklamalar:**
+>- Yazıya ilişkin format geçerlilik kontrolü yapılmayacaktır.
+>- Yazıya ilişkin bir örnek şu şekildedir: `12345:Oğuz Karan:1976-09-10:Mathematics:67:90`
+>- Öğrenci numarası sayıya çevrilmeyecektir.
+>- Doğum tarihi `yyyy-mm-dd` biçiminde olacaktır.
+>- Vize ve final notları int türden olacaktır.
+>- Yazının bilgilerin alınmasından (parse) sonra `vize * %40 + final * %60` formülüne göre en az notu `50` olanın geçebildiği bir sistemde aşağıdaki gibi bir çıktı üretilecektir.
+
+```java
+Student Information:
+Number: 12345
+Name: Oğuz Karan
+Birth Date: 10th September 1976 Friday
+Lecture Name: Mathematics
+Midterm Grade:67
+Final Grade:90
+Grade: 80.8
+Status: Success
+```
+
+>- Geçme notu (Grade) noktadan sonra tek basamak olacak şekilde yuvarlanacaktır.
+>- Doğum tarihi için JavaSE'de veya başka bir kütüphanede bulunan sınıflar ya da metotlar **kullanılmayacaktır.** Bunun için DateUtil sınıfını kullanabilirsiniz. Hatta gerekirse eklentiler de yapabilirsiniz.
+>- Durum (Status) bilgisi `Success veya Fail` biçiminde yazdırılacaktır.
 
 
+>**Sınıf Çalışması:** Aşağıda prototipi verilen metodu açıllamalara göre `StringUtil` sınıfı içerisinde yazınız ve test ediniz.
+
+```java
+public static String [] split(String s, String separator);
+public static String [] split(String s, String separator, boolean removeEmpties);
+```
+
+>**Açıklamalar:**
+>- Metotlar birinci parametresi ile aldığı yazıyı ikinici parametresi ile belirtilen ayraçlara göre ayrıştıracaktır
+>- İki parametreli split metodu ayraçların yan yana olması durumunda aralarındaki boş string'leri de diziye dahil edecektir.
+>- Üç parametreli split metodu üçüncü parametresi ile aldığı flag değerine göre, true geçilirse ayraçların yan yana olması durumunda aralarındaki boş string'leri diziye dahil etmeyecektir, false geçilirse dahil edecektir.
 
 
 

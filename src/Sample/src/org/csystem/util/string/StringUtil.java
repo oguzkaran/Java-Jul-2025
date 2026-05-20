@@ -9,29 +9,6 @@ import java.util.Random;
  * @author Java-Jul-2025 Group 
  */
 public class StringUtil {
-    public static String [] ones = {"", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"};
-    public static String [] tens = {"", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"};
-
-    public static String numToStr3DigitsTR(int val)
-    {
-        int a = val / 100;
-        int b = val / 10 % 10;
-        int c = val % 10;
-
-        StringBuilder sb = new StringBuilder();
-
-        if (a != 1)
-            sb.append(ones[a]);
-
-        if (a != 0)
-            sb.append("yüz");
-
-        sb.append(tens[b]);
-        sb.append(ones[c]);
-
-        return sb.toString();
-    }
-
     public static String capitalize(String s)
     {
         return s.isEmpty() ? s : Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
@@ -73,8 +50,6 @@ public class StringUtil {
 
         return sb.toString();
     }
-
-
 
     public static boolean isPalindrome(String s) 
     {
@@ -255,4 +230,14 @@ public class StringUtil {
     {
         return new StringBuilder(s).reverse().toString();
     }
+
+//    public static String [] split(String s, String separator)
+//    {
+//        //TODO:
+//    }
+//
+//    public static String [] split(String s, String separator, boolean removeEmpties)
+//    {
+//        //TODO:
+//    }
 }

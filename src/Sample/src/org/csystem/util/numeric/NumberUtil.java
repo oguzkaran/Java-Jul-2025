@@ -5,6 +5,28 @@ package org.csystem.util.numeric;
  * @author Java-Jul-2025 Group 
  */
 public class NumberUtil {
+    public static String [] ones = {"", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"};
+    public static String [] tens = {"", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"};
+
+    public static String numToStr3DigitsTR(int val)
+    {
+        int a = val / 100;
+        int b = val / 10 % 10;
+        int c = val % 10;
+
+        StringBuilder sb = new StringBuilder();
+
+        if (a != 1)
+            sb.append(ones[a]);
+
+        if (a != 0)
+            sb.append("yüz");
+
+        sb.append(tens[b]);
+        sb.append(ones[c]);
+
+        return sb.toString();
+    }
     public static int getDigitsPowSum(int a) 
     {
         int n = countDigits(a);
