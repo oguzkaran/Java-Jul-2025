@@ -1,7 +1,5 @@
 package org.csystem.util.string;
 
-import org.csystem.util.array.ArrayUtil;
-
 import java.util.Random;
 
 /**
@@ -231,13 +229,29 @@ public class StringUtil {
         return new StringBuilder(s).reverse().toString();
     }
 
-//    public static String [] split(String s, String separator)
-//    {
-//        //TODO:
-//    }
-//
-//    public static String [] split(String s, String separator, boolean removeEmpties)
-//    {
-//        //TODO:
-//    }
+    public static String [] split(String s, String separators)
+    {
+        return split(s, separators, false);
+    }
+
+    public static String [] split(String s, String separators, boolean removeEmpties)
+    {
+        StringBuilder patternBuilder = new StringBuilder("[");
+
+        for (int i = 0; i < separators.length(); ++i) {
+            char sep =  separators.charAt(i);
+
+            if (sep == '[' || sep == ']')
+                patternBuilder.append('\\');
+
+            patternBuilder.append(sep);
+        }
+
+        patternBuilder.append(']');
+
+        if (removeEmpties)
+            patternBuilder.append('+');
+
+        return s.split(patternBuilder.toString());
+    }
 }

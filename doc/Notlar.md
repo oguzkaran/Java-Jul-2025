@@ -20742,17 +20742,122 @@ class App {
 ```
 
 **Anahtar Notlar:** Buradaki kullanımların istisna durumları olabilmektedir ancak pratikte buradaki kullanımlar çoğu zaman ihtiyacımızı karşılar.
+###### 1 Haziran 2026
+
+>**Sınıf Çalışması:** Aşağıda prototipi verilen metotları açıklamalara göre `StringUtil` sınıfı içerisinde yazınız ve test ediniz.
+
+```java
+public static String [] split(String s, String separators);
+public static String [] split(String s, String separators, boolean removeEmpties);
+```
+
+>**Açıklamalar:**
+>- Metotlar birinci parametresi ile aldığı yazıyı ikinci parametresi ile belirtilen ayraçlara göre parçalayacaktır.
+>- İki parametreli split metodu ayraçların yan yana olması durumunda aralarındaki boş string'leri de diziye dahil edecektir.
+>- Üç parametreli split metodu üçüncü parametresi ile aldığı flag değerine göre, true geçilirse ayraçların yan yana olması durumunda aralarındaki boş string'leri diziye dahil etmeyecektir, false geçilirse dahil edecektir.
+
+**Çözüm:**
+
+**Test Kodları**
+```java
+package org.csystem.util.string.test;  
+  
+import org.csystem.util.string.StringUtil;  
+  
+import java.util.Arrays;  
+  
+public class StringUtilSplitTest {  
+    public static void runTestRemoveEmpties1()  
+    {  
+        String s = "Bugün hava çok  güzel. Bu güzel havada denize mi gitsek?";  
+        String [] expected = {"Bugün", "hava", "çok", "güzel", "Bu", "güzel", "havada", "denize", "mi", "gitsek?"};  
+        String separators = " .";  
+  
+        System.out.println(Arrays.equals(StringUtil.split(s, separators, true), expected));  
+    }  
+  
+    public static void runTestRemoveEmpties2()  
+    {  
+        String s = "Bugün hava [çok] güzel. Bu [güzel] havada denize mi gitsek?";  
+        String [] expected = {"Bugün", "hava", "çok", "güzel", "Bu", "güzel", "havada", "denize", "mi", "gitsek?"};  
+        String separators = " ][.";  
+  
+        System.out.println(Arrays.equals(StringUtil.split(s, separators, true), expected));  
+    }  
+  
+    public static void runTestNotRemoveEmpties1()  
+    {  
+        String s = "Bugün hava çok  güzel. Bu güzel havada denize mi gitsek?";  
+        String [] expected = {"Bugün", "hava", "çok","", "güzel", "", "Bu", "güzel", "havada", "denize", "mi", "gitsek?"};  
+        String separators = " .";  
+  
+        System.out.println(Arrays.equals(StringUtil.split(s, separators), expected));  
+    }  
+  
+    public static void runTestNotRemoveEmpties2()  
+    {  
+        String s = "Bugün hava [çok] güzel. Bu [güzel] havada denize mi gitsek?";  
+        String [] expected = {"Bugün", "hava", "", "çok", "", "güzel", "", "Bu", "", "güzel", "", "havada", "denize", "mi", "gitsek?"};  
+        String separators = " ][.";  
+  
+        System.out.println(Arrays.equals(StringUtil.split(s, separators), expected));  
+    }  
+  
+    public static void main(String[] args)  
+    {  
+        runTestRemoveEmpties1();  
+        runTestRemoveEmpties2();  
+        runTestNotRemoveEmpties1();  
+        runTestNotRemoveEmpties2();  
+    }  
+}
+```
+
+
+```java
+package org.csystem.util.string;
+
+public class StringUtil {
+	//...
+	public static String [] split(String s, String separators)  
+	{  
+	    return split(s, separators, false);  
+	}  
+	  
+	public static String [] split(String s, String separators, boolean removeEmpties)  
+	{  
+	    StringBuilder patternBuilder = new StringBuilder("[");  
+	  
+	    for (int i = 0; i < separators.length(); ++i) {  
+	        char sep =  separators.charAt(i);  
+	  
+	        if (sep == '[' || sep == ']')  
+	            patternBuilder.append('\\');  
+	  
+	        patternBuilder.append(sep);  
+	    }  
+	  
+	    patternBuilder.append(']');  
+	  
+	    if (removeEmpties)  
+	        patternBuilder.append('+');  
+	  
+	    return s.split(patternBuilder.toString());  
+	}
+	//...
+}
+```
 
 >**Sınıf Çalışması:** Klavyeden aşağıdaki formatta girilen yazıyı açıklamalara göre ayrıştırınız:
 >`<student number>:<fullname>:<birth date>:<lecture name>:<midterm grade>:<final grade>`
 >
 >**Açıklamalar:**
->- Yazıya ilişkin format geçerlilik kontrolü yapılmayacaktır.
+>- Yazıya ilişkin, format geçerlilik kontrolü yapılmayacaktır.
 >- Yazıya ilişkin bir örnek şu şekildedir: `12345:Oğuz Karan:1976-09-10:Mathematics:67:90`
 >- Öğrenci numarası sayıya çevrilmeyecektir.
 >- Doğum tarihi `yyyy-mm-dd` biçiminde olacaktır.
 >- Vize ve final notları int türden olacaktır.
->- Yazının bilgilerin alınmasından (parse) sonra `vize * %40 + final * %60` formülüne göre en az notu `50` olanın geçebildiği bir sistemde aşağıdaki gibi bir çıktı üretilecektir.
+>- Yazının bilgilerinin alınmasından (parse) sonra `vize * %40 + final * %60` formülüne göre en az notu `50` olanın geçebildiği bir sistemde aşağıdaki gibi bir çıktı üretilecektir.
 
 ```java
 Student Information:
@@ -20767,22 +20872,14 @@ Status: Success
 ```
 
 >- Geçme notu (Grade) noktadan sonra tek basamak olacak şekilde yuvarlanacaktır.
->- Doğum tarihi için JavaSE'de veya başka bir kütüphanede bulunan sınıflar ya da metotlar **kullanılmayacaktır.** Bunun için DateUtil sınıfını kullanabilirsiniz. Hatta gerekirse eklentiler de yapabilirsiniz.
+>- Doğum tarihi için JavaSE'de veya başka bir kütüphanede bulunan sınıflar ya da metotlar **kullanılmayacaktır.** Bunun için DateUtil sınıfını kullanabilirsiniz. Gerekirse DateUtil sınıfına eklemeler de yapabilirsiniz.
 >- Durum (Status) bilgisi `Success veya Fail` biçiminde yazdırılacaktır.
 
+**Çözüm:**
 
->**Sınıf Çalışması:** Aşağıda prototipi verilen metodu açıllamalara göre `StringUtil` sınıfı içerisinde yazınız ve test ediniz.
+###### Dizi Dizleri ve Matrisler
 
-```java
-public static String [] split(String s, String separator);
-public static String [] split(String s, String separator, boolean removeEmpties);
-```
-
->**Açıklamalar:**
->- Metotlar birinci parametresi ile aldığı yazıyı ikinici parametresi ile belirtilen ayraçlara göre ayrıştıracaktır
->- İki parametreli split metodu ayraçların yan yana olması durumunda aralarındaki boş string'leri de diziye dahil edecektir.
->- Üç parametreli split metodu üçüncü parametresi ile aldığı flag değerine göre, true geçilirse ayraçların yan yana olması durumunda aralarındaki boş string'leri diziye dahil etmeyecektir, false geçilirse dahil edecektir.
-
+>
 
 
 

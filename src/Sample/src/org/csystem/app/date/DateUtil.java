@@ -6,11 +6,18 @@ public class DateUtil {
 	public static String [] months = {"January", "February", "March", "April", "May", "June",
 			"July", "August", "September", "October", "November", "December"};
 
-	public static void printDateEN(int day, int month, int year)
+	public static String toDateStringEN(int day, int month, int year)
 	{
 		int dayOfWeek = getDayOfWeek(day, month, year);
 
-		System.out.println(dayOfWeek != -1 ? "%d%s %s %d %s".formatted(day, getDaySuffix(day), months[month - 1], year, weekDays[dayOfWeek]) : "Invalid date values!...");
+		return dayOfWeek != -1 ? "%d%s %s %d %s".formatted(day, getDaySuffix(day), months[month - 1], year, weekDays[dayOfWeek]) : "";
+	}
+
+	public static void printDateEN(int day, int month, int year)
+	{
+		String dateStr = toDateStringEN(day, month, year);
+
+		System.out.println(!dateStr.isEmpty() ? dateStr : "Invalid date values!...");
 	}
 	
 	public static int getDayOfWeek(int day, int month, int year)
