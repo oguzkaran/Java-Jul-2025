@@ -20848,6 +20848,9 @@ public class StringUtil {
 }
 ```
 
+
+###### 3 Haziran 2026
+
 >**Sınıf Çalışması:** Klavyeden aşağıdaki formatta girilen yazıyı açıklamalara göre ayrıştırınız:
 >`<student number>:<fullname>:<birth date>:<lecture name>:<midterm grade>:<final grade>`
 >
@@ -20873,13 +20876,139 @@ Status: Success
 
 >- Geçme notu (Grade) noktadan sonra tek basamak olacak şekilde yuvarlanacaktır.
 >- Doğum tarihi için JavaSE'de veya başka bir kütüphanede bulunan sınıflar ya da metotlar **kullanılmayacaktır.** Bunun için DateUtil sınıfını kullanabilirsiniz. Gerekirse DateUtil sınıfına eklemeler de yapabilirsiniz.
->- Durum (Status) bilgisi `Success veya Fail` biçiminde yazdırılacaktır.
+>- Durum (Status) bilgisi `Success veya Failure` biçiminde yazdırılacaktır.
 
 **Çözüm:**
 
+```java
+package org.csystem.app.grade;  
+  
+import java.util.Scanner;  
+  
+public class StudentGradeApp {  
+    public static void printStudentInfo(StudentInfo studentInfo)  
+    {  
+        System.out.println("Student Information:");  
+        System.out.printf("Number: %s%n", studentInfo.studentNumber);  
+        System.out.printf("Name: %s%n", studentInfo.studentName);  
+        System.out.printf("Birth Date: %s%n", studentInfo.studentBirthDateStr);  
+        System.out.printf("Lecture Name: %s%n", studentInfo.lectureName);  
+        System.out.printf("Midterm Grade: %d%n", studentInfo.midtermGrade);  
+        System.out.printf("Final Grade: %d%n", studentInfo.finalGrade);  
+  
+        double grade = studentInfo.getGrade();  
+  
+        System.out.printf("Grade: %.1f%n", grade);  
+        System.out.printf("Status: %s%n", grade >= 50 ? "Success" : "Failure");  
+    }  
+  
+    public static void run()  
+    {  
+        Scanner kb = new Scanner(System.in);  
+  
+        System.out.print("Input student info pattern in '<student number>:<full name>:<birth date (yyyy-mm-dd)>:<lecture name>:<midterm grade>:<final grade>' format:");  
+        String str = kb.nextLine();  
+  
+        StudentInfo studentInfo = StudentInfo.of(str);  
+  
+        printStudentInfo(studentInfo);  
+    }  
+  
+    public static void main(String [] args)  
+    {  
+        run();  
+    }  
+}
+```
+
+```java
+package org.csystem.app.grade;  
+  
+import org.csystem.app.date.DateUtil;  
+  
+public class StudentInfo {  
+    public String studentNumber;  
+    public String studentName;  
+    public String studentBirthDateStr;  
+    public String lectureName;  
+    public int midtermGrade;  
+    public int finalGrade;  
+  
+    //...  
+  
+    public static StudentInfo of(String str)  
+    {  
+        StudentInfo studentInfo = new StudentInfo();  
+  
+        String [] info = str.split("[:]");  
+        String [] birtDateInfo = info[2].split("[-]");  
+  
+        studentInfo.studentNumber = info[0];  
+        studentInfo.studentName = info[1];  
+        studentInfo.studentBirthDateStr = DateUtil.toDateStringEN(Integer.parseInt(birtDateInfo[2]), Integer.parseInt(birtDateInfo[1]), Integer.parseInt(birtDateInfo[0]));  
+        studentInfo.lectureName = info[3];  
+        studentInfo.midtermGrade = Integer.parseInt(info[4]);  
+        studentInfo.finalGrade = Integer.parseInt(info[5]);  
+  
+        return studentInfo;  
+    }  
+  
+    public double getGrade()  
+    {  
+        return midtermGrade * 0.4 + finalGrade * 0.6;  
+    }  
+}
+```
+
+
+Örnekte, StringUtil sınıfında yazdığımız split metodu da aşağıdaki gibi kullanılabilir
+
+```java
+package org.csystem.app.grade;  
+  
+import org.csystem.app.date.DateUtil;  
+import org.csystem.util.string.StringUtil;  
+  
+public class StudentInfo {  
+    public String studentNumber;  
+    public String studentName;  
+    public String studentBirthDateStr;  
+    public String lectureName;  
+    public int midtermGrade;  
+    public int finalGrade;  
+  
+    //...  
+  
+    public static StudentInfo of(String str)  
+    {  
+        StudentInfo studentInfo = new StudentInfo();  
+  
+        String [] info = StringUtil.split(str, ":");  
+        String [] birtDateInfo = StringUtil.split(info[2], "-");  
+  
+        studentInfo.studentNumber = info[0];  
+        studentInfo.studentName = info[1];  
+        studentInfo.studentBirthDateStr = DateUtil.toDateStringEN(Integer.parseInt(birtDateInfo[2]), Integer.parseInt(birtDateInfo[1]), Integer.parseInt(birtDateInfo[0]));  
+        studentInfo.lectureName = info[3];  
+        studentInfo.midtermGrade = Integer.parseInt(info[4]);  
+        studentInfo.finalGrade = Integer.parseInt(info[5]);  
+  
+        return studentInfo;  
+    }  
+  
+    public double getGrade()  
+    {  
+        return midtermGrade * 0.4 + finalGrade * 0.6;  
+    }  
+}
+```
 ###### Dizi Dizleri ve Matrisler
 
->
+>Bir dizinin her bir elemanı yine bir dizi referansı ise bu durumda bu diziye artık **dizi dizisi (array of array)** denir. Programlamada dizi dizisi için **jagged array** terimi de kullanılmaktadır. Örneğin, `int[][] a;` bildiriminde a referansı her bir elemanı `int []` türünden olan bir dizi türündendir. Yani aslında bu bir referans dizisidir. Dizi dizisi yaratılırken new operatörü ile birlikte iki tane `[]` kullanılmalıdır. Bu durumda ilk köşeli parantez ana dizinin uzunluğunu belirtir. Dizi yaratılırken ikinci köşeli parantezin içerisi boş bırakılabilir. İlk köşeli parantezin içerisinin boş bırakılması ilk değer verme sentaksı dışında error oluşturur. Bu durumda dizinin her bir elemanı olan referanslara default değer yani null değeri atanır. Bir dizi dizisinin her bir elemanı olan referansların gösterdiği dizilerinde her birinin uzunluğu aynı ise bu dizi artık bir matrisi temsil edebilir. Yani örneğin ana dizinin uzunluğu `m`, elemanı olan her bir dizinin uzunlukları `n` ise bu dizi dizisi `m * n'lik` bir matris olarak kullanılabilir. 
+
+**Anahtar Notlar:** Java'da çok boyutlu dizi (multi dimensional array) yoktur. Yani Java'da `matris iki boyutlu bir dizidir` demek teknik olarak doğru değildir. Teknik olarak matris de bir dizi dizisidir. 
+
+
 
 
 
