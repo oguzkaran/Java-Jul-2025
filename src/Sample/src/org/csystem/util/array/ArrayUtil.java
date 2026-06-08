@@ -3,7 +3,7 @@ package org.csystem.util.array;
 import java.util.Random;
 
 /**
- * Utility class for string operations
+ * Utility class for array operations
  * @author Java-Jul-2025 Group
  */
 public class ArrayUtil {
@@ -232,6 +232,12 @@ public class ArrayUtil {
             System.out.printf("%d%s", a[i], sep);
 
         System.out.print(end);
+    }
+
+    public static void print(int [][] a)
+    {
+        for (int i = 0; i < a.length; ++i)
+            print(a[i]);
     }
 
     public static int [] randomArray(Random random, int n, int origin, int bound)

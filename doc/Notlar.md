@@ -21002,11 +21002,156 @@ public class StudentInfo {
     }  
 }
 ```
+
+###### 8 Haziran 2026
 ###### Dizi Dizleri ve Matrisler
 
 >Bir dizinin her bir elemanı yine bir dizi referansı ise bu durumda bu diziye artık **dizi dizisi (array of array)** denir. Programlamada dizi dizisi için **jagged array** terimi de kullanılmaktadır. Örneğin, `int[][] a;` bildiriminde a referansı her bir elemanı `int []` türünden olan bir dizi türündendir. Yani aslında bu bir referans dizisidir. Dizi dizisi yaratılırken new operatörü ile birlikte iki tane `[]` kullanılmalıdır. Bu durumda ilk köşeli parantez ana dizinin uzunluğunu belirtir. Dizi yaratılırken ikinci köşeli parantezin içerisi boş bırakılabilir. İlk köşeli parantezin içerisinin boş bırakılması ilk değer verme sentaksı dışında error oluşturur. Bu durumda dizinin her bir elemanı olan referanslara default değer yani null değeri atanır. Bir dizi dizisinin her bir elemanı olan referansların gösterdiği dizilerinde her birinin uzunluğu aynı ise bu dizi artık bir matrisi temsil edebilir. Yani örneğin ana dizinin uzunluğu `m`, elemanı olan her bir dizinin uzunlukları `n` ise bu dizi dizisi `m * n'lik` bir matris olarak kullanılabilir. 
 
-**Anahtar Notlar:** Java'da çok boyutlu dizi (multi dimensional array) yoktur. Yani Java'da `matris iki boyutlu bir dizidir` demek teknik olarak doğru değildir. Teknik olarak matris de bir dizi dizisidir. 
+**Anahtar Notlar:** Java'da çok boyutlu dizi (multi dimensional array) yoktur. Yani Java'da `matris iki boyutlu bir dizidir` demek teknik olarak **doğru değildir**. Teknik olarak matris de bir dizi dizisidir. 
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+import java.util.Random;  
+import java.util.Scanner;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Scanner kb = new Scanner(System.in);  
+        Random random = new Random();  
+  
+        System.out.print("Input row and column of a matrix:");  
+        int m = kb.nextInt();  
+        int n = kb.nextInt();  
+  
+        int[][] a;  
+  
+        a = new int[m][];  
+  
+        for (int i = 0; i < m; ++i) {  
+            a[i] = new int[n];  
+            for (int j = 0; j < n; ++j)  
+                a[i][j] = random.nextInt(1, 100);  
+        }  
+  
+        for (int i = 0; i < m; ++i) {  
+            for (int j = 0; j < n; ++j)  
+                System.out.printf("%02d ", a[i][j]);  
+  
+            System.out.println();  
+        }  
+    }  
+}
+```
+
+>Bir dizi dizisinin yaratılması sırasında ana dizi dışında kalan köşeli parantezlerin içerisinde uzunluk ifadesi yazılırsa ilgili diziler default değerleri ile otomatik olarak belirtilen uzunlukta yaratılır. Bu özellik Java 1.5 ile dile eklenmiştir. Bu durumda yukarıdaki örnek aşağıdaki gibi yazılabilir
+
+```java
+package org.csystem.app;  
+  
+import java.util.Random;  
+import java.util.Scanner;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Scanner kb = new Scanner(System.in);  
+        Random random = new Random();  
+  
+        System.out.print("Input row and column of a matrix:");  
+        int m = kb.nextInt();  
+        int n = kb.nextInt();  
+  
+        int[][] a;  
+  
+        a = new int[m][n];  
+  
+        for (int i = 0; i < m; ++i)  
+            for (int j = 0; j < n; ++j)  
+                a[i][j] = random.nextInt(1, 100);  
+  
+        for (int i = 0; i < m; ++i) {  
+            for (int j = 0; j < n; ++j)  
+                System.out.printf("%02d ", a[i][j]);  
+  
+            System.out.println();  
+        }  
+    }  
+}
+```
+
+>Aşağıdaki örnekte dizi dizisi yaratılırken ikinci köşeli parantez içerisinde n ifadesinin yazılması gereksiz olurdu. Çünkü, her bir dizi referansına `ArrayUtil` sınıfının `randomArray` metodunun geri dönüş değeri olan dizi referansları verilmektedir
+
+```java
+package org.csystem.app;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+import java.util.Random;  
+import java.util.Scanner;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        Scanner kb = new Scanner(System.in);  
+        Random random = new Random();  
+  
+        System.out.print("Input row and column of a matrix:");  
+        int m = kb.nextInt();  
+        int n = kb.nextInt();  
+  
+        int[][] a;  
+  
+        a = new int[m][];  
+  
+        for (int i = 0; i < m; ++i)  
+            a[i] = ArrayUtil.randomArray(random, n, 1, 100);  
+  
+        for (int i = 0; i < m; ++i) {  
+            for (int j = 0; j < n; ++j)  
+                System.out.printf("%02d ", a[i][j]);  
+  
+            System.out.println();  
+        }  
+    }  
+}
+```
+
+>Dizi dizilerine ilk değer iç içe küme parantezleri ile verilebilir
+
+```java
+package org.csystem.app;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {0, 1, 2}};  
+        int [][] b = {{1, 2, 3, 4}, {5, 6}, {7, 8, 9, 5}, {0, 1, 2}};  
+  
+        ArrayUtil.print(a);  
+        System.out.println();  
+        ArrayUtil.print(b);  
+    }  
+}
+```
+
+>Burada dizi dizisinin elemanları olan diziler için new operatörünün hiç bir zaman kullanımı gerekmez. 
+
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir dizi dizisi referansının matris olup olmadığını test eden `isMatrix` isimli metodu `MatrixUtil` sınıfı içerisinde yazınız ve test ediniz.
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir dizi dizisi referansının kare matris olup olmadığını test eden `isSquareMatrix` isimli metodu `MatrixUtil` sınıfı içerisinde yazınız ve test ediniz.
+
+
+
+
+
 
 
 
