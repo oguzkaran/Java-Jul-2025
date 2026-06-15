@@ -21141,12 +21141,212 @@ class App {
 }
 ```
 
->Burada dizi dizisinin elemanları olan diziler için new operatörünün hiç bir zaman kullanımı gerekmez. 
+>Burada dizi dizisinin elemanları olan diziler için new operatörünün hiç bir durumda kullanımı gerekmez. 
 
+###### 15 Haziran 2026
 
 >**Sınıf Çalışması:** Parametresi ile aldığı int türden bir dizi dizisi referansının matris olup olmadığını test eden `isMatrix` isimli metodu `MatrixUtil` sınıfı içerisinde yazınız ve test ediniz.
 
+>**Çözüm:**
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.matrix.test;  
+  
+import org.csystem.util.matrix.MatrixUtil;  
+  
+public class MatrixUtilIsMatrixTest {  
+    public static void run()  
+    {  
+        int [][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};  
+        int [][] b = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9, -1}, {10, 11, 12}};  
+  
+        System.out.println(MatrixUtil.isMatrix(a));  
+        System.out.println(!MatrixUtil.isMatrix(b));  
+    }  
+    public static void main(String [] args)  
+    {  
+        run();  
+    }  
+}
+```
+
 >**Sınıf Çalışması:** Parametresi ile aldığı int türden bir dizi dizisi referansının kare matris olup olmadığını test eden `isSquareMatrix` isimli metodu `MatrixUtil` sınıfı içerisinde yazınız ve test ediniz.
+
+>**Çözüm:**
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.matrix.test;  
+  
+import org.csystem.util.matrix.MatrixUtil;  
+  
+public class MatrixUtilIsSquareMatrixTest {  
+    public static void run()  
+    {  
+        int [][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};  
+        int [][] b = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};  
+        int [][] c = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9, -1}, {10, 11, 12}};  
+  
+        System.out.println(MatrixUtil.isSquareMatrix(a));  
+        System.out.println(!MatrixUtil.isSquareMatrix(b));  
+        System.out.println(!MatrixUtil.isSquareMatrix(c));  
+    }  
+    public static void main(String [] args)  
+    {  
+        run();  
+    }  
+}
+```
+
+
+```java
+package org.csystem.util.matrix;  
+  
+public class MatrixUtil {  
+	//...
+    public static boolean isMatrix(int [][] a)  
+    {  
+        for (int i = 1; i < a.length; ++i)  
+            if (a[i].length != a[0].length)  
+                return false;  
+  
+        return true;  
+    }  
+  
+    public static boolean isSquareMatrix(int [][] a)  
+    {  
+        return isMatrix(a) && a[0].length == a.length;  
+    }  
+    //...
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden iki matrisin eşit olup olmadıklarını test eden `equals` isimli metodu `MatrixUtil` sınıfı içerisinde yazınız ve test ediniz.
+>
+>**Açıklamalar:** 
+>- Metot matris olup olmama kontrolü yapmayacaktır.
+>- İki matrisin eşit olabilmesi için gerek ve yeter koşul satır ve sütun sayılarının ve karşılıklı elemanlarının aynı olması gerekir.
+
+>**Çözüm:**
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.matrix.test;  
+  
+import org.csystem.util.matrix.MatrixUtil;  
+  
+public class MatrixUtilEqualsTest {  
+    public static void run()  
+    {  
+        int [][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};  
+        int [][] b = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};  
+        int [][] c = {{1, 2, 3}, {4, 5, 6}, {7, 8, -9}, {10, 11, 12}};  
+        int [][] d = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};  
+  
+        System.out.println(MatrixUtil.equals(a, b));  
+        System.out.println(!MatrixUtil.equals(c, d));  
+    }  
+    public static void main(String [] args)  
+    {  
+        run();  
+    }  
+}
+```
+
+```java
+package org.csystem.util.matrix;  
+  
+  
+public class MatrixUtil {  
+	//...
+    public static boolean equals(int[][] a, int[][] b)  
+    {  
+        if (a.length != b.length || a[0].length != b[0].length)  
+            return false;  
+  
+        int row =  a.length;  
+        int col = a[0].length;  
+  
+        for (int i = 0; i < row; ++i)  
+            for (int j = 0; j < col; ++j)  
+                if (a[i][j] != b[i][j])  
+                    return false;  
+        return true;  
+    }  
+  
+    //...
+}
+```
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden iki matrisin toplamından oluşan matrise geri dönen `add` isimli metodu `MatrixUtil` sınıfı içerisinde yazınız ve test ediniz.
+>
+>**Açıklamalar:** 
+>- Metot matris olup olmama kontrolü yapmayacaktır.
+>- Metot matrislerin toplanıp toplanamayacağını kontrol etmeyecektir.
+>- İki matrisin toplamı karşılıklı elemanların toplamından elde edilen yeni bir matristir.
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden iki matrisin farkından oluşan matrise geri dönen `subtract` isimli metodu `MatrixUtil` sınıfı içerisinde yazınız ve test ediniz.
+>
+>**Açıklamalar:** 
+>- Metot matris olup olmama kontrolü yapmayacaktır.
+>- Metot matrislerin farkının alınıp alınamayacağını kontrol etmeyecektir.
+>- İki matrisin farkı karşılıklı elemanların farkından elde edilen yeni bir matristir.
+
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir matris ile, ikinci parametresi ile aldığı int türden bir sayıyı toplayan ve matrisi buna göre değiştiren `addBy` isimli metodu yazınız ve test ediniz.
+>
+>**Açıklamalar:** 
+>- Metot matris olup olmama kontrolü yapmayacaktır.
+>- Bir matrisin bir sayı (scaler) ile toplamı tüm elemanların o sayı ile toplanmasıdır.
+
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir matristen, ikinci parametresi ile aldığı int türden bir sayıyı çıkartan ve matrisi buna göre değiştiren `subtractBy` isimli metodu yazınız ve test ediniz.
+>
+>**Açıklamalar:** 
+>- Metot matris olup olmama kontrolü yapmayacaktır.
+>- Bir matrisin bir sayı (scaler) ile farkı tüm elemanların o sayı ile farkıdır.
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir matris ile, ikinci parametresi ile aldığı int türden bir sayıyı çarpan ve matrisi buna göre değiştiren `multiplyBy` isimli metodu yazınız ve test ediniz.
+>
+>**Açıklamalar:** 
+>- Metot matris olup olmama kontrolü yapmayacaktır.
+>- Bir matrisin bir sayı (scaler) ile çarpımı tüm elemanların o sayı ile çarpmaktır.
+
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir kare matrisin esas köşegeni (diagonal) üzerinde elemanların toplamına geri dönen `sumDiagonal` isimli metodu `MatrixUtil` isimli sınıfın içerisinde yazınız ve test ediniz.
+>
+>**Açıklamalar:** 
+>- Metot kare matris olup olmama kontrolü yapmayacaktır.
+>- `n * n'lik` bir matrisin esas köşegeni üzerindeki elemanlar `a[0][0], a[1][1], ..., a[n - 1][n - 1]`
+>- Metot long türüne geri dönecektir.
+
+
+>**Sınıf Çalışması:** Parametresi ile aldığı int türden bir matrisin `devriğine (transpose)` geri dönen `transpose` isimli metodu MatrixUtil sınıfı içerisinde yazınız ve test ediniz.
+>
+>**Açıklamalar:**
+>- Metot matris olup olmama kontrolü yapmayacaktır.
+>- Bir matrisin devriği satırların sütun sütunların yapılmış halidir.
+
+> **Sınıf Çalışması:** Parametresi ile aldığı int türden iki matrisin çarpımından oluşan matrisi döndüren `multiply` isimli metodu MatrixUtil içerisinde yazınız ve test ediniz.
+> 
+> **Açıklamalar:**
+> - Metot matris olup olmama kontrolü yapmayacaktır.
+> - Metot matrislerin çarpılıp çarpılmayacağını kontrol etmeyecektir.
+> - Matris çarpımına ilişkin formülü şu link'den elde edebilirsiniz:  https://en.wikipedia.org/wiki/Matrix_multiplication
+
+
+>**Sınıf Çalışması:** Parametresi ile aldığı long türden bir sayının 3'erli basamaklarından oluşan diziye geri dönen `digitsInThrees` isimli metodu `NumberUtil` sınıfı içerisinde yazınız ve test ediniz.
+>
+>**Açıklamalar**
+>- Örneğin 1234567890 sayısı için metot sırasıyla 1, 234, 567, 890 elemanlarından oluşan diziye geri dönecektir.
+>- Sayı negatif ise pozitif olacak şekilde dizi elde edilecektir.
+
+
+
 
 
 
