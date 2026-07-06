@@ -8,6 +8,20 @@ public class NumberUtil {
     public static String [] ones = {"", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"};
     public static String [] tens = {"", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"};
 
+
+    public static int [] digits(long a, int n)
+    {
+        a = Math.abs(a);
+        int [] d = new int[a != 0 ? (int)(Math.log10(a) / n) + 1 : 1];
+        int divider = (int)(Math.pow(10, n));
+
+
+        for (int i = d.length - 1; a != 0; d[i--] = (int)(a % divider), a /= divider)
+            ;
+
+        return d;
+    }
+
     public static String numToStr3DigitsTR(int val)
     {
         int a = val / 100;
@@ -40,13 +54,17 @@ public class NumberUtil {
 
     public static int [] digits(long a)
     {
-        int [] d = new int[countDigits(a)];
+        return digits(a, 1);
+    }
 
-        a = Math.abs(a);
-        for (int i = d.length - 1; a != 0; d[i--] = (int)(a % 10), a /= 10)
-            ;
+    public static int[] digitsInThrees(long a)
+    {
+        return digits(a, 3);
+    }
 
-        return d;
+    public static int[] digitsInTwos(long a)
+    {
+        return digits(a, 2);
     }
 
     public static int countDigits(int a)

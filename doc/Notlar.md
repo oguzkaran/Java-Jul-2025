@@ -21282,12 +21282,40 @@ public class MatrixUtil {
 }
 ```
 
+###### 22 Haziran 2026
+
 >**Sınıf Çalışması:** Parametresi ile aldığı int türden iki matrisin toplamından oluşan matrise geri dönen `add` isimli metodu `MatrixUtil` sınıfı içerisinde yazınız ve test ediniz.
 >
 >**Açıklamalar:** 
 >- Metot matris olup olmama kontrolü yapmayacaktır.
->- Metot matrislerin toplanıp toplanamayacağını kontrol etmeyecektir.
 >- İki matrisin toplamı karşılıklı elemanların toplamından elde edilen yeni bir matristir.
+>- Metot matrislerin toplanıp toplanamayacağını kontrol etmeyecektir.
+
+>**Çözüm:**
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.matrix.test;  
+  
+import org.csystem.util.matrix.MatrixUtil;  
+  
+public class MatrixUtilAddTest {  
+    public static void run()  
+    {  
+        int [][] a = {{1, 2, 3}, {4, 5, 6}};  
+        int [][] b = {{7, 8, 9}, {5, 8, 9}};  
+        int [][] r = {{8, 10, 12}, {9, 13, 15}};  
+  
+        System.out.println(MatrixUtil.equals(MatrixUtil.add(a, b), r));  
+    }  
+  
+    public static void main(String [] args)  
+    {  
+        run();  
+    }  
+}
+```
 
 >**Sınıf Çalışması:** Parametresi ile aldığı int türden iki matrisin farkından oluşan matrise geri dönen `subtract` isimli metodu `MatrixUtil` sınıfı içerisinde yazınız ve test ediniz.
 >
@@ -21296,6 +21324,64 @@ public class MatrixUtil {
 >- Metot matrislerin farkının alınıp alınamayacağını kontrol etmeyecektir.
 >- İki matrisin farkı karşılıklı elemanların farkından elde edilen yeni bir matristir.
 
+>**Çözüm:**
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.matrix.test;  
+  
+import org.csystem.util.matrix.MatrixUtil;  
+  
+public class MatrixUtilSubtractTest {  
+    public static void run()  
+    {  
+        int [][] a = {{1, 2, 3}, {4, 5, 6}};  
+        int [][] b = {{7, 8, 9}, {5, 8, 9}};  
+        int [][] r = {{-6, -6, -6}, {-1, -3, -3}};  
+  
+        System.out.println(MatrixUtil.equals(MatrixUtil.subtract(a, b), r));  
+    }  
+  
+    public static void main(String [] args)  
+    {  
+        run();  
+    }  
+}
+```
+
+> **Sınıf Çalışması:** Parametresi ile aldığı int türden iki matrisin çarpımından oluşan matrisi döndüren `multiply` isimli metodu MatrixUtil içerisinde yazınız ve test ediniz.
+> 
+> **Açıklamalar:**
+> - Metot matris olup olmama kontrolü yapmayacaktır.
+> - Metot matrislerin çarpılıp çarpılmayacağını kontrol etmeyecektir.
+> - Matris çarpımına ilişkin formülü şu link'den elde edebilirsiniz:  https://en.wikipedia.org/wiki/Matrix_multiplication
+
+>**Çözüm:**
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.matrix.test;  
+  
+import org.csystem.util.matrix.MatrixUtil;  
+  
+public class MatrixUtilMultiplyTest {  
+    public static void run()  
+    {  
+        int [][] a = {{1, 0, 1}, {2, 1, 1}, {0, 1, 1}, {1, 1, 2}};  
+        int [][] b = {{1, 2, 1}, {2, 3, 1}, {4, 2, 2}};  
+        int [][] r = {{5, 4, 3}, {8, 9, 5}, {6, 5, 3}, {11, 9, 6}};  
+  
+        System.out.println(MatrixUtil.equals(MatrixUtil.multiply(a, b), r));  
+    }  
+  
+    public static void main(String [] args)  
+    {  
+        run();  
+    }  
+}
+```
 
 >**Sınıf Çalışması:** Parametresi ile aldığı int türden bir matris ile, ikinci parametresi ile aldığı int türden bir sayıyı toplayan ve matrisi buna göre değiştiren `addBy` isimli metodu yazınız ve test ediniz.
 >
@@ -21304,11 +21390,66 @@ public class MatrixUtil {
 >- Bir matrisin bir sayı (scaler) ile toplamı tüm elemanların o sayı ile toplanmasıdır.
 
 
+>**Çözüm:**
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.matrix.test;  
+  
+import org.csystem.util.matrix.MatrixUtil;  
+  
+public class MatrixUtilAddByTest {  
+    public static void run()  
+    {  
+        int [][] a = {{1, 2, 3}, {4, 5, 6}};  
+        int value = 2;  
+        int [][] r = {{3, 4, 5}, {6, 7, 8}};  
+  
+        MatrixUtil.addBy(a, value);  
+        System.out.println(MatrixUtil.equals(a, r));  
+    }  
+  
+    public static void main(String [] args)  
+    {  
+        run();  
+    }  
+}
+```
+
 >**Sınıf Çalışması:** Parametresi ile aldığı int türden bir matristen, ikinci parametresi ile aldığı int türden bir sayıyı çıkartan ve matrisi buna göre değiştiren `subtractBy` isimli metodu yazınız ve test ediniz.
 >
 >**Açıklamalar:** 
 >- Metot matris olup olmama kontrolü yapmayacaktır.
 >- Bir matrisin bir sayı (scaler) ile farkı tüm elemanların o sayı ile farkıdır.
+
+
+>**Çözüm:**
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.matrix.test;  
+  
+import org.csystem.util.matrix.MatrixUtil;  
+  
+public class MatrixUtilSubtractByTest {  
+    public static void run()  
+    {  
+        int [][] a = {{1, 2, 3}, {4, 5, 6}};  
+        int value = 2;  
+        int [][] r = {{-1, -0, 1}, {2, 3, 4}};  
+  
+        MatrixUtil.subtractBy(a, value);  
+        System.out.println(MatrixUtil.equals(a, r));  
+    }  
+  
+    public static void main(String [] args)  
+    {  
+        run();  
+    }  
+}
+```
 
 >**Sınıf Çalışması:** Parametresi ile aldığı int türden bir matris ile, ikinci parametresi ile aldığı int türden bir sayıyı çarpan ve matrisi buna göre değiştiren `multiplyBy` isimli metodu yazınız ve test ediniz.
 >
@@ -21316,6 +21457,33 @@ public class MatrixUtil {
 >- Metot matris olup olmama kontrolü yapmayacaktır.
 >- Bir matrisin bir sayı (scaler) ile çarpımı tüm elemanların o sayı ile çarpmaktır.
 
+
+>**Çözüm:**
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.matrix.test;  
+  
+import org.csystem.util.matrix.MatrixUtil;  
+  
+public class MatrixUtilMultiplyByTest {  
+    public static void run()  
+    {  
+        int [][] a = {{1, 2, 3}, {4, 5, 6}};  
+        int value = 2;  
+        int [][] r = {{2, 4, 6}, {8, 10, 12}};  
+  
+        MatrixUtil.multiplyBy(a, value);  
+        System.out.println(MatrixUtil.equals(a, r));  
+    }  
+  
+    public static void main(String [] args)  
+    {  
+        run();  
+    }  
+}
+```
 
 >**Sınıf Çalışması:** Parametresi ile aldığı int türden bir kare matrisin esas köşegeni (diagonal) üzerinde elemanların toplamına geri dönen `sumDiagonal` isimli metodu `MatrixUtil` isimli sınıfın içerisinde yazınız ve test ediniz.
 >
@@ -21325,25 +21493,298 @@ public class MatrixUtil {
 >- Metot long türüne geri dönecektir.
 
 
+>**Çözüm:**
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.matrix.test;  
+  
+import org.csystem.util.matrix.MatrixUtil;  
+  
+public class MatrixUtilSumDiagonalTest {  
+    public static void run()  
+    {  
+        int [][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};  
+  
+        System.out.println(MatrixUtil.sumDiagonal(a) == 15L);  
+    }  
+  
+    public static void main(String [] args)  
+    {  
+        run();  
+    }  
+}
+```
+
 >**Sınıf Çalışması:** Parametresi ile aldığı int türden bir matrisin `devriğine (transpose)` geri dönen `transpose` isimli metodu MatrixUtil sınıfı içerisinde yazınız ve test ediniz.
 >
 >**Açıklamalar:**
 >- Metot matris olup olmama kontrolü yapmayacaktır.
 >- Bir matrisin devriği satırların sütun sütunların yapılmış halidir.
 
-> **Sınıf Çalışması:** Parametresi ile aldığı int türden iki matrisin çarpımından oluşan matrisi döndüren `multiply` isimli metodu MatrixUtil içerisinde yazınız ve test ediniz.
-> 
-> **Açıklamalar:**
-> - Metot matris olup olmama kontrolü yapmayacaktır.
-> - Metot matrislerin çarpılıp çarpılmayacağını kontrol etmeyecektir.
-> - Matris çarpımına ilişkin formülü şu link'den elde edebilirsiniz:  https://en.wikipedia.org/wiki/Matrix_multiplication
 
+>**Çözüm:**
 
->**Sınıf Çalışması:** Parametresi ile aldığı long türden bir sayının 3'erli basamaklarından oluşan diziye geri dönen `digitsInThrees` isimli metodu `NumberUtil` sınıfı içerisinde yazınız ve test ediniz.
+>**Test Kodları:**
+
+```java
+package org.csystem.util.matrix.test;  
+  
+import org.csystem.util.matrix.MatrixUtil;  
+  
+public class MatrixUtilTransposeTest {  
+    public static void run()  
+    {  
+        int [][] a = {{1, 2, 3}, {4, 5, 6}};  
+        int [][] t = {{1, 4}, {2, 5}, {3, 6}};  
+  
+        System.out.println(MatrixUtil.equals(MatrixUtil.transpose(a), t));  
+        System.out.println(MatrixUtil.equals(MatrixUtil.transpose(t), a));  
+    }  
+  
+    public static void main(String [] args)  
+    {  
+        run();  
+    }  
+}
+```
+
+```java
+package org.csystem.util.matrix;  
+  
+public class MatrixUtil { 
+	//... 
+    public static int [][] add(int [][] a, int[][] b)  
+    {  
+        int row = a.length;  
+        int col = a[0].length;  
+        int [][] r = new int[row][col];  
+  
+        for (int i = 0; i < row; ++i)  
+            for (int j = 0; j < col; ++j)  
+                r[i][j] = a[i][j] + b[i][j];  
+  
+        return r;  
+    }  
+  
+    public static void addBy(int [][] a, int val)  
+    {  
+        int row = a.length;  
+        int col = a[0].length;  
+  
+        for (int i = 0; i < row; ++i)  
+            for (int j = 0; j < col; ++j)  
+                a[i][j] += val;  
+    }  
+  
+    public static int [][] multiply(int [][] a, int[][] b)  
+    {  
+        int m = a.length;  
+        int n = a[0].length;  
+        int p = b[0].length;  
+        int [][] r = new int[m][p];  
+  
+        for (int i = 0; i < m; ++i)  
+            for (int j = 0; j < n; ++j)  
+                for (int k = 0; k < p; ++k)  
+                    r[i][k] += a[i][j] * b[j][k];  
+        return r;  
+    }  
+  
+    public static void multiplyBy(int [][] a, int val)  
+    {  
+        int row = a.length;  
+        int col = a[0].length;  
+  
+        for (int i = 0; i < row; ++i)  
+            for (int j = 0; j < col; ++j)  
+                a[i][j] *= val;  
+    }  
+  
+    public static int [][] subtract(int [][] a, int[][] b)  
+    {  
+        int row = a.length;  
+        int col = a[0].length;  
+        int [][] r = new int[row][col];  
+  
+        for (int i = 0; i < row; ++i)  
+            for (int j = 0; j < col; ++j)  
+                r[i][j] = a[i][j] - b[i][j];  
+  
+        return r;  
+    }  
+  
+    public static void subtractBy(int [][] a, int val)  
+    {  
+        int row = a.length;  
+        int col = a[0].length;  
+  
+        for (int i = 0; i < row; ++i)  
+            for (int j = 0; j < col; ++j)  
+                a[i][j] -= val;  
+    }  
+  
+    public static boolean equals(int[][] a, int[][] b)  
+    {  
+        if (a.length != b.length || a[0].length != b[0].length)  
+            return false;  
+  
+        int row =  a.length;  
+        int col = a[0].length;  
+  
+        for (int i = 0; i < row; ++i)  
+            for (int j = 0; j < col; ++j)  
+                if (a[i][j] != b[i][j])  
+                    return false;  
+        return true;  
+    }
+      
+    public static long sumDiagonal(int[][] a)  
+    {  
+        long total = 0;  
+  
+        for (int i = 0; i < a.length; ++i)  
+            total += a[i][i];  
+  
+        return total;  
+    }  
+  
+    public static int [][] transpose(int [][] a)  
+    {  
+        int row = a.length;  
+        int col = a[0].length;  
+        int [][] r = new int[col][row];  
+  
+        for (int i = 0; i < row; ++i)  
+            for (int j = 0; j < col; ++j)  
+                r[j][i] = a[i][j];  
+  
+        return r;  
+    }  
+    //...
+}
+```
+
+###### 6 Temmuz 2026
+
+>**Sınıf Çalışması:** Parametresi ile aldığı long türden bir sayının 3'erli basamaklarından oluşan diziye geri dönen `digitsInThrees` isimli metodu ve 2'şerli basamaklarından oluşan diziye geri dönen `digitsInTwos` isimli metodu `NumberUtil` sınıfı içerisinde yazınız ve test ediniz.
 >
 >**Açıklamalar**
->- Örneğin 1234567890 sayısı için metot sırasıyla 1, 234, 567, 890 elemanlarından oluşan diziye geri dönecektir.
+>- Örneğin 1234567890 sayısı için `digitsInThrees` metodu sırasıyla 1, 234, 567, 890 elemanlarından oluşan diziye `digitsInTwos` metodu 12, 34, 56, 78, 90 elemanlarından oluşan diziye geri dönecektir.
 >- Sayı negatif ise pozitif olacak şekilde dizi elde edilecektir.
+
+
+>**Çözüm:**
+
+>**Test Kodları:**
+
+```java
+package org.csystem.util.numeric.test;  
+  
+import org.csystem.util.array.ArrayUtil;  
+  
+import static org.csystem.util.numeric.NumberUtil.digitsInThrees;  
+  
+public class NumberUtilDigitsInThreesTest {  
+    public static void run()    
+    {    
+        long a = 12_345_678_901_234L;  
+        int [] ad = {12, 345, 678, 901, 234};  
+        long b = -12345678901234L;    
+    
+        System.out.println(ArrayUtil.equals(digitsInThrees(a), ad));  
+        System.out.println(ArrayUtil.equals(digitsInThrees(b), ad));  
+    
+        a = 0;    
+        ad = new int[1];    
+        System.out.println(ArrayUtil.equals(digitsInThrees(a), ad));  
+    }    
+    
+    public static void main(String[] args)    
+    {    
+        run();    
+    }    
+}
+```
+
+```java
+package org.csystem.util.numeric.test;    
+    
+import org.csystem.util.array.ArrayUtil;    
+    
+import static org.csystem.util.numeric.NumberUtil.digitsInTwos;    
+    
+public class NumberUtilDigitsInTwosTest {    
+    public static void run()    
+    {    
+        long a = 12345678901234L;    
+        int [] ad = {12, 34, 56, 78, 90, 12, 34};    
+        long b = -12345678901234L;    
+    
+        System.out.println(ArrayUtil.equals(digitsInTwos(a), ad));    
+        System.out.println(ArrayUtil.equals(digitsInTwos(b), ad));    
+    
+        a = 0;    
+        ad = new int[1];    
+        System.out.println(ArrayUtil.equals(digitsInTwos(a), ad));    
+    }    
+    
+    public static void main(String[] args)    
+    {    
+        run();    
+    }    
+}
+```
+
+```java
+package org.csystem.util.numeric;  
+  
+public class NumberUtil {
+    //...
+  
+    public static int [] digits(long a, int n)  
+    {  
+        a = Math.abs(a);  
+        int [] d = new int[a != 0 ? (int)(Math.log10(a) / n) + 1 : 1];  
+        int divider = (int)(Math.pow(10, n));  
+  
+  
+        for (int i = d.length - 1; a != 0; d[i--] = (int)(a % divider), a /= divider)  
+            ;  
+  
+        return d;  
+    }  
+    
+    //...
+  
+    public static int [] digits(long a)  
+    {  
+        return digits(a, 1);  
+    }  
+  
+    public static int[] digitsInThrees(long a)  
+    {  
+        return digits(a, 3);  
+    }  
+  
+    public static int[] digitsInTwos(long a)  
+    {  
+        return digits(a, 2);  
+    }
+    //...
+}
+```
+
+##### for-each Döngü Deyimi
+
+>for-each döngü deyimi Java 1.5 ile dile eklenmiştir. Bu döngü deyimi **dolaşılabilir (iterable)** türler ile kullanılabilmektedir. Diziler, Java'da dolaşılabilir türlerdir, dolayısıyla bu döngü deyimi diziler ile kullanılabilmektedir. İleride dolaşılabilir olan başka sınıflar da incelenecektir. for-each döngü deyimi için **enhanced for loop** ya da **range based loop** ya da **special for loop** terimleri de kullanılmaktadır.
+
+**Anahtar Notlar:** Bir sınıfın dolaşılabilir olarak bildirimi yani bir sınıf ile for-each döngü deyiminin kullanılabilir duruma getirilmesi `Java ile Uygulama Geliştirme I` kursunda ele alınacaktır.
+
+>**Java programcısı for-each döngü deyiminin kullanılabildiği VE okunabilirliği/algılanabilirliği olumsuz etkilemediği her durumda KESİNLİKLE bu döngü deyimini kullanmalıdır.**
+
+
 
 
 
