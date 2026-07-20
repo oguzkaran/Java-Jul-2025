@@ -119,11 +119,11 @@ public class StringUtil {
     {
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < s.length; ++i) {
-            if (ignoreBlanks && s[i].isBlank())
+        for (String str : s) {
+            if (ignoreBlanks && str.isBlank())
                 continue;
 
-            sb.append(s[i]).append(delimiter);
+            sb.append(str).append(delimiter);
         }
 
         return sb.substring(0, sb.length() - delimiter.length());
