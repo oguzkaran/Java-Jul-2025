@@ -21776,28 +21776,566 @@ public class NumberUtil {
 }
 ```
 
+###### 20 Temmuz 2026
+
 ##### for-each Döngü Deyimi
 
->for-each döngü deyimi Java 1.5 ile dile eklenmiştir. Bu döngü deyimi **dolaşılabilir (iterable)** türler ile kullanılabilmektedir. Diziler, Java'da dolaşılabilir türlerdir, dolayısıyla bu döngü deyimi diziler ile kullanılabilmektedir. İleride dolaşılabilir olan başka sınıflar da incelenecektir. for-each döngü deyimi için **enhanced for loop** ya da **range based loop** ya da **special for loop** terimleri de kullanılmaktadır.
+>for-each döngü deyimi Java 1.5 ile dile eklenmiştir. Bu döngü deyimi **dolaşılabilir (iterable)** türler ile kullanılabilmektedir. Diziler, Java'da dolaşılabilir türlerdir, dolayısıyla bu döngü deyimi diziler ile de kullanılabilmektedir. İleride dolaşılabilir olan başka sınıflar da incelenecektir. for-each döngü deyimi için **enhanced for loop** ya da **range based loop** ya da **special for loop** terimleri de kullanılmaktadır.
 
 **Anahtar Notlar:** Bir sınıfın dolaşılabilir olarak bildirimi yani bir sınıf ile for-each döngü deyiminin kullanılabilir duruma getirilmesi `Java ile Uygulama Geliştirme I` kursunda ele alınacaktır.
 
 >**Java programcısı for-each döngü deyiminin kullanılabildiği VE okunabilirliği/algılanabilirliği olumsuz etkilemediği her durumda KESİNLİKLE bu döngü deyimini kullanmalıdır.**
 
+>for-each döngü deyiminin genel biçimi şu şekildedir:
+
+```java
+for (<tür> <değişken> : <dolaşılabilir türden referans>)
+	<deyim>
+```
+
+>Burada, döngü değişkeni dolaşılabilir türün her bir elemanının doğrudan atanabildiği (implicit conversion) türden olmalıdır. Akdi durumda error oluşur. Bu döngünün her adımında, dolaşılabilir türün ilgili elemanı (o sıradaki elemanı) döngü değişkenine atanır. Yani aslında dolaşılabilir tür baştan sonra dolaşılmış olur. Örneğin, dolaşılabilir tür bir dizi ise her adımda dizinin ilgili indeksteki elemanı döngü değişkenine atanmış olur. Bu döngü deyiminde dizinin her adımda elemanına indeks değeri ile erişilmediğine dikkat ediniz.
 
 
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [] a = {6, 10, 9, 21, 11, 76, 7};  
+  
+        for (int v : a)  
+            System.out.printf("%d ", v);  
+  
+        System.out.println();  
+    }  
+}
+```
+
+>for-each deyiminde döngü değişkene atama işlemi doğrudan (implicit) yapıldığında aşağıdaki demo örnekte error oluşur
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [] a = {6, 10, 9, 21, 11, 76, 7};  
+  
+        for (short v : a) //error  
+            System.out.printf("%d ", v);  
+  
+        System.out.println();  
+    }  
+}
+```
+>for-each deyiminde döngü değişkene atama işlemi doğrudan (implicit) yapıldığında aşağıdaki demo örnek geçerlidir
 
 
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [] a = {6, 10, 9, 21, 11, 76, 7};  
+  
+        for (long v : a)  
+            System.out.printf("%d ", v);  
+  
+        System.out.println();  
+    }  
+}
+```
+
+>Aşağıdaki demo örnekte dizinin elemanları değiştirilemez değil mi?
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [] a = {6, 10, 9, 21, 11, 76, 7};  
+  
+        for (long v : a)  
+            v *= 2;  
+          
+        for (long v : a)  
+            System.out.printf("%d ", v);  
+  
+        System.out.println();  
+    }  
+}
+```
+
+>Aslında for-each döngü deyimi for döngü deyimi yerine dolaylı da olsa kullanılabilir. Bir dizinin elemanlarına atama yapmak için indeks değeri gerekir.  Programcı  bu işlemi for-each döngü deyimi ile ayrı bir indeks değişkeni belirleyerek de yapabilir ancak bu durum okunabilirlik/algılanabilirlik açısından olumsuz bir durum oluşturur. Bu durumda programcı klasik for döngü deyimini tercih etmelidir. 
 
 
+>Aşağıdaki demo örnekte dizinin elemanlarının her biri iki katına çıkartılmıştır. Klasik for döngüsü kullanılsaydı daha okunabilir/algılanabilir olurdu değil mi?
 
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [] a = {6, 10, 9, 21, 11, 76, 7};  
+  
+        int i = 0;  
+  
+        for (int v : a)  
+            a[i++] *= 2;  
+  
+        for (int v : a)  
+            System.out.printf("%d ", v);  
+  
+        System.out.println();  
+    }  
+}
+```
 
+>Buna göre for-each döngü deyimi ne zaman tercih edilmemelidir? Bu sorunun yanıtı oldukça basittir. Ne zaman indeks numarası gerekirse o zaman kullanılmamalıdır. Başka bir deyişle indeks gerekmediği her durumda for-each döngü deyimi kullanılmalıdır.
 
+>for-each döngü deyiminde `:` atomundan sonraki ifade bir kez yapılır.
 
+>Aşağıdaki demo örneği inceleyiniz
 
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        for (int v : Sample.getIntArray())  
+            System.out.printf("%d ", v);  
+  
+        System.out.println();  
+    }  
+}  
+  
+class Sample {  
+    public static int [] getIntArray()  
+    {  
+        System.out.println("getIntArray method invoked");  
+  
+        return new int[]{6, 10, 9, 21, 11, 76, 7};  
+    }  
+}
+```
 
+>Java'da String sınıfı dolaşılabilir (iterable) olmadığında for-each döngüsüyle aşağıdaki gibi dolaşılamaz
 
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        String s = "Bugün hava çok güzel";  
+  
+        for (char c : s) //error  
+            System.out.printf("%c ", c);  
+  
+        System.out.println();  
+    }  
+}
+```
 
+>Aşağıdaki demo örnekte String sınıfının toCharArray metodu çağrılarak char türden dizi dolaşılmıştır
 
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        String s = "Bugün hava çok güzel";  
+  
+        for (char c : s.toCharArray())  
+            System.out.printf("%c ", c);  
+  
+        System.out.println();  
+    }  
+}
+```
+
+>Aşağıdaki demo örneği inceleyiniz
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        String [] weekDays = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};  
+  
+        for (String wd : weekDays)  
+            System.out.printf("%s ", wd);  
+  
+        System.out.println();  
+    }  
+}
+```
+
+>for-each döngü deyimiyle bir dizi dizisi aşağıdaki gibi dolaşılabilir
+
+```java
+package org.csystem.app;  
+  
+class App {  
+    public static void main(String [] args)  
+    {  
+        int [][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};  
+          
+        for (int [] array : a) {  
+            for (int v : array)  
+                System.out.printf("%02d ", v);  
+  
+            System.out.println();  
+        }  
+  
+        System.out.println();  
+    }  
+}
+```
+
+>ArrayUtil sınıfı
+
+```java
+package org.csystem.util.array;  
+  
+import java.util.Random;  
+  
+public class ArrayUtil {  
+    public static void bubbleSortAscending(int [] a) //ileride gizlenecektir  
+    {  
+        for (int i = 0; i < a.length - 1; ++i)  
+            for (int k = 0; k < a.length -1 - i; ++k)  
+                if (a[k + 1] < a[k])  
+                    swap(a, k, k + 1);  
+    }  
+  
+    public static void bubbleSortDescending(int [] a) //ileride gizlenecektir  
+    {  
+        for (int i = 0; i < a.length - 1; ++i)  
+            for (int k = 0; k < a.length -1 - i; ++k)  
+                if (a[k] < a[k + 1])  
+                    swap(a, k, k + 1);  
+    }  
+  
+    public static void selectionSortAscending(int [] a) //ileride gizlenecektir  
+    {  
+        for (int i = 0; i < a.length - 1; ++i) {  
+            int idx = minIndex(a, i);  
+  
+            if (a[idx] < a[i])  
+                swap(a, i, idx);  
+        }  
+    }  
+  
+    public static void selectionSortDescending(int [] a) //ileride gizlenecektir  
+    {  
+        for (int i = 0; i < a.length - 1; ++i) {  
+            int idx = maxIndex(a, i);  
+  
+            if (a[i] < a[idx])  
+                swap(a, i, idx);  
+        }  
+    }  
+  
+    public static double average(int [] a)  
+    {  
+        return (double)sum(a) / a.length;  
+    }  
+  
+    public static void bubbleSort(int [] a)  
+    {  
+        bubbleSort(a, false);  
+    }  
+  
+    public static void bubbleSort(int [] a, boolean descending)  
+    {  
+        if (descending)  
+            bubbleSortDescending(a);  
+        else  
+            bubbleSortAscending(a);  
+    }  
+  
+    public static boolean equals(int [] a, int [] b)  
+    {  
+        if (a.length != b.length)  
+            return false;  
+  
+        for (int i = 0; i < a.length; i++)  
+            if (a[i] != b[i])  
+                return false;  
+  
+        return true;  
+    }  
+  
+    public static boolean hasLength(int [] a)  
+    {  
+        return !isEmpty(a);  
+    }  
+  
+    public static int [] histogramData(int [] a, int n)  
+    {  
+        int [] counts = new int[n + 1];  
+  
+        for (int v : a)  
+            ++counts[v];  
+  
+        return counts;  
+    }  
+  
+    public static boolean isEmpty(int [] a)  
+    {  
+        return a.length == 0;  
+    }  
+  
+    public static int max(int [] a)  
+    {  
+        return max(a, 0);  
+    }  
+  
+    public static int max(int [] a, int start)  
+    {  
+        int result = a[start];  
+  
+        for (int i = start + 1; i < a.length; ++i)  
+            result = Math.max(result, a[i]);  
+  
+        return result;  
+    }  
+  
+    public static int maxIndex(int [] a)  
+    {  
+        return maxIndex(a, 0);  
+    }  
+  
+    public static int maxIndex(int [] a, int start)  
+    {  
+        int idx = start;  
+  
+        for (int i = start + 1; i < a.length; ++i)  
+            if (a[idx] < a[i])  
+                idx = i;  
+  
+        return idx;  
+    }  
+  
+    public static int min(int [] a)  
+    {  
+        return  min(a, 0);  
+    }  
+  
+    public static int min(int [] a, int start)  
+    {  
+        int result = a[start];  
+  
+        for (int i = start + 1; i < a.length; ++i)  
+            result = Math.min(result, a[i]);  
+  
+        return result;  
+    }  
+  
+    public static int minIndex(int [] a)  
+    {  
+        return minIndex(a, 0);  
+    }  
+  
+    public static int minIndex(int [] a, int start)  
+    {  
+        int idx = start;  
+  
+        for (int i = start + 1; i < a.length; ++i)  
+            if (a[i] < a[idx])  
+                idx = i;  
+  
+        return idx;  
+    }  
+  
+    public static int partitionByLess(int [] a, int threshold)  
+    {  
+        int pi = 0;  
+  
+        while (pi != a.length && a[pi] < threshold)  
+            ++pi;  
+  
+        if (pi == a.length)  
+            return pi;  
+  
+        for (int i = pi + 1; i < a.length; ++i)  
+            if (a[i] < threshold)  
+                swap(a, i, pi++);  
+  
+        return pi;  
+    }  
+  
+    public static int partitionByGreater(int [] a, int threshold)  
+    {  
+        int pi = 0;  
+  
+        while (pi != a.length && threshold < a[pi])  
+            ++pi;  
+  
+        if (pi == a.length)  
+            return pi;  
+  
+        for (int i = pi + 1; i < a.length; ++i)  
+            if (threshold < a[i])  
+                swap(a, i, pi++);  
+  
+        return pi;  
+    }  
+  
+    public static int partitionByEven(int [] a)  
+    {  
+        int pi = 0;  
+  
+        while (pi != a.length && a[pi] % 2 == 0)  
+            ++pi;  
+  
+        if (pi == a.length)  
+            return pi;  
+  
+        for (int i = pi + 1; i < a.length; ++i)  
+            if (a[i] % 2 == 0)  
+                swap(a, i, pi++);  
+  
+        return pi;  
+    }  
+  
+    public static void print(int [] a)  
+    {  
+        print(a, " ", "\n");  
+    }  
+  
+    public static void print(int [] a, int n)  
+    {  
+        print(a, n, " ", "\n");  
+    }  
+  
+    public static void print(int [] a, int n, String sep, String end)  
+    {  
+        String fmt = "%%0%dd%s".formatted(n, sep);  
+  
+        for (int v : a)  
+            System.out.printf(fmt, v, sep);  
+  
+        System.out.print(end);  
+    }  
+  
+    public static void print(int [] a, String sep, String end)  
+    {  
+        for (int v : a)  
+            System.out.printf("%d%s", v, sep);  
+  
+        System.out.print(end);  
+    }  
+  
+    public static void print(int [][] a)  
+    {  
+        for (int[] ints : a)  
+            print(ints);  
+    }  
+  
+    public static int [] randomArray(Random random, int n, int origin, int bound)  
+    {  
+        int [] a = new int [n];  
+  
+        for (int i = 0; i < n; ++i)  
+            a[i] = random.nextInt(origin, bound);  
+  
+        return a;  
+    }  
+  
+    public static void reverse(int[] a)  
+    {  
+        int first = 0;  
+        int last = a.length - 1;  
+  
+        while (first < last)  
+            swap(a, first++, last--);  
+    }  
+  
+    public static void reverse(char[] a)  
+    {  
+        int first = 0;  
+        int last = a.length - 1;  
+  
+        while (first < last)  
+            swap(a, first++, last--);  
+    }  
+  
+    public static int [] reversed(int[] a)  
+    {  
+        int [] result = new int [a.length];  
+  
+        for (int i = a.length - 1; i >= 0; --i)  
+            result[result.length - 1 - i] = a[i];  
+  
+        return result;  
+    }  
+  
+    public static void selectionSort(int [] a)  
+    {  
+        selectionSort(a, false);  
+    }  
+  
+    public static void selectionSort(int [] a, boolean descending)  
+    {  
+        if (descending)  
+            selectionSortDescending(a);  
+        else  
+            selectionSortAscending(a);  
+    }  
+  
+    public static long sum(int [] a)  
+    {  
+        long total = 0;  
+  
+        for (int v : a)  
+            total += v;  
+  
+        return total;  
+    }  
+  
+    public static void swap(int [] a, int i, int k)  
+    {  
+        int temp = a[i];  
+  
+        a[i] = a[k];  
+        a[k] = temp;  
+    }  
+  
+    public static void swap(long [] a, int i, int k)  
+    {  
+        long temp = a[i];  
+  
+        a[i] = a[k];  
+        a[k] = temp;  
+    }  
+  
+    public static void swap(double [] a, int i, int k)  
+    {  
+        double temp = a[i];  
+  
+        a[i] = a[k];  
+        a[k] = temp;  
+    }  
+  
+    public static void swap(char [] a, int i, int k)  
+    {  
+        char temp = a[i];  
+  
+        a[i] = a[k];  
+        a[k] = temp;  
+    }  
+}
+```
 
 

@@ -1,19 +1,17 @@
 package org.csystem.app;
 
-import org.csystem.util.array.ArrayUtil;
-
-import java.util.Scanner;
-
 class App {
     public static void main(String [] args)
     {
-        Scanner kb = new Scanner(System.in);
+        int [][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
 
-        System.out.print("Input a number:");
-        int a =  kb.nextInt();
+        for (int [] array : a) {
+            for (int v : array)
+                System.out.printf("%02d ", v);
 
-        int n = a != 0 ? (int)(Math.log10(Math.abs(a)) / 3) + 1 : 1;
+            System.out.println();
+        }
 
-        System.out.printf("n = %d", n);
+        System.out.println();
     }
 }

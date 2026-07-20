@@ -82,8 +82,8 @@ public class ArrayUtil {
     {
         int [] counts = new int[n + 1];
 
-        for (int i = 0; i < a.length; ++i)
-            ++counts[a[i]];
+        for (int v : a)
+            ++counts[v];
 
         return counts;
     }
@@ -220,24 +220,24 @@ public class ArrayUtil {
     {
         String fmt = "%%0%dd%s".formatted(n, sep);
 
-        for (int i = 0; i < a.length; ++i)
-            System.out.printf(fmt, a[i], sep);
+        for (int v : a)
+            System.out.printf(fmt, v, sep);
 
         System.out.print(end);
     }
 
     public static void print(int [] a, String sep, String end)
     {
-        for (int i = 0; i < a.length; ++i)
-            System.out.printf("%d%s", a[i], sep);
+        for (int v : a)
+            System.out.printf("%d%s", v, sep);
 
         System.out.print(end);
     }
 
     public static void print(int [][] a)
     {
-        for (int i = 0; i < a.length; ++i)
-            print(a[i]);
+        for (int[] ints : a)
+            print(ints);
     }
 
     public static int [] randomArray(Random random, int n, int origin, int bound)
@@ -295,8 +295,8 @@ public class ArrayUtil {
     {
         long total = 0;
 
-        for (int i = 0; i < a.length; ++i)
-            total += a[i];
+        for (int v : a)
+            total += v;
 
         return total;
     }
