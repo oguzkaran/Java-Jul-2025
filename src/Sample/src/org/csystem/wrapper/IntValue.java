@@ -3,7 +3,7 @@ package org.csystem.wrapper;
 /**
  * Immutable class that wraps an int value by using cache for values between [-128, 127]
  * Last Update: 25th October 2025
- * @author Java-Sep-2024 Group
+ * @author Java-Jul-2025 Group
  */
 public final class IntValue {
     private static final int CACHE_MIN = -128;

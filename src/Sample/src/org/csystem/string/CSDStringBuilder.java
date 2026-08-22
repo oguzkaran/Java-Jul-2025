@@ -1,7 +1,7 @@
 /**
  * Mutable class for some string operations
  * Last Update: 30th November 2025
- * @author Java-Sep-2024 Group
+ * @author Java-Jul-2025 Group
  */
 package org.csystem.string;
 

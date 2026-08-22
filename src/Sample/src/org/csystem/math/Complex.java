@@ -3,7 +3,7 @@ package org.csystem.math;
 /**
  * Complex class that represents a complex number
  * Last Update: 25th October 2025
- * @author Java-Sep-2024 Group
+ * @author Java-Jul-2025 Group
  */
 
 public class Complex {

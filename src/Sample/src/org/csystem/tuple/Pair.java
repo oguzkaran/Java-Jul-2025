@@ -1,7 +1,7 @@
 /**
  * Immutable class that represents a pair tuple
  * Last Update: 3rd January 2026
- * @author Java-Sep-2024 Group
+ * @author Java-Jul-2025 Group
  */
 package org.csystem.tuple;
 

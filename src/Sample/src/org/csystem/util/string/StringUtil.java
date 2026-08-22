@@ -6,7 +6,7 @@ import java.util.random.RandomGenerator;
 /**
  * Utility class for string operations
  * Last Update: 27th December 2025
- * @author Java-Sep-2024 Group
+ * @author Java-Jul-2025 Group
  */
 public final class StringUtil {
     private static final String LETTERS_TR;

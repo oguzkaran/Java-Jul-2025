@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * CSDArrayList class that represents a synamic array
  * Last Update: 7th March 2026
- * @author Java-Sep-2024 Group
+ * @author Java-Jul-2025 Group
  */
 public class CSDArrayList<E> {
     private static final String TO_STRING_SEPARATOR = ", ";

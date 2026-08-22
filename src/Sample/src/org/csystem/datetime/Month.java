@@ -4,7 +4,7 @@ package org.csystem.datetime;
 /**
  * Enumeration class that represents month
  * Last Update: 9th August 2025
- * @author Java-Sep-2024 Group
+ * @author Java-Jul-2025 Group
  */
 public enum Month {
     JANUARY(31), FEBRUARY(28), MARCH(31), APRIL(30), MAY(31), JUNE(30),

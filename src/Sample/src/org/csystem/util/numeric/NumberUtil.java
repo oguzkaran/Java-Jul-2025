@@ -3,7 +3,7 @@ package org.csystem.util.numeric;
 /**
  * Utility class for numeric operations
  * Last Update: 8th November 2025
- * @author Java-Sep-2024 Group
+ * @author Java-Jul-2025 Group
  */
 public final class NumberUtil {
     private static final String [] ONES_TR;

@@ -7,7 +7,7 @@ import java.util.random.RandomGenerator;
 /**
  * Utility class for matrix operations
  * Last Update: 30th November 2025
- * @author Java-Sep-2024 Group
+ * @author Java-Jul-2025 Group
  */
 public final class MatrixUtil {
     private MatrixUtil()
