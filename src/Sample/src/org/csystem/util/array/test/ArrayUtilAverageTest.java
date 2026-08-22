@@ -5,14 +5,13 @@ import org.csystem.util.array.ArrayUtil;
 public class ArrayUtilAverageTest {
     public static void run()
     {
-        int [] a = {1, 2, 3, 4};
-        double expected = 2.5;
-        double delta = 0.00001;
+        int [] a = {1, 2, 3, 4, 5, 6};
+        double delta = 0.00000001;
 
-        System.out.println(ArrayUtil.average(a) - expected < delta);
+        System.out.println(Math.abs(ArrayUtil.average(a) - 3.5) < delta);
     }
 
-    public static void main()
+    public static void main(String [] args)
     {
         run();
     }

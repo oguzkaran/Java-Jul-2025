@@ -1,58 +1,70 @@
 package org.csystem.math.geometry;
 
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
-
 /**
- * Point class that represents a point in Cartesian Plane
- * @author Java-Jul-2025 Group 
+ * Immutable Point class that represents a point in cartesian coordinates
+ * Last Update: 19th October 2025
+ * @author Java-Sep-2024 Group
  */
 public class Point {
-	public double x, y;
-	
-	public Point()
+	public final double m_x, m_y;
+
+	private Point(double x, double y)
 	{
+		m_x = x;
+		m_y = y;
 	}
-	
-	public Point(double a)
+
+	public static Point createCartesian()
 	{
-		x = a;
+		return createCartesian(0);
 	}
-	
-	public Point(double a, double b)
+
+	public static Point createCartesian(double x)
 	{
-		x = a;
-		y = b;
+		return createCartesian(x, 0);
+	}
+
+	public static Point createCartesian(double x, double y)
+	{
+		return new Point(x, y);
+	}
+
+	public static Point createPolar(double radius, double theta)
+	{
+		return new Point(PointCommon.getXByPolar(radius, theta), PointCommon.getYByPolar(radius, theta));
+	}
+
+	public double getX()
+	{
+		return m_x;
+	}
+	public double getY()
+	{
+		return m_y;
 	}
 
 	public double euclideanDistance()
 	{
 		return euclideanDistance(0, 0);
 	}
-	
-	public double euclideanDistance(double a, double b)
-	{
-		return sqrt(pow(x - a, 2) + pow(y - b, 2));
-	}
-	
+
 	public double euclideanDistance(Point other)
 	{
-		return euclideanDistance(other.x, other.y);
-	}	
-	
-	public void offset(double dxy)
-	{
-		offset(dxy, dxy);
+		return euclideanDistance(other.m_x, other.m_y);
 	}
 	
-	public void offset(double dx, double dy)
+	public double euclideanDistance(double x, double y)
 	{
-		x += dx;
-		y += dy;
+		return PointCommon.euclideanDistance(m_x, m_y, x, y);
 	}
-	
+
+    public boolean equals(Object other)
+    {
+        return other instanceof Point p && PointCommon.equals(m_x, m_y, p.m_x, p.m_y);
+    }
+
 	public String toString()
 	{
-		return String.format("(%f, %f)", x, y);
+		return PointCommon.toString(m_x, m_y);
 	}
 }

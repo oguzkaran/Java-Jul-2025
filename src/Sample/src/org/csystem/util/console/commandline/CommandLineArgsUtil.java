@@ -1,32 +1,50 @@
 package org.csystem.util.console.commandline;
 
 /**
- * Utility class for command line operations
- * @author Java-Jul-2025 Group
+ * Utility class for command line arguments operations
+ * Last Update: 7th September 2025
+ * @author Java-Sep-2024 Group
  */
-public class CommandLineArgsUtil {
-    public static void checkLengthEquals(int length, int argsLength, String errMessage)
+public final class CommandLineArgsUtil {
+    private CommandLineArgsUtil()
     {
-        checkLengthEquals(length, argsLength, errMessage, 1);
     }
 
-    public static void checkLengthEquals(int length, int argsLength, String errMessage, int exitCode)
+    public static void checkLengthEquals(int length, int argsLength, String errorMessage, int exitCode)
     {
-        if (length != argsLength) {
-            System.err.println(errMessage);
+        if (argsLength != length) {
+            System.err.println(errorMessage);
             System.exit(exitCode);
         }
     }
 
-    public static void checkLengthGreater(int length, int argsLength, String errMessage)
+    public static void checkLengthEquals(int length, int argsLength, String errorMessage)
     {
-        checkLengthGreater(length, argsLength, errMessage, 1);
+        checkLengthEquals(length, argsLength, errorMessage, 1);
     }
 
-    public static void checkLengthGreater(int length, int argsLength, String errMessage, int exitCode)
+    public static void checkLengthGreater(int length, int argsLength, String errorMessage)
+    {
+        checkLengthGreater(length, argsLength, errorMessage, 1);
+    }
+
+    public static void checkLengthGreater(int length, int argsLength, String errorMessage, int exitCode)
     {
         if (argsLength <= length) {
-            System.err.println(errMessage);
+            System.err.println(errorMessage);
+            System.exit(exitCode);
+        }
+    }
+
+    public static void checkLengthLess(int length, int argsLength, String errorMessage)
+    {
+        checkLengthLess(length, argsLength, errorMessage, 1);
+    }
+
+    public static void checkLengthLess(int length, int argsLength, String errorMessage, int exitCode)
+    {
+        if (argsLength >= length) {
+            System.err.println(errorMessage);
             System.exit(exitCode);
         }
     }

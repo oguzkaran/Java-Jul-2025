@@ -2,74 +2,53 @@ package org.csystem.math;
 
 /**
  * Complex class that represents a complex number
- * @author Java-Jul-2025 Group 
+ * Last Update: 25th October 2025
+ * @author Java-Sep-2024 Group
  */
+
 public class Complex {
+    private static final double DELTA = 0.000001;
 	public double real;
 	public double imag;
 	
-	public static Complex add(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
-	{
-		return new Complex(a1 + a2, b1 + b2);
+	private static Complex add(double re1, double im1, double re2, double im2)
+	{	
+		return new Complex(re1 + re2, im1 + im2);
 	}
 	
-	public static Complex subtract(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	private static Complex subtract(double re1, double im1, double re2, double im2)
 	{
-		return add(a1, b1, -a2, -b2);
+		return add(re1, im1, -re2, -im2);
 	}
 	
-	public static Complex multiply(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
+	private static Complex multiply(double re1, double im1, double re2, double im2)
 	{
-		return new Complex(a1 * a2 - b1 * b2, a1 * b2 + a2 * b1);		
-	}
-	
-	public static Complex divide(double a1, double b1, double a2, double b2) //İleride gizleyeceğiz
-	{
-		double val = 1 / getNorm(a2, -b2);
-		Complex z = multiply(a1, b1, a2, -b2);
-		
-		return multiply(val, z);		
+		return new Complex(re1 * re2 - im1 * im2, re1 * im2 + re2 * im1);
 	}
 	
 	public Complex()
-	{
-		
+	{		
 	}
 	
-	public Complex(double a)
+	public Complex(double real)
 	{
-		real = a;
+		this.real = real;
 	}
 	
-	public Complex(double a, double b)
+	public Complex(double real, double imag)
 	{
-		real = a;
-		imag = b;
-	}
-
-	public static double getNorm(double a, double b) //İleride bunu gizleyeceğiz
-	{
-		return Math.sqrt(a * a + b * b);
+		this.real = real;
+		this.imag = imag;
 	}
 	
-	public double getLength()
+	public static Complex add(double value, Complex z)
 	{
-		return getNorm();
+		return add(value, 0, z.real, z.imag);
 	}
 	
-	public double getNorm()
+	public Complex add(double value)
 	{
-		return getNorm(real, imag);
-	}
-	
-	public Complex getConjugate()
-	{
-		Complex z = new Complex();
-		
-		z.real = real;
-		z.imag = -imag;
-		
-		return z;
+		return add(real, imag, value, 0);
 	}
 	
 	public Complex add(Complex other)
@@ -77,63 +56,60 @@ public class Complex {
 		return add(real, imag, other.real, other.imag);
 	}
 	
-	public Complex add(double val)
+	public static Complex subtract(double value, Complex z)
 	{
-		return add(real, imag, val, 0);
+		return subtract(value, 0, z.real, z.imag);
 	}
 	
-	public static Complex add(double val, Complex z)
+	public Complex subtract(double value)
 	{
-		return add(val, 0, z.real, z.imag);
+		return subtract(real, imag, value, 0);
 	}
-
+	
 	public Complex subtract(Complex other)
 	{
 		return subtract(real, imag, other.real, other.imag);
 	}
 	
-	public Complex subtract(double val)
+	public static Complex multiply(double value, Complex z)
 	{
-		return subtract(real, imag, val, 0);
+		return multiply(value, 0, z.real, z.imag);
 	}
 	
-	public static Complex subtract(double val, Complex z)
+	public Complex multiply(double value)
 	{
-		return subtract(val, 0, z.real, z.imag);
+		return multiply(real, imag, value, 0);
 	}
 	
 	public Complex multiply(Complex other)
 	{
 		return multiply(real, imag, other.real, other.imag);
 	}
+
+	//...
 	
-	public Complex multiply(double val)
+	public Complex getConjugate()
 	{
-		return multiply(real, imag, val, 0);
+		return new Complex(real, -imag);
 	}
 	
-	public static Complex multiply(double val, Complex z)
+	public double getNorm()
 	{
-		return multiply(val, 0, z.real, z.imag);
+		return Math.sqrt(real * real + imag * imag);
+	}
+	
+	public double getLength()
+	{
+		return getNorm();
 	}
 
-	public Complex divide(Complex other)
-	{
-		return divide(real, imag, other.real, other.imag);
-	}
-	
-	public Complex divide(double val)
-	{
-		return divide(real, imag, val, 0);
-	}
-	
-	public static Complex divide(double val, Complex z)
-	{
-		return divide(val, 0, z.real, z.imag);
-	}
+    public boolean equals(Object other)
+    {
+        return other instanceof Complex c && Math.abs(c.real - real) < DELTA && Math.abs(c.imag - imag) < DELTA;
+    }
 	
 	public String toString()
 	{
-		return String.format("(%f, %f)", real, imag);
+		return "|(%f, %f)| = %.3f".formatted(real, imag, getLength());
 	}
 }

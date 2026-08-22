@@ -5,15 +5,14 @@ import org.csystem.util.array.ArrayUtil;
 public class ArrayUtilSelectionSortDescendingTest {
     public static void run()
     {
-        int [] a = {4, -5, 7, -4, 3, 8, 6, 9, 5, -6, 5};
-        int [] expected = {9, 8, 7, 6, 5, 5, 4, 3, -4, -5, -6};
+        int [] a = {3, 9, -5, 6, 7, -8};
+        int [] target = {9, 7, 6, 3, -5, -8};
 
         ArrayUtil.selectionSort(a, true);
-
-        System.out.println(ArrayUtil.equals(a,  expected));
+        System.out.println(ArrayUtil.equals(a, target));
     }
 
-    public static void main()
+    public static void main(String [] args)
     {
         run();
     }

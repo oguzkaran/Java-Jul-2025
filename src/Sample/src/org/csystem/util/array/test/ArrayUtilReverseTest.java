@@ -1,23 +1,25 @@
 package org.csystem.util.array.test;
 
-import org.csystem.util.array.ArrayUtil;
+import java.util.Random;
+
+import static org.csystem.util.array.ArrayUtil.randomArray;
+import static org.csystem.util.array.ArrayUtil.print;
+import static org.csystem.util.array.ArrayUtil.reverse;
 
 public class ArrayUtilReverseTest {
     public static void run()
     {
-        int [] a = {1, 2, 3, 4, 5};
-        int [] b = {1, 2, 3, 4};
-        int [] expected1 = {5, 4, 3, 2, 1};
-        int [] expected2 = {4, 3, 2, 1};
+        Random random = new Random();
 
-        ArrayUtil.reverse(a);
-        ArrayUtil.reverse(b);
+        int [] a = randomArray(random, random.nextInt(5, 11), 0, 10);
 
-        System.out.println(ArrayUtil.equals(a, expected1));
-        System.out.println(ArrayUtil.equals(b, expected2));
+        print(a);
+        reverse(a);
+        print(a);
+
     }
 
-    public static void main()
+    public static void main(String [] args)
     {
         run();
     }
